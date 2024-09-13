@@ -1,4 +1,4 @@
-@extends('layouts.user_type.guest')
+@extends('elements.guest.guest')
 
 @section('content')
 
@@ -29,7 +29,7 @@
                         <h4 class="mb-0">Forgot your password? Enter your email here</h4>
                     </div>
                     <div class="card-body">
-                    
+
                         <form action="/forgot-password" method="POST" role="form text-left">
                             @csrf
                             <div>

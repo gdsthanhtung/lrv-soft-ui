@@ -1,4 +1,4 @@
-@extends('layouts.user_type.guest')
+@extends('elements.guest.guest')
 
 @section('content')
 

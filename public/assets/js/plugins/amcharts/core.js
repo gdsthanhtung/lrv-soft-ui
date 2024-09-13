@@ -26457,7 +26457,7 @@
       u = function() {
         function t() {
           var t = this;
-          this.events = new r.a, this.themes = [], this.loadedThemes = {}, this._uidCount = 0, this.registeredClasses = {}, this._placeholders = {}, this.invalidSprites = {}, this.invalidDatas = {}, this.invalidRawDatas = [], this.invalidDataItems = [], this.invalidDataRange = [], this.invalidPositions = {}, this.invalidLayouts = {}, this.baseSprites = [], this.baseSpritesByUid = {}, this.queue = [], this.deferred = [], this.uid = this.getUniqueId(), this.invalidSprites.noBase = [], this.invalidDatas.noBase = [], this.invalidLayouts.noBase = [], this.invalidPositions.noBase = [], "undefined" != typeof addEventListener && (addEventListener("beforeprint", function() {
+          this.events = new r.a, this.themes = [], this.loadedThemes = {}, this._uidCount = 0, this.registeredClasses = {}, this._placeholders = {}, this.invalidSprites = {}, this.invalidDatas = {}, this.invalidRawDatas = [], this.invalidDataItems = [], this.invalidDataRange = [], this.invalidPositions = {}, this.invalidLayouts = {}, this.baseSprites = [], this.baseSpritesByUid = {}, this.queue = [], this.deferred = [], this.uid = this.getUniqueId(), this.invalidSprites.noBase = [], this.invalidDatas.noBase = [], this.invalidelements.noBase = [], this.invalidPositions.noBase = [], "undefined" != typeof addEventListener && (addEventListener("beforeprint", function() {
             l.each(t.baseSprites, function(t) {
               var e = t.paper.svg;
               e.setAttribute("viewBox", "0 0 " + e.clientWidth + " " + e.clientHeight)
@@ -26509,9 +26509,9 @@
         }, t.prototype.removeFromInvalidPositions = function(t) {
           t.baseId && l.remove(this.invalidPositions[t.baseId], t), l.remove(this.invalidPositions.noBase, t)
         }, t.prototype.addToInvalidLayouts = function(t) {
-          t.baseId ? l.add(this.invalidLayouts[t.baseId], t) : l.add(this.invalidLayouts.noBase, t)
+          t.baseId ? l.add(this.invalidLayouts[t.baseId], t) : l.add(this.invalidelements.noBase, t)
         }, t.prototype.removeFromInvalidLayouts = function(t) {
-          t.baseId && l.remove(this.invalidLayouts[t.baseId], t), l.remove(this.invalidLayouts.noBase, t)
+          t.baseId && l.remove(this.invalidLayouts[t.baseId], t), l.remove(this.invalidelements.noBase, t)
         }, t
       }(),
       h = new u
