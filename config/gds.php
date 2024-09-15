@@ -45,8 +45,8 @@ return [
         ],
     ],
     'format' => [
-        'longTime' => 'd/m/Y H:m:s',
-        'shortTime' => 'd/m/Y'
+        'longTime' => 'd.m.Y H:m:s',
+        'shortTime' => 'd.m.Y'
     ],
     'template' => [
         'formLabel' => [
@@ -77,8 +77,8 @@ return [
             'unknown'   => ['name' => 'Không xác định', 'class' => 'danger']
         ],
         'selectStatus' => [
-            'active' => 'Kích hoạt',
-            'inactive' => 'Chưa kích hoạt'
+            'active' => 'Active',
+            'inactive' => 'Inactive'
         ],
         'selectStatusHoaDon' => [
             'active' => 'Đã thanh toán',
@@ -93,8 +93,14 @@ return [
             '1' => 'Yes'
         ],
         'selectLevel' => [
-            'user' => 'Người dùng',
-            'admin' => 'Quản trị viên'
+            'class' => [
+                'user' => 'secondary',
+                'admin' => 'primary'
+            ],
+            'value' => [
+                'user' => 'Người dùng',
+                'admin' => 'Quản trị viên'
+            ]
         ],
         'searchSelection' => [
             'all' => ['name' => 'Tìm Tất cả'],
@@ -130,21 +136,21 @@ return [
             'hoadon' => ['all'],
         ],
         'ruleBtn' => [
-            'edit'      => ['class' => 'btn-primary',               'title' => 'Điều chỉnh',    'icon' => 'bi-pencil',  'route' => "/form"],
-            'delete'    => ['class' => 'btn-delete btn-danger',     'title' => 'Xoá',           'icon' => 'bi-trash',   'route' => "/delete"],
-            'info'      => ['class' => 'btn-info',                  'title' => 'Thông tin',     'icon' => 'bi-info',    'route' => "/form"],
+            'edit'      => ['class' => 'btn-primary',               'title' => 'Edit',    'icon' => 'fa-pen',  'route' => "/form"],
+            'delete'    => ['class' => 'btn-delete btn-danger',     'title' => 'Remove',           'icon' => 'fa-trash',   'route' => "/delete"],
+            'info'      => ['class' => 'btn-info',                  'title' => 'Info',     'icon' => 'fa-info',    'route' => "/form"],
         ],
         'btnInArea' => [
             'default' => ['edit', 'delete'],
-            'user' => ['edit'],
+            'user' => ['edit', 'delete'],
             'phongtro' => ['edit', 'delete'],
             'congdan' => ['edit', 'delete'],
             'hopdong' => ['edit', 'delete'],
             'hoadon' => ['edit', 'delete'],
         ],
         'gender' => [
-            'M' => 'Nam',
-            'W' => 'Nữ'
+            'M' => 'Men',
+            'W' => 'Women'
         ],
         'defaultPath' => [
             'avatar' => 'default/avatar.jpg',

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Resource;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
@@ -88,8 +89,8 @@ class UserModel extends Model
     public function saveItem($params = null, $options = null){
         $result = null;
         $id = (isset($params['id'])) ? $params['id'] : null;
-        $loginUserId = Session::get('userInfo')['id'];
-        $params['modified'] = Carbon::now();
+        $loginUserId = Auth::id();
+        $params['updated_at'] = Carbon::now();
 
         if($options['task'] == 'change-status'){
             $paramsNew = $params;

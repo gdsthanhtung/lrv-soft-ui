@@ -11,7 +11,7 @@
     <div class="collapse navbar-collapse  w-auto" id="sidenav-collapse-main">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link {{ (Request::is('dashboard') ? 'active' : '') }}" href="{{ url('dashboard') }}">
+          <a class="nav-link {{ (Request::is('admin/dashboard') ? 'active' : '') }}" href="{{ url('admin/dashboard') }}">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>shop </title>
@@ -32,9 +32,9 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link {{ (Request::is('user') ? 'active' : '') }}" href="{{ url('user') }}">
+          <a class="nav-link {{ (Request::is('admin/user') ? 'active' : '') }}" href="{{ url('admin/user') }}">
               <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i style="font-size: 1rem;" class="fas fa-lg fa-list-ul ps-2 pe-2 text-center text-dark {{ (Request::is('user') ? 'text-white' : 'text-dark') }} " aria-hidden="true"></i>
+                  <i style="font-size: 1rem;" class="fas fa-lg fa-list-ul ps-2 pe-2 text-center text-dark {{ (Request::is('admin/user') ? 'text-white' : 'text-dark') }} " aria-hidden="true"></i>
               </div>
               <span class="nav-link-text ms-1">User Management</span>
           </a>

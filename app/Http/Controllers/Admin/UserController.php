@@ -24,7 +24,7 @@ class UserController extends Controller
         $this->pathView = "modules.$this->moduleName.";
         $this->pathViewTemplate = "templates.";
 
-        $this->params["pagination"]['perPage'] = 10;
+        $this->params["pagination"]['perPage'] = 2;
 
         $ctrl = Config::get("gds.route.$this->moduleName.ctrl");
         View::share([
@@ -101,7 +101,7 @@ class UserController extends Controller
             'id'    => $rq->id,
             'status'  => $rq->status
         ];
-
+        //dd($params);
         $rs = $this->mainModel->saveItem($params, ['task' => 'change-status']);
         return redirect()->route($this->moduleName)->with('notify', Notify::export($rs));
 

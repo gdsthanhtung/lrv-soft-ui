@@ -25,10 +25,14 @@ use Illuminate\Support\Facades\Config;
 
 $prefixAdmin = Config::get('gds.route.prefix_admin', 'admin');
 
+// Route::get('/', function () {
+//     return view('welcome',['pathViewTemplate' => "admin.templates."]);
+// })->name('/');
 
-Route::group(['middleware' => 'auth'], function () {
+Route::prefix($prefixAdmin)->middleware('auth')->group(function () {
 
     Route::get('/', [HomeController::class, 'home']);
+
 	Route::get('dashboard', function () {
 		return view('modules.dashboard.index');
 	})->name('dashboard');
@@ -40,6 +44,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/', 'show')->name($ctrl);
             Route::get('/form/{id?}', 'form')->where(['id' => '[0-9]+'])->name($ctrl.'/form');
             Route::get('/delete/{id}', 'delete')->where(['id' => '[0-9]+'])->name($ctrl.'/delete');
+            Route::get('/change-status/{id}/{status}', 'change_status')->where(['id' => '[0-9]+', 'status' => '[a-z]+'])->name($ctrl.'/change-status');
+            Route::get('/change-level/{id}/{level}', 'change_level')->where(['id' => '[0-9]+', 'level' => '[a-z]+'])->name($ctrl.'/change-level');
             Route::post('/save', 'save')->name($ctrl.'/save');
         });
     });
