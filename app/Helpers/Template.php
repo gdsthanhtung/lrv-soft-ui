@@ -107,23 +107,10 @@ class Template {
 
     public static function showSearchArea($ctrl, $params, $searchSelection = 'searchSelection'){
         $html = "";
-        $selections = "";
 
         extract($params);
         $searchValue = $filter['searchValue'];
         $ctrl = (isset($selectionInModule[$ctrl]))  ? $ctrl : 'default';
-
-        // $html = sprintf('<div class="input-group">
-        //             <select class="form-select" aria-label="Bộ lọc">
-        //                 %s
-        //             </select>
-        //             <input type="text" class="form-control mr-5 input-br" name="searchValue" value="%s">
-        //             <input type="hidden" name="searchField" value="%s">
-        //             <span class="input-group-btn">
-        //                 <button id="btn-search" type="button" class="btn btn-primary">Tìm kiếm</button>
-        //                 <button id="btn-clear" type="button" class="btn btn-success">Xóa tìm kiếm</button>
-        //             </span>
-        //         </div>', $selections, $searchValue, $searchField);
 
         $html = sprintf('<div class="dataTable-search">
                             <input class="dataTable-input" placeholder="Search..." type="text" name="searchValue" value="%s">
@@ -134,7 +121,7 @@ class Template {
 
     public static function showItemSelect($ctrl, $id, $displayValue, $fieldName)
     {
-       $link          = route($ctrl . '/change-' . $fieldName, [$fieldName => 'value_new', 'id' => $id]);
+       $link = route($ctrl . '/change-' . $fieldName, [$fieldName => 'value_new', 'id' => $id]);
 
        $tmplDisplay = Config::get('gds.enum.select' . ucfirst($fieldName));
        $html = sprintf('<select name="selectChangeAttr" data-url="%s" class="form-select">', $link  );
@@ -152,23 +139,26 @@ class Template {
     public static function showItemDropdown($ctrl, $id, $displayValue, $fieldName)
     {
         $html = $list = '';
-        $link = route($ctrl . '/change-' . $fieldName, [$fieldName => 'value_new', 'id' => $id]);
         $enum = Config::get('gds.enum.select' . ucfirst($fieldName));
 
         foreach ($enum['value'] as $key => $value) {
+            $link = route($ctrl . '/change-' . $fieldName, [$fieldName => $key, 'id' => $id]);
             $list .= sprintf('<li><a class="dropdown-item" href="%s">%s</a></li>', $link, $value);
         }
-//dd($enum['class'][$displayValue]);
+
+        $class = isset($enum['class'][$displayValue]) ? $enum['class'][$displayValue] : 'secondary';
+        $value = isset($enum['value'][$displayValue]) ? $enum['value'][$displayValue] : 'N/A';
+
         $html = sprintf('
             <div class="dropdown">
                 <button class="btn bg-gradient-%s btn-sm dropdown-toggle mb-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     %s
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                %s
+                    %s
                 </ul>
             </div>
-        ', $enum['class'][$displayValue], $enum['value'][$displayValue], $list);
+        ', $class, $value, $list);
 
         return $html;
     }

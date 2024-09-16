@@ -6,47 +6,45 @@
 
 @extends('elements.auth')
 @section('content')
-<div class="pb-4">
-	<div class="row">
-		<div class="col-12">
-			<div class="card">
+<div class="row">
+    <div class="col-12">
+        <div class="card">
 
-                @include($pathViewTemplate . 'page-header',
-                [
-                    'title' => $pageTitle,
-                    'button' => '<a href="'.route($ctrl."/form").'" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; Add New</a>'
-                ])
+            @include($pathViewTemplate . 'page-header',
+            [
+                'title' => $pageTitle,
+                'button' => '<a href="'.route($ctrl."/form").'" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; Add New</a>'
+            ])
 
-				<div class="card-body px-0 pb-0 pt-0">
-					<div class="table-responsive">
-						<div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
-							<div class="dataTable-top">
-								<div class="dataTable-dropdown">
-									<label>
-										Show
-										<select class="dataTable-selector">
-											<option value="5">5</option>
-											<option value="10">10</option>
-											<option value="15">15</option>
-											<option value="20">20</option>
-											<option value="25">25</option>
-										</select>
-										entries
-									</label>
-								</div>
+            <div class="card-body px-0 pb-0 pt-0">
+                <div class="table-responsive">
+                    <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                        <div class="dataTable-top">
+                            <div class="dataTable-dropdown">
+                                <label>
+                                    Show
+                                    <select class="dataTable-selector">
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="15">15</option>
+                                        <option value="20">20</option>
+                                        <option value="25">25</option>
+                                    </select>
+                                    entries
+                                </label>
+                            </div>
 
-                                {!! $searchArea !!}
-							</div>
+                            {!! $searchArea !!}
+                        </div>
 
-							@include($pathView.'list')
+                        @include($pathView.'list')
 
-                            @include($pathViewTemplate.'pagination')
+                        @include($pathViewTemplate.'pagination')
 
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
