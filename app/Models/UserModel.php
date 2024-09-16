@@ -107,9 +107,9 @@ class UserModel extends Model
 
         if($options['task'] == 'add'){
             $paramsNew = array_diff_key($params, array_flip($this->crudNotAccepted));
-            $paramsNew['created'] = Carbon::now();
-            $paramsNew['created_by'] = $paramsNew['updated_by'] = $loginUserId;
-            $paramsNew['password']       = md5($params['password']);
+            $paramsNew['created_at']       = Carbon::now();
+            $paramsNew['created_by']    = $paramsNew['updated_by'] = $loginUserId;
+            $paramsNew['password']      = md5($params['password']);
 
             if(isset($params['avatar']) && $params['avatar']){
                 $uploadRS = Resource::uploadImage($this->uploadDir, $params['avatar'], 'avatar');

@@ -13,8 +13,11 @@
             @include($pathViewTemplate . 'page-header',
             [
                 'title' => $pageTitle,
-                'button' => '<a href="'.route($ctrl."/form").'" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; Add New</a>'
+                'button' => '<a href="'.route($ctrl."/form").'" class="btn bg-gradient-primary btn-sm mb-0"><i class="fa-solid fa-plus"></i> Add New</a>'
             ])
+
+            @includeWhen(session('notify'), $pathViewTemplate . 'notify')
+            @include($pathViewTemplate . 'error')
 
             <div class="card-body px-0 pb-0 pt-0">
                 <div class="table-responsive">

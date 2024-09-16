@@ -50,10 +50,10 @@ return [
     ],
     'template' => [
         'formLabel' => [
-            'class' => 'col-3 col-form-label'
+            'class' => 'form-label'
         ],
         'formLabelRight' => [
-            'class' => 'col-9 col-form-label text-left'
+            'class' => 'form-label text-right'
         ],
         'formInput' => [
             'class' => 'form-control'

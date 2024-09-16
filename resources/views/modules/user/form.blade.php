@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-9 mx-auto">
+        <div class="col-6 mx-auto">
             <div class="card card-body mt-4">
                 @php
                     $tt = ((!$id) ? 'New' : 'Modify').' '.$pageTitle;

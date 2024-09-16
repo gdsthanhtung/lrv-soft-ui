@@ -2,81 +2,70 @@
     use App\Helpers\Template;
     use App\Helpers\FormTemplate;
 
-    $formLabelClass = Config::get('custom.template.formLabel.class');
-    $formInputClass = Config::get('custom.template.formInput.class');
+    $flClass = Config::get('gds.template.formLabel.class');
+    $fiClass = Config::get('gds.template.formInput.class');
 
-    $username       = $id ? $data['username'] : '';
-    $fullname       = $id ? $data['fullname'] : '';
-    $email          = $id ? $data['email'] : '';
-    $status         = $id ? $data['status'] : '';
-    $level          = $id ? $data['level'] : '';
-    $avatar         = $id ? $data['avatar'] : '';
-
-    $hiddenID       = Form::hidden('id', $id);
-    $hiddenAvatar   = Form::hidden('avatar', $avatar);
-
-    $hiddenTask     = Form::hidden('task', 'add');
-
-    $statusEnum     = Config::get('custom.enum.selectStatus');
-    $levelEnum      = Config::get('custom.enum.selectLevel');
-
-    $element = [
-        [
-            'label' => Form::label('username', 'Username', ['class' => $formLabelClass]),
-            'el'    => Form::text('username', $username, ['class' => $formInputClass, 'required' => true])
-        ],[
-            'label' => Form::label('fullname', 'Fullname', ['class' => $formLabelClass]),
-            'el'    => Form::text('fullname', $fullname, ['class' => $formInputClass, 'required' => true])
-        ],[
-            'label' => Form::label('password', 'Password', ['class' => $formLabelClass]),
-            'el'    => Form::password('password', ['class' => $formInputClass, 'required' => true])
-        ],[
-            'label' => Form::label('password_confirmation', 'Re-Password', ['class' => $formLabelClass]),
-            'el'    => Form::password('password_confirmation', ['class' => $formInputClass, 'required' => true])
-        ],[
-            'label' => Form::label('email', 'Email', ['class' => $formLabelClass]),
-            'el'    => Form::text('email', $email, ['class' => $formInputClass, 'required' => true])
-        ],[
-            'label' => Form::label('status', 'Status', ['class' => $formLabelClass]),
-            'el'    => Form::select('status', $statusEnum, $status, ['class' => $formInputClass.' form-select', 'placeholder' => 'Select an item...'])
-        ],[
-            'label' => Form::label('level', 'Level', ['class' => $formLabelClass]),
-            'el'    => Form::select('level', $levelEnum, $level, ['class' => $formInputClass.' form-select', 'placeholder' => 'Select an item...'])
-        ],[
-            'label' => Form::label('avatar', 'Avatar', ['class' => $formLabelClass]),
-            'el'    => Form::file('avatar', ['class' => $formInputClass]),
-            'avatar' => ($avatar) ? Template::showItemAvatar($ctrl, $avatar, $fullname) : null,
-            'type'  => 'avatar'
-        ],[
-            'el' => $hiddenID . $hiddenAvatar . $hiddenTask . Form::submit('Lưu', ['class' => 'btn btn-success']),
-            'type'  => 'btn-submit'
-        ]
-    ];
+    $statusEnum = Config::get('gds.enum.selectStatus');
+    $levelEnum  = Config::get('gds.enum.selectLevel')['value'];
+    $task       = ($id) ? 'edit' : 'add';
 @endphp
 
-<div class="row">
-    <div class="col-6 offset-3">
-        <div class="card overflow-auto">
-            <div class="card-body">
-                <h5 class="card-title">Thêm mới</h5>
-                <div class="row">
+<form action="{{ route($ctrl.'/save') }}" method="POST" accept-charset="UTF-8" enctype="multipart/form-data">
+	@csrf
 
-                    {!!
-                        Form::open([
-                            'url' => route($ctrl.'/save'),
-                            'accept-charset' => 'UTF-8',
-                            'method' => 'POST',
-                            'enctype' => 'multipart/form-data',
-                            'class' => 'form-horizontal form-label-left',
-                            'id' => 'main-form'
-                        ])
-                    !!}
+	<div class="form-group">
+		<label for="email" class="{{ $flClass }}">Email</label>
+		<div class=""><input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required></div>
+	</div>
 
-                        {!! FormTemplate::export($element) !!}
+	<div class="form-group">
+		<label for="password" class="{{ $flClass }}">Password</label>
+		<div class=""><input type="password" class="form-control" id="password" name="password" value="" required></div>
+	</div>
 
-                    {!! Form::close() !!}
-                </div>
-            </div>
+	<div class="form-group">
+		<label for="password_confirmation" class="{{ $flClass }}">Password confirmation</label>
+		<div class=""><input type="password" class="form-control" id="password_confirmation" name="password_confirmation" value="" required></div>
+	</div>
+
+	<div class="form-group">
+		<label for="name" class="{{ $flClass }}">Name</label>
+		<div class=""><input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required></div>
+	</div>
+
+	<div class="form-group">
+		<label for="email" class="{{ $flClass }}">Status</label>
+		<div class="">
+            <select class="form-control" id="status" name="status" required>
+                <option>Select a item...</option>
+                @foreach ($statusEnum as $key => $val)
+                    <option {{ old('status') == $key ? "selected" : "" }} value="{{ $key }}">{{ $val }}</option>
+                @endforeach
+            </select>
         </div>
-    </div>
-</div>
+	</div>
+
+	<div class="form-group">
+		<label for="email" class="{{ $flClass }}">Level</label>
+		<div class="">
+            <select class="form-control" id="level" name="level" required>
+                <option>Select a item...</option>
+                @foreach ($levelEnum as $key => $val)
+                    <option {{ old('level') == $key ? "selected" : "" }} value="{{ $key }}">{{ $val }}</option>
+                @endforeach
+            </select>
+        </div>
+	</div>
+
+	<div class="form-group">
+		<label for="avatar" class="{{ $flClass }}">Avatar</label>
+		<div class=""><input type="file" class="form-control" id="avatar" name="avatar"></div>
+	</div>
+
+	<div class="d-flex justify-content-end mt-4">
+        <input type="hidden" class="form-control" id="task" name="task" value="{{ $task }}">
+        {{--  --}}
+		<a href="{{ route($ctrl) }}" type="button" class="btn btn-light m-0">BACK</a>
+		<button type="submit" class="btn bg-gradient-primary m-0 ms-2">SUBMIT</button>
+	</div>
+</form>
