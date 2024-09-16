@@ -20,12 +20,12 @@
 
 	<div class="form-group">
 		<label for="password" class="{{ $flClass }}">Password</label>
-		<div class=""><input type="password" class="form-control" id="password" name="password" value="" required></div>
+		<div class=""><input type="password" class="form-control" id="password" name="password" required></div>
 	</div>
 
 	<div class="form-group">
 		<label for="password_confirmation" class="{{ $flClass }}">Password confirmation</label>
-		<div class=""><input type="password" class="form-control" id="password_confirmation" name="password_confirmation" value="" required></div>
+		<div class=""><input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required></div>
 	</div>
 
 	<div class="form-group">

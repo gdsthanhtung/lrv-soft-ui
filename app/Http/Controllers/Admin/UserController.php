@@ -24,7 +24,7 @@ class UserController extends Controller
         $this->pathView = "modules.$this->moduleName.";
         $this->pathViewTemplate = "templates.";
 
-        $this->params["pagination"]['perPage'] = 2;
+        $this->params["pagination"]['perPage'] = 5;
 
         $ctrl = Config::get("gds.route.$this->moduleName.ctrl");
         View::share([

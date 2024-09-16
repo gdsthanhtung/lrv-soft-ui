@@ -7,7 +7,7 @@ use Intervention\Image\Laravel\Facades\Image;
 
 class Resource {
     public static function delete($dirName, $file){
-        $rs = Storage::disk('global')->delete($dirName.'/'.$file);
+        $rs = Storage::delete($dirName.'/'.$file);
         return ($rs) ? $rs : false;
     }
 
