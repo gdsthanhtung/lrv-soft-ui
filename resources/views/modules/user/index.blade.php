@@ -5,8 +5,9 @@
 @endphp
 
 @extends('elements.auth')
+
 @section('content')
-<div class="row">
+<div class="row mb-5">
     <div class="col-12">
         <div class="card">
 
@@ -16,8 +17,10 @@
                 'button' => '<a href="'.route($ctrl."/form").'" class="btn bg-gradient-primary btn-sm mb-0"><i class="fa-solid fa-plus"></i> Add New</a>'
             ])
 
-            @includeWhen(session('notify'), $pathViewTemplate . 'notify')
-            @include($pathViewTemplate . 'error')
+            <div class="m-3 mb-0">
+                @includeWhen(session('notify'), $pathViewTemplate . 'notify')
+                @include($pathViewTemplate . 'error')
+            </div>
 
             <div class="card-body px-0 pb-0 pt-0">
                 <div class="table-responsive">

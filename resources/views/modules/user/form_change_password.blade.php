@@ -1,13 +1,8 @@
 @php
-    use App\Helpers\Template;
-
-    $flClass = Config::get('gds.template.formLabel.class');
-    $fiClass = Config::get('gds.template.formInput.class');
-
     $task = 'change-password';
 @endphp
 
-<div class="col-lg-5 col-md-6 col-md-12">
+<div class="col-lg-5 col-md-6 col-md-12 mb-5">
     <div class="card card-body p-4">
     <h6 class="mb-0">{{ $tt }}</h6>
     <p class="text-sm mb-0">{{ $stt }}</p>

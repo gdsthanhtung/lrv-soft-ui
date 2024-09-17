@@ -1,14 +1,3 @@
-@php
-    use App\Helpers\Template;
-
-    $flClass = Config::get('gds.template.formLabel.class');
-    $fiClass = Config::get('gds.template.formInput.class');
-
-    $statusEnum = Config::get('gds.enum.selectStatus');
-    $levelEnum  = Config::get('gds.enum.selectLevel')['value'];
-    $task       = ($id) ? 'edit' : 'add';
-@endphp
-
 <form action="{{ route($ctrl.'/save') }}" method="POST" accept-charset="UTF-8" enctype="multipart/form-data">
 	@csrf
 

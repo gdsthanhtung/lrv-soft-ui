@@ -16,7 +16,7 @@ class UserModel extends Model
     protected $table = 'users';
     protected $uploadDir = 'user';
 
-    protected $crudNotAccepted = ['_token', 'avatar', 'avatar_current', 'password_confirmation', 'task'];
+    protected $crudNotAccepted = ['_token', 'avatar', 'current_avatar', 'password_confirmation', 'task'];
 
     public function listItems($params = null, $options = null){
         $this->table = $this->table.' as main';
@@ -128,9 +128,10 @@ class UserModel extends Model
 
             if(isset($params['avatar']) && $params['avatar']){
                 $uploadRS = Resource::uploadImage($this->uploadDir, $params['avatar'], 'avatar');
-                if($uploadRS)
+                if($uploadRS){
+                    Resource::delete($this->uploadDir, $params['current_avatar']);
                     $paramsNew['avatar'] = $uploadRS;
-                else
+                }else
                     return "Upload error..";
             }
 

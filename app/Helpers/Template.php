@@ -56,8 +56,8 @@ class Template {
         return sprintf (" <img src=%s }} alt=%s class='cccd'> ", asset("images/$ctrl/$img"), $alt);
     }
 
-    public static function showItemAvatar($ctrl, $img, $alt){
-        return sprintf ("<img src='%s' alt='%s' class='avatar avatar-xxl me-2' style='object-fit: cover'>", asset("images/$ctrl/$img"), $alt);
+    public static function showItemAvatar($ctrl, $img, $alt, $size = 'xxl'){
+        return sprintf ("<img src='%s' alt='%s' class='avatar avatar-%s shadow'>", asset("images/$ctrl/$img"), $alt, $size);
     }
 
     public static function showActionButton($ctrl, $id){
