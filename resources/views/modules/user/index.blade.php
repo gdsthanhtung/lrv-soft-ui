@@ -13,7 +13,8 @@
 
             @include($pathViewTemplate . 'page-header',
             [
-                'title' => $pageTitle,
+                'title' => $pageTitle. ' management',
+                'subTitle' => 'The '.$pageTitle. ' information list',
                 'button' => '<a href="'.route($ctrl."/form").'" class="btn bg-gradient-primary btn-sm mb-0"><i class="fa-solid fa-plus"></i> Add New</a>'
             ])
 
