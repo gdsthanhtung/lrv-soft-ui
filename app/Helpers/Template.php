@@ -73,7 +73,7 @@ class Template {
             $button = $rule[$item];
             $link = route($ctrl.$button['route'], ['id' => $id]);
             $html .= sprintf('<a href="%s" class="mx-2" data-bs-toggle="tooltip" data-bs-original-title="%s">
-                                <i class="fas %s text-secondary" aria-hidden="true"></i>
+                                <i class="fa %s text-secondary" aria-hidden="true"></i>
                             </a>', $link, $button['title'], $button['icon']);
         }
         $html = '<div class="zvn-box-btn-filter">'.$html.'</div>';

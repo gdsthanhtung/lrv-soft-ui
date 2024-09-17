@@ -136,7 +136,7 @@ return [
             'hoadon' => ['all'],
         ],
         'ruleBtn' => [
-            'edit'      => ['class' => 'btn-primary',               'title' => 'Edit',    'icon' => 'fa-pen',  'route' => "/form"],
+            'edit'      => ['class' => 'btn-primary',               'title' => 'Edit',    'icon' => 'fa-pencil',  'route' => "/form"],
             'delete'    => ['class' => 'btn-delete btn-danger',     'title' => 'Remove',           'icon' => 'fa-trash',   'route' => "/delete"],
             'info'      => ['class' => 'btn-info',                  'title' => 'Info',     'icon' => 'fa-info',    'route' => "/form"],
         ],

@@ -1,6 +1,5 @@
 @php
     use App\Helpers\Template;
-    use App\Helpers\FormTemplate;
 
     $flClass = Config::get('gds.template.formLabel.class');
     $fiClass = Config::get('gds.template.formInput.class');

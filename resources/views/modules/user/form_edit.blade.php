@@ -1,86 +1,69 @@
 @php
     use App\Helpers\Template;
-    use App\Helpers\FormTemplate;
 
-    $formLabelClass = Config::get('gds.template.formLabel.class');
-    $formInputClass = Config::get('gds.template.formInput.class');
+    $flClass = Config::get('gds.template.formLabel.class');
+    $fiClass = Config::get('gds.template.formInput.class');
 
     $username       = $id ? $data['username'] : '';
-    $fullname       = $id ? $data['fullname'] : '';
+    $name           = $id ? $data['name'] : '';
     $email          = $id ? $data['email'] : '';
     $status         = $id ? $data['status'] : '';
     $level          = $id ? $data['level'] : '';
     $avatar         = $id ? $data['avatar'] : '';
 
-    //$hiddenID       = Form::hidden('id', $id);
-    //$hiddenAvatar   = Form::hidden('avatar_current', $avatar);
-
-    //$hiddenTask     = Form::hidden('task', 'edit');
-
-    $statusEnum     = Config::get('gds.enum.selectStatus');
-    $levelEnum      = Config::get('gds.enum.selectLevel')['value'];
-
-    // $element = [
-    //     [
-    //         'label' => Form::label('username', 'Username', ['class' => $formLabelClass]),
-    //         'el'    => Form::text('username', $username, ['class' => $formInputClass, 'required' => true])
-    //     ],[
-    //         'label' => Form::label('fullname', 'Fullname', ['class' => $formLabelClass]),
-    //         'el'    => Form::text('fullname', $fullname, ['class' => $formInputClass, 'required' => true])
-    //     ],[
-
-    //         'label' => Form::label('email', 'Email', ['class' => $formLabelClass]),
-    //         'el'    => Form::text('email', $email, ['class' => $formInputClass, 'required' => true])
-    //     ],[
-    //         'label' => Form::label('status', 'Trạng thái', ['class' => $formLabelClass]),
-    //         'el'    => Form::select('status', $statusEnum, $status, ['class' => $formInputClass.' form-select', 'placeholder' => 'Select an item...'])
-    //     ],[
-    //         'label' => Form::label('level', 'Level', ['class' => $formLabelClass]),
-    //         'el'    => Form::select('level', $levelEnum, $level, ['class' => $formInputClass.' form-select', 'placeholder' => 'Select an item...'])
-    //     ],[
-    //         'label' => Form::label('avatar', 'Avatar', ['class' => $formLabelClass]),
-    //         'el'    => Form::file('avatar', ['class' => $formInputClass]),
-    //         'avatar' => ($avatar) ? Template::showItemAvatar($ctrl, $avatar, $fullname) : null,
-    //         'type'  => 'avatar'
-    //     ],[
-    //         'el' => $hiddenID . $hiddenAvatar . $hiddenTask . Form::submit('Lưu', ['class' => 'btn btn-success']),
-    //         'type'  => 'btn-submit'
-    //     ]
-    // ];
+    $statusEnum = Config::get('gds.enum.selectStatus');
+    $levelEnum  = Config::get('gds.enum.selectLevel')['value'];
+    $task       = ($id) ? 'edit' : 'add';
 @endphp
 
-<div class="col-lg-5 mb-lg-0 mb-4">
-    <div class="card z-index-2">
-    <div class="card-body p-3">
+<div class="col-lg-7 col-md-6 col-md-12">
+    <div class="card card-body p-4">
+    <h6 class="mb-0">{{ $tt }}</h6>
+    <p class="text-sm mb-0">{{ $stt }}</p>
+    <hr class="horizontal dark my-3">
 
-    asdasdasd
-
-
-    </div>
-    </div>
-    </div>
-
-{{-- <div class="col-6">
-    <div class="card overflow-auto">
-        <div class="card-body">
-            <h5 class="card-title">Điều chỉnh</h5>
-            <div class="row">
-
-                {!!
-                    Form::open([
-                        'url' => route($ctrl.'/save'),
-                        'accept-charset' => 'UTF-8',
-                        'method' => 'POST',
-                        'enctype' => 'multipart/form-data',
-                        'class' => 'form-horizontal form-label-left',
-                        'id' => 'main-form'
-                    ])
-                !!}
-
-                    {!! FormTemplate::export($element) !!}
-
-                {!! Form::close() !!}
+    <form action="{{ route($ctrl.'/save') }}" method="POST" accept-charset="UTF-8" enctype="multipart/form-data">
+        @csrf
+        <div class="form-group">
+            <label for="email" class="{{ $flClass }}">Email</label>
+            <div class=""><input type="email" class="form-control" id="email" name="email" value="{{ old('email') ?? $email }}" required></div>
+        </div>
+        <div class="form-group">
+            <label for="name" class="{{ $flClass }}">Name</label>
+            <div class=""><input type="text" class="form-control" id="name" name="name" value="{{ old('name') ?? $name }}" required></div>
+        </div>
+        <div class="form-group">
+            <label for="email" class="{{ $flClass }}">Status</label>
+            <div class="">
+                <select class="form-control" id="status" name="status" required>
+                    <option>Select a item...</option>
+                    @foreach ($statusEnum as $key => $val)
+                    <option {{ (old('status') ?? $status ) == $key ? "selected" : "" }} value="{{ $key }}">{{ $val }}</option>
+                    @endforeach
+                </select>
             </div>
         </div>
+        <div class="form-group">
+            <label for="email" class="{{ $flClass }}">Level</label>
+            <div class="">
+                <select class="form-control" id="level" name="level" required>
+                    <option>Select a item...</option>
+                    @foreach ($levelEnum as $key => $val)
+                    <option {{ (old('level') ?? $level ) == $key ? "selected" : "" }} value="{{ $key }}">{{ $val }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="avatar" class="{{ $flClass }}">Avatar</label>
+            <div class=""><input type="file" class="form-control" id="avatar" name="avatar"></div>
+        </div>
+            <div class="d-flex justify-content-end mt-4">
+                <input type="hidden" class="form-control" id="task" name="task" value="{{ $task }}">
+                {{--  --}}
+                <a href="{{ route($ctrl) }}" type="button" class="btn btn-light m-0">BACK</a>
+                <button type="submit" class="btn bg-gradient-primary m-0 ms-2">SUBMIT</button>
+            </div>
+        </form>
     </div>
-</div> --}}
+</div>

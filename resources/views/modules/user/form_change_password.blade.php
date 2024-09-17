@@ -1,71 +1,34 @@
 @php
     use App\Helpers\Template;
-    use App\Helpers\FormTemplate;
 
-    $formLabelClass = Config::get('gds.template.formLabel.class');
-    $formInputClass = Config::get('gds.template.formInput.class');
+    $flClass = Config::get('gds.template.formLabel.class');
+    $fiClass = Config::get('gds.template.formInput.class');
 
-    $username       = $id ? $data['username'] : '';
-    $fullname       = $id ? $data['fullname'] : '';
-    $email          = $id ? $data['email'] : '';
-    $status         = $id ? $data['status'] : '';
-    $level          = $id ? $data['level'] : '';
-    $avatar         = $id ? $data['avatar'] : '';
-
-    //$hiddenID       = Form::hidden('id', $id);
-    //$hiddenTask     = Form::hidden('task', 'change-password');
-
-    // $element = [
-    //     [
-    //         'label' => Form::label('password', 'Password', ['class' => $formLabelClass]),
-    //         'el'    => Form::password('password', ['class' => $formInputClass, 'required' => true])
-    //     ],[
-    //         'label' => Form::label('password_confirmation', 'Re-Password', ['class' => $formLabelClass]),
-    //         'el'    => Form::password('password_confirmation', ['class' => $formInputClass, 'required' => true])
-
-    //     ],[
-    //         'el' => $hiddenID . $hiddenTask . Form::submit('Lưu', ['class' => 'btn btn-success']),
-    //         'type'  => 'btn-submit'
-    //     ]
-    // ];
+    $task = 'change-password';
 @endphp
 
-<div class="col-lg-7">
-    <div class="card z-index-2">
-    <div class="card-header pb-0">
-    <h6>Sales overview</h6>
-    <p class="text-sm">
-    <i class="fa fa-arrow-up text-success" aria-hidden="true"></i>
-    <span class="font-weight-bold">4% more</span> in 2021
-    </p>
-    </div>
-    <div class="card-body p-3">
-    akshdakjsd
-    </div>
-    </div>
-    </div>
+<div class="col-lg-5 col-md-6 col-md-12">
+    <div class="card card-body p-4">
+    <h6 class="mb-0">{{ $tt }}</h6>
+    <p class="text-sm mb-0">{{ $stt }}</p>
+    <hr class="horizontal dark my-3">
 
-{{-- <div class="col-6">
-    <div class="card overflow-auto">
-        <div class="card-body">
-            <h5 class="card-title">Change password</h5>
-            <div class="row">
-
-                {!!
-                    Form::open([
-                        'url' => route($ctrl.'/save'),
-                        'accept-charset' => 'UTF-8',
-                        'method' => 'POST',
-                        'enctype' => 'multipart/form-data',
-                        'class' => 'form-horizontal form-label-left',
-                        'id' => 'main-form'
-                    ])
-                !!}
-
-                    {!! FormTemplate::export($element) !!}
-
-                {!! Form::close() !!}
-            </div>
+    <form action="{{ route($ctrl.'/save') }}" method="POST" accept-charset="UTF-8" enctype="multipart/form-data">
+        @csrf
+        <div class="form-group">
+            <label for="password" class="{{ $flClass }}">Password</label>
+            <div class=""><input type="password" class="form-control" id="password" name="password" required></div>
         </div>
-    </div>
-</div> --}}
+        <div class="form-group">
+            <label for="password_confirmation" class="{{ $flClass }}">Password confirmation</label>
+            <div class=""><input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required></div>
+        </div>
+        <div class="d-flex justify-content-end mt-4">
+            <input type="hidden" class="form-control" id="id" name="id" value="{{ $id }}">
+            <input type="hidden" class="form-control" id="task" name="task" value="{{ $task }}">
+            {{--  --}}
+            <a href="{{ route($ctrl) }}" type="button" class="btn btn-light m-0">BACK</a>
+            <button type="submit" class="btn bg-gradient-primary m-0 ms-2">SUBMIT</button>
+        </div>
+    </form>
+</div>
