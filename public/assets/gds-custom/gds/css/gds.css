@@ -2,3 +2,11 @@
     z-index: 2000;
 }
 
+.clear-search, .filter-search {
+    border: 1px solid #e9ecef;
+    cursor: pointer;
+}
+
+.clear-search > i{
+    color: #8392ab;
+}

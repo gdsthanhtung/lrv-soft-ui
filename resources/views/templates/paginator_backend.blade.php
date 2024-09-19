@@ -36,4 +36,6 @@
         @endif
     </ul>
 </nav>
+@else
+    <nav class="dataTable-pagination"> </nav>
 @endif

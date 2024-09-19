@@ -24,8 +24,6 @@ class UserController extends Controller
         $this->pathView = "modules.$this->moduleName.";
         $this->pathViewTemplate = "templates.";
 
-        $this->params["pagination"]['perPage'] = 5;
-
         $ctrl = Config::get("gds.route.$this->moduleName.ctrl");
         View::share([
             'ctrl' => $ctrl,
@@ -46,11 +44,16 @@ class UserController extends Controller
         $searchField = $rq->input('searchField', 'all');
         $fieldAccepted = Config::get("gds.enum.selectionInModule.".$this->moduleName);
 
+        $ppEnum = Config::get('gds.perPage');
+        $this->params["pagination"]['perPage'] = (in_array($rq->input('perPage'), $ppEnum)) ? $rq->input('perPage') : $ppEnum[0];
+        $this->params['pagination']['page'] = $rq->input('page', 1);
+
         $this->params['filter']['fieldAccepted'] = $fieldAccepted;
         $this->params['filter']['searchField'] = (in_array($searchField, $fieldAccepted)) ? $searchField : 'all';
         $this->params['filter']['searchValue'] = $rq->input('searchValue', '');
-
         $this->params['filter']['status'] = $rq->input('status', 'all');
+        $this->params['filter']['level'] = $rq->input('level', 'all');
+
 
         $data = $this->mainModel->listItems($this->params, ['task' => 'admin-list-items']);
         $countByStatus = $this->mainModel->countItems($this->params, ['task' => 'admin-count-items']);

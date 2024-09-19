@@ -1,13 +1,11 @@
 $(document).ready(function() {
-	let $btnSearch        = $("button#btn-search");
-	let $btnClearSearch	  = $("button#btn-clear");
+	let $btnSearch        = $("#btn-search");
+	let $btnClearSearch	  = $("#btn-clear");
 
-	let $inputSearchField = $("input[name  = searchField]");
-	let $inputSearchValue = $("input[name  = searchValue]");
+	let $inputSearchField = $("#search-field");
+	let $inputSearchValue = $("#search-value");
 
-	let $selectFilter     = $("select[name = searchFilter]");
-	let $selectChangeAttr = $("select[name =  selectChangeAttr]");
-	let $selectChangeAttrAjax = $("select[name =  selectChangeAttrAjax]");
+	let $inputPerPage = $("#per-page");
 
     $.fn.datepicker.defaults.format = "dd-mm-yyyy";
     $('.datepicker').datepicker();
@@ -311,26 +309,48 @@ $(document).ready(function() {
     	$inputSearchField.val(field);
 	});
 
-	$btnSearch.on('click', function () {
-        let searchField = $inputSearchField.val();
-		let searchValue = $inputSearchValue.val();
-        if(searchValue.replace(/\s/g, '') == ''){
-            alert('Vui lòng nhập thông tin cần tìm kiếm...');
-            return;
-        }
+    $inputSearchValue.on('keypress', function (e) {
+        if(e.which === 13){
+           //Disable textbox to prevent multiple submit
+           $(this).attr("disabled", "disabled");
 
-		var pathname	= window.location.pathname;
-		let searchParams= new URLSearchParams(window.location.search);
-		params 			= ['page', 'status'];
+           //Do Stuff, submit, etc..
+           executeSearch();
+
+           //Enable the textbox again if needed.
+           $(this).removeAttr("disabled");
+        }
+    });
+
+	$btnSearch.on('click', function () {
+        executeSearch();
+	});
+
+	$inputPerPage.on('change', function () {
+        executeSearch();
+	});
+
+    function executeSearch(){
+        let perPage     = $inputPerPage.find('option:selected').val();
+        let searchField = $inputSearchField.find('option:selected').val();
+        let searchValue = $inputSearchValue.val();
 
 		let link		= "";
+		var pathname	= window.location.pathname;
+		let searchParams= new URLSearchParams(window.location.search);
+		let params      = ['page', 'status'];
+
 		$.each( params, function( key, value ) {
 			if (searchParams.has(value) ) {
 				link += value + "=" + searchParams.get(value) + "&"
 			}
 		});
-        window.location.href = pathname + "?" + link + 'searchField='+ searchField + '&searchValue=' + searchValue.replace(/\s+/g, '+').toLowerCase();
-	});
+        let searchFieldStr = (searchValue) ?  '&searchField='+ searchField : '';
+        let searchValueStr = (searchValue) ?  '&searchValue=' + searchValue.replace(/\s+/g, '+').toLowerCase() : '';
+        let perPageStr = (perPage) ? 'perPage='+ perPage : '';
+        window.location.href = pathname + "?" + link + perPageStr + searchFieldStr + searchValueStr;
+    }
+
 
 	$btnClearSearch.click(function() {
 		var pathname	= window.location.pathname;
@@ -348,92 +368,31 @@ $(document).ready(function() {
 		window.location.href = pathname + "?" + link.slice(0,-1);
 	});
 
-	//Event onchange select filter
-	$selectFilter.on('change', function () {
-		var pathname	= window.location.pathname;
-		let searchParams= new URLSearchParams(window.location.search);
-
-		params 			= ['page', 'status', 'searchField', 'searchValue'];
-
-		let link		= "";
-		$.each( params, function( key, value ) {
-			if (searchParams.has(value) ) {
-				link += value + "=" + searchParams.get(value) + "&"
-			}
-		});
-
-		let selectField = $(this).data('field');
-		let selectValue = $(this).val();
-		window.location.href = pathname + "?" + link.slice(0,-1) + 'selectField='+ selectField + '&selectValue=' + selectValue;
- 	});
-
-	// Change attributes with selectbox
-	// $selectChangeAttr.on('change', function() {
-	// 	let item_id = $(this).data('id');
-	// 	let url = $(this).data('url');
-	// 	let csrf_token = $("input[name=csrf-token]").val();
-	// 	let selectField = $(this).data('field');
+	// $selectChangeAttrAjax.on('change', function() {
 	// 	let selectValue = $(this).val();
-	//
+	// 	let $url = $(this).data('url');
+	// 	let csrf_token = $("input[name=csrf-token]").val();
+
 	// 	$.ajax({
-	// 		url : url,
-	// 		type : "post",
-	// 		dataType: "html",
+	// 		url : $url.replace('value_new', selectValue),
+	// 		type : "GET",
+	// 		dataType: "json",
 	// 		headers: {'X-CSRF-TOKEN': csrf_token},
-	// 		data : {
-	// 			id : item_id,
-	// 			field: selectField,
-	// 			value: selectValue
-	// 		},
 	// 		success : function (result){
-	// 			if(result == 1)
-	// 				alert('Bạn đã cập nhật giá trị thành công!');
-	// 			else
+	// 			if(result) {
+	// 				$.notify({
+	// 					message: "Cập nhật giá trị thành công!"
+	// 				}, {
+	// 					delay: 500,
+	// 					allow_dismiss: false
+	// 				});
+	// 			}else {
 	// 				console.log(result)
-	//
+	// 			}
 	// 		}
 	// 	});
+
 	// });
-
-	$selectChangeAttr.on('change', function() {
-		let selectValue = $(this).val();
-		let $url = $(this).data('url');
-		window.location.href = $url.replace('value_new', selectValue);
-	});
-
-	$selectChangeAttrAjax.on('change', function() {
-		let selectValue = $(this).val();
-		let $url = $(this).data('url');
-		let csrf_token = $("input[name=csrf-token]").val();
-
-		$.ajax({
-			url : $url.replace('value_new', selectValue),
-			type : "GET",
-			dataType: "json",
-			headers: {'X-CSRF-TOKEN': csrf_token},
-			success : function (result){
-				if(result) {
-					$.notify({
-						message: "Cập nhật giá trị thành công!"
-					}, {
-						delay: 500,
-						allow_dismiss: false
-					});
-				}else {
-					console.log(result)
-				}
-			}
-		});
-
-	});
-
-	//Init datepicker
-	// $('.datepicker').datepicker({
-	// 	format: 'dd-mm-yyyy',
-	// });
-
-
-	//Confirm button delete item
 
     $('.btn-delete').on('click', function() {
 		if(!confirm('Are you sure?'))

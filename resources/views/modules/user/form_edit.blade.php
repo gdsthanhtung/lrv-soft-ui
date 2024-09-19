@@ -28,11 +28,11 @@
             @csrf
             <div class="form-group">
                 <label for="email" class="{{ $flClass }}">Email</label>
-                <div class=""><input type="email" class="form-control" id="email" name="email" value="{{ old('email') ?? $email }}" required></div>
+                <div class=""><input type="email" class="form-control" id="email" name="email" value="{{ old('email') ?? $email }}" placeholder="john.doe@icloud.com" required></div>
             </div>
             <div class="form-group">
                 <label for="name" class="{{ $flClass }}">Name</label>
-                <div class=""><input type="text" class="form-control" id="name" name="name" value="{{ old('name') ?? $name }}" required></div>
+                <div class=""><input type="text" class="form-control" id="name" name="name" value="{{ old('name') ?? $name }}" placeholder="John Doe" required></div>
             </div>
             <div class="form-group">
                 <label for="email" class="{{ $flClass }}">Status</label>

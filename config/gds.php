@@ -62,13 +62,15 @@ return [
             'class' => 'form-control'
         ]
     ],
+    'perPage' => [
+        5, 10, 25, 50, 100
+    ],
     'enum' => [
         'longNameId'    => array(),
         'ruleStatus'    => [
-            'active'    => ['name' => 'Kích hoạt', 'class' => 'success'],
-            'inactive'  => ['name' => 'Chưa kích hoạt', 'class' => 'warning'],
             'all'       => ['name' => 'Tất cả', 'class' => 'primary'],
-            'unknown'   => ['name' => 'Không xác định', 'class' => 'danger']
+            'active'    => ['name' => 'Kích hoạt', 'class' => 'success'],
+            'inactive'  => ['name' => 'Chưa kích hoạt', 'class' => 'warning']
         ],
         'ruleStatusHoaDon'    => [
             'active'    => ['name' => 'Đã thanh toán', 'class' => 'success'],
@@ -106,8 +108,6 @@ return [
             'all' => ['name' => 'Tìm Tất cả'],
             'id' => ['name' => 'Tìm theo ID'],
             'name' => ['name' => 'Tìm theo Tên'],
-            'username' => ['name' => 'Tìm theo Username'],
-            'name' => ['name' => 'Tìm theo Tên đầy đủ'],
             'email' => ['name' => 'Tìm theo Email'],
             'description' => ['name' => 'Tìm theo Mô tả'],
             'content' => ['name' => 'Tìm theo Nội dung'],
@@ -129,7 +129,7 @@ return [
         ],
         'selectionInModule' => [
             'default' => ['all'],
-            'user' => ['all', 'username', 'email', 'name'],
+            'user' => ['all', 'email', 'name'],
             'phongtro' => ['all', 'name'],
             'congdan' => ['all', 'name', 'cccd_number', 'address', 'phone'],
             'hopdong' => ['all', 'main.id', 'main.ma_hop_dong', 'cd.name', 'cd.cccd_number', 'pt.name'],

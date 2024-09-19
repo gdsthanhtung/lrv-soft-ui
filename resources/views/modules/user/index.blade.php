@@ -1,6 +1,7 @@
 @php
     use App\Helpers\Template;
     $statusFilter = Template::showButtonFilter($ctrl, $countByStatus, $params);
+    //$statusFilter = Template::showDropdownFilter($ctrl, $params, $enum = 'ruleStatus', $class = 'secondary', $filterName = 'status');
     $searchArea = Template::showsearchArea($ctrl, $params);
 @endphp
 
@@ -11,11 +12,11 @@
     <div class="col-12">
         <div class="card">
 
-            @include($pathViewTemplate . 'page-header',
+            @include($pathViewTemplate . 'page_header',
             [
                 'title' => $pageTitle. ' management',
                 'subTitle' => 'The '.$pageTitle. ' information list',
-                'button' => '<a href="'.route($ctrl."/form").'" class="btn bg-gradient-primary btn-sm mb-0"><i class="fa-solid fa-plus"></i> Add New</a>'
+                'button' => '<a href="'.route($ctrl."/form").'" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; Add New</a>'
             ])
 
             <div class="m-3 mb-0">
@@ -27,20 +28,7 @@
                 <div class="table-responsive">
                     <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
                         <div class="dataTable-top">
-                            <div class="dataTable-dropdown">
-                                <label>
-                                    Show
-                                    <select class="dataTable-selector">
-                                        <option value="5">5</option>
-                                        <option value="10">10</option>
-                                        <option value="15">15</option>
-                                        <option value="20">20</option>
-                                        <option value="25">25</option>
-                                    </select>
-                                    entries
-                                </label>
-                            </div>
-
+                            {!! $statusFilter !!}
                             {!! $searchArea !!}
                         </div>
 

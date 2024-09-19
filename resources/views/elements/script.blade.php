@@ -27,9 +27,9 @@
 
 <script src="{{ asset('assets/gds-custom/datepicker/js/bootstrap-datepicker.min.js') }}"></script>
 <script src="{{ asset('assets/gds-custom/selectpicker/js/bootstrap-multiselect.js') }}"></script>
-<script src="{{ asset('assets/gds-custom/moment/moment.min.js'); }}"></script>
+<script src="{{ asset('assets/gds-custom/moment/moment.min.js') }}"></script>
 
-<script src="{{ asset('assets/gds-custom/gds/js/modules.js'); }}"></script>
+<script src="{{ asset('assets/gds-custom/gds/js/modules.js') }}"></script>
 
 @if(Route::current()->getName() == 'hopdong/form')
     <script src="{{ asset('assets/gds-custom/gds/js/hopdong.js') }}"></script>
