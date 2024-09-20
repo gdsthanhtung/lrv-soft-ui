@@ -1,14 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\InfoUserController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ResetController;
 use App\Http\Controllers\SessionsController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
 
@@ -50,13 +48,17 @@ Route::prefix($prefixAdmin)->middleware('auth')->group(function () {
         });
     });
 
-	Route::get('user-management', function () {
-		return view('laravel-examples/user-management');
-	})->name('user-management');
-
-	Route::get('tables', function () {
-		return view('tables');
-	})->name('tables');
+    $prefix = Config::get('gds.route.role.prefix', 'role');
+    $ctrl   = Config::get('gds.route.role.ctrl', 'role');
+    Route::prefix($prefix)->group(function () use ($ctrl) {
+        Route::controller(RoleController::class)->group(function () use ($ctrl) {
+            Route::get('/', 'show')->name($ctrl);
+            Route::get('/form/{id?}', 'form')->where(['id' => '[0-9]+'])->name($ctrl.'/form');
+            Route::get('/delete/{id}', 'delete')->where(['id' => '[0-9]+'])->name($ctrl.'/delete');
+            Route::get('/change-status/{id}/{status}', 'change_status')->where(['id' => '[0-9]+', 'status' => '[a-z]+'])->name($ctrl.'/change-status');
+            Route::post('/save', 'save')->name($ctrl.'/save');
+        });
+    });
 
     Route::get('/logout', [SessionsController::class, 'destroy']);
     Route::get('/login', function () {

@@ -209,7 +209,7 @@ class Template {
         return $html;
     }
 
-    public static function radioSelect($listToSelect = [], $elName = 'noname', $valToChecked = null){
+    public static function radioSelect($listToSelect = [], $elName = 'noname', $valToChecked = null, $required = false){
         $html = '';
         foreach ($listToSelect as $value => $title) {
             $checked = ($value === $valToChecked) ? 'checked' : '';
@@ -219,6 +219,19 @@ class Template {
                     </div>";
         }
         return $html;
+    }
+
+    public static function checkboxSelect($listToSelect = [], $elName = 'noname', $valToChecked = [], $col = 'col-3', $required = false){
+        $html = '';
+        foreach ($listToSelect as $value => $title) {
+            $checked = in_array($value, $valToChecked) ? 'checked' : '';
+            $html .= "<div class='$col mb-2'><div class='form-check form-check-inline'>
+                        <input class='form-check-input' type='checkbox' name='$elName"."[]"."' id='$elName$value' value='$value' $checked>
+                        <label class='custom-control-label m-0 mt-1' for='$elName$value'>$title</label>
+                    </div></div>";
+        }
+        $wrapHtml = sprintf('<div class="row">%s</div>', $html);
+        return $wrapHtml;
     }
 
     public static function buildNhanKhauInHopDong($id, $nkInHopDong = []){

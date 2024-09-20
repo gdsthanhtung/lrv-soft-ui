@@ -13,10 +13,10 @@ return [
             'prefix' => 'user',
             'view' => 'user'
         ],
-        'auth' => [
-            'ctrl' => 'auth',
-            'prefix' => 'auth',
-            'view' => 'auth'
+        'role' => [
+            'ctrl' => 'role',
+            'prefix' => 'role',
+            'view' => 'role'
         ],
         'phongtro' => [
             'ctrl' => 'phongtro',
@@ -64,6 +64,15 @@ return [
     ],
     'perPage' => [
         5, 10, 25, 50, 100
+    ],
+    'permission' => [
+        'dashboard' => 'View Dashboard',
+        'user' => 'View User list',
+        'user/form' => 'Add/Edit User',
+        'role' => 'View Role list',
+        'role/form' => 'Add/Edit Role',
+        'room' => 'View Room list',
+        'room/form' => 'Add/Edit Room'
     ],
     'enum' => [
         'longNameId'    => array(),
@@ -130,6 +139,7 @@ return [
         'selectionInModule' => [
             'default' => ['all'],
             'user' => ['all', 'email', 'name'],
+            'role' => ['all', 'name'],
             'phongtro' => ['all', 'name'],
             'congdan' => ['all', 'name', 'cccd_number', 'address', 'phone'],
             'hopdong' => ['all', 'main.id', 'main.ma_hop_dong', 'cd.name', 'cd.cccd_number', 'pt.name'],
@@ -143,6 +153,7 @@ return [
         'btnInArea' => [
             'default' => ['edit', 'delete'],
             'user' => ['edit', 'delete'],
+            'role' => ['edit', 'delete'],
             'phongtro' => ['edit', 'delete'],
             'congdan' => ['edit', 'delete'],
             'hopdong' => ['edit', 'delete'],

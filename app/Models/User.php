@@ -44,5 +44,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    
+
+    public function permissions() {
+        return ['dashboard', 'user'];
+    }
+    public function hasPermission($route) {
+        $pms = $this->permissions();
+        dump($route);
+        return (in_array($route, $pms)) ? true : false;
+    }
 }

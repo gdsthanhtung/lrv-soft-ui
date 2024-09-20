@@ -10,7 +10,7 @@ class Notify {
             $sMsg = $customMsg['sMsg'];
             $eMsg = $customMsg['eMsg'];
         }
-        $notify = ($data) ? ['type' => 'success', 'message' => $sMsg] : ['type' => 'danger', 'message' => $eMsg];
+        $notify = ($data) ? ['type' => 'success', 'message' => $sMsg] : ['type' => 'danger', 'message' => $eMsg.$data];
         return $notify;
     }
 }

@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
-class UserModel extends Model
+class RoleModel extends Model
 {
     use HasFactory;
-    protected $table = 'users';
-    protected $uploadDir = 'user';
+    protected $table = 'roles';
+    protected $uploadDir = 'role';
 
-    protected $crudNotAccepted = ['_token', 'avatar', 'current_avatar', 'password_confirmation', 'task'];
+    protected $crudNotAccepted = ['_token', 'task'];
 
 
     public function listItems($params = null, $options = null){
@@ -98,50 +98,22 @@ class UserModel extends Model
             $paramsNew['status'] = ($params['status'] == 'active') ? 'inactive' : 'active';
             $paramsNew['updated_by'] = $loginUserId;
             $result = Self::where('id', $id)->update($paramsNew);
-        }
-
-        if($options['task'] == 'change-level'){
-            $paramsNew = $params;
-            $paramsNew['updated_by'] = $loginUserId;
-            $result = Self::where('id', $id)->update($paramsNew);
+        }else{
+            $params['permission'] = json_encode($params['permission']);
         }
 
         if($options['task'] == 'add'){
             $paramsNew = array_diff_key($params, array_flip($this->crudNotAccepted));
-            $paramsNew['created_at']       = Carbon::now();
-            $paramsNew['created_by']    = $paramsNew['updated_by'] = $loginUserId;
-            $paramsNew['password']      = md5($params['password']);
-
-            if(isset($params['avatar']) && $params['avatar']){
-                $uploadRS = Resource::uploadImage($this->uploadDir, $params['avatar'], 'avatar');
-                if($uploadRS)
-                    $paramsNew['avatar'] = $uploadRS;
-                else
-                    return "Upload error..";
-            }
-
+            $paramsNew['created_at'] = Carbon::now();
+            $paramsNew['created_by'] = $paramsNew['updated_by'] = $loginUserId;
             $result = Self::insert($paramsNew);
         }
 
         if($options['task'] == 'edit'){
             $paramsNew = array_diff_key($params, array_flip($this->crudNotAccepted));
             $paramsNew['updated_by'] = $loginUserId;
-
-            if(isset($params['avatar']) && $params['avatar']){
-                $uploadRS = Resource::uploadImage($this->uploadDir, $params['avatar'], 'avatar');
-                if($uploadRS){
-                    Resource::delete($this->uploadDir, $params['current_avatar']);
-                    $paramsNew['avatar'] = $uploadRS;
-                }else
-                    return "Upload error..";
-            }
-
             $result = Self::where('id', $id)->update($paramsNew);
-        }
 
-        if($options['task'] == 'change-password'){
-            $params['password']       = md5($params['password']);
-            $result = Self::where('id', $id)->update(['password' => $params['password']]);
         }
 
         return $result;
@@ -151,12 +123,6 @@ class UserModel extends Model
         $result = null;
         if($options['task'] == 'get-item'){
             $result = Self::select('*')->where('id', $params['id'])->first();
-        }
-
-        if($options['task'] == 'do-login'){
-            $result = Self::select(['id', 'username', 'name', 'email', 'status', 'level', 'avatar'])
-                        ->firstWhere(['email' => $params['email'], 'password' => md5($params['password']), 'status' => 'active']);
-            $result = ($result) ? $result->toArray() : null;
         }
         return $result;
     }
