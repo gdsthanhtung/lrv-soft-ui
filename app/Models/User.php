@@ -45,12 +45,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function permissions() {
-        return ['dashboard', 'user'];
-    }
     public function hasPermission($route) {
-        $pms = $this->permissions();
-        dump($route);
+        $pms = $this->routes();
+        //GDSMARKED dump($route);
         return (in_array($route, $pms)) ? true : false;
+    }
+
+    public function routes() {
+        $data = [];
+        foreach ($this->getRoleList as $key => $role) {
+            $permission = json_decode($role->permission);
+            $data = array_merge($data, $permission);
+        }
+        $data = array_unique($data);
+        //GDSMARKED dump($data);
+        return $data;
+    }
+
+    public function getRoleList(){
+        return $this->belongsToMany(RoleModel::class, 'user_roles', 'user_id', 'role_id');
     }
 }

@@ -16,7 +16,7 @@
             [
                 'title' => $pageTitle. ' management',
                 'subTitle' => 'The '.$pageTitle. ' information list',
-                'button' => '<a href="'.route($ctrl."/form").'" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; Add New</a>'
+                'button' => '<a href="'.route('admin.'.$ctrl.'.form').'" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; Add New</a>'
             ])
 
             <div class="m-3 mb-0">

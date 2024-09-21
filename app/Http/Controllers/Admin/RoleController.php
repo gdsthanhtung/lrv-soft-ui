@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\View;
 use App\Http\Requests\RoleRequest as MainRequest;
 use App\Helpers\Notify;
 use Config;
+use Route;
 
 class RoleController extends Controller
 {
@@ -79,9 +80,12 @@ class RoleController extends Controller
         if(!$data && $id)
             return redirect()->route($this->moduleName)->with('notify', ['type' => 'danger', 'message' => $this->pageTitle.' id is invalid!']);
 
+        $routeList = $this->getRouteList();
+
         $shareData = [
             'data' => $data,
-            'id' => $id
+            'id' => $id,
+            'routeList' => $routeList
         ];
         return view($this->getPathView('form'), $shareData);
 
@@ -93,7 +97,7 @@ class RoleController extends Controller
             'id'    => $rq->id
         ];
         $rs = $this->mainModel->delete($params);
-        return redirect()->route($this->moduleName)->with('notify', Notify::export($rs));
+        return redirect()->route('admin.'.$this->moduleName)->with('notify', Notify::export($rs));
     }
 
     public function change_status(Request $rq)
@@ -104,7 +108,7 @@ class RoleController extends Controller
         ];
 
         $rs = $this->mainModel->saveItem($params, ['task' => 'change-status']);
-        return redirect()->route($this->moduleName)->with('notify', Notify::export($rs));
+        return redirect()->route('admin.'.$this->moduleName)->with('notify', Notify::export($rs));
 
     }
 
@@ -115,6 +119,16 @@ class RoleController extends Controller
 
             $rs = $this->mainModel->saveItem($params, ['task' => $params['task']]);
         }
-        return redirect()->route($this->moduleName)->with('notify', Notify::export($rs));
+        return redirect()->route('admin.'.$this->moduleName)->with('notify', Notify::export($rs));
+    }
+
+    public function getRouteList(){
+        $routes = [];
+        $fullRoutes = Route::getRoutes();
+        foreach ($fullRoutes as $key => $value) {
+            if(strpos($value->getName(), 'admin.') !== false)
+                $routes[] = $value->getName();
+        }
+        return $routes;
     }
 }

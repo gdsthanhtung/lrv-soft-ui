@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use App\Http\Requests\UserRequest as MainRequest;
 use App\Helpers\Notify;
+use App\Models\RoleModel;
+use App\Models\User;
 use Config;
 
 class UserController extends Controller
@@ -54,9 +56,15 @@ class UserController extends Controller
         $this->params['filter']['status'] = $rq->input('status', 'all');
         $this->params['filter']['level'] = $rq->input('level', 'all');
 
-
         $data = $this->mainModel->listItems($this->params, ['task' => 'admin-list-items']);
         $countByStatus = $this->mainModel->countItems($this->params, ['task' => 'admin-count-items']);
+
+        if($data){
+            foreach ($data as $key => $user) {
+                $userRole = $this->mainModel->getUserRoles([$user['id']]);
+                $data[$key]['role'] = $userRole[$user['id']]['dataForShow'];
+            }
+        }
 
         $shareData = [
             'data' => $data,
@@ -81,9 +89,18 @@ class UserController extends Controller
         if(!$data && $id)
             return redirect()->route($this->moduleName)->with('notify', ['type' => 'danger', 'message' => $this->pageTitle.' id is invalid!']);
 
+        //Get list role
+        $roleModel = new RoleModel();
+        $dataRole = $roleModel->listItems([], ['task' => 'admin-list-items-to-select']);
+
+        //Get user's role
+        $userRole = $this->mainModel->getUserRoles([$id]);
+
         $shareData = [
             'data' => $data,
-            'id' => $id
+            'id' => $id,
+            'dataRole' => $dataRole,
+            'userRole' => $userRole[$id]
         ];
         return view($this->getPathView('form'), $shareData);
 
@@ -95,7 +112,7 @@ class UserController extends Controller
             'id'    => $rq->id
         ];
         $rs = $this->mainModel->delete($params);
-        return redirect()->route($this->moduleName)->with('notify', Notify::export($rs));
+        return redirect()->route('admin.'.$this->moduleName)->with('notify', Notify::export($rs));
     }
 
     public function change_status(Request $rq)
@@ -106,7 +123,7 @@ class UserController extends Controller
         ];
 
         $rs = $this->mainModel->saveItem($params, ['task' => 'change-status']);
-        return redirect()->route($this->moduleName)->with('notify', Notify::export($rs));
+        return redirect()->route('admin.'.$this->moduleName)->with('notify', Notify::export($rs));
 
     }
 
@@ -118,7 +135,7 @@ class UserController extends Controller
         ];
 
         $rs = $this->mainModel->saveItem($params, ['task' => 'change-level']);
-        return redirect()->route($this->moduleName)->with('notify', Notify::export($rs));
+        return redirect()->route('admin.'.$this->moduleName)->with('notify', Notify::export($rs));
 
     }
 
@@ -129,6 +146,6 @@ class UserController extends Controller
 
             $rs = $this->mainModel->saveItem($params, ['task' => $params['task']]);
         }
-        return redirect()->route($this->moduleName)->with('notify', Notify::export($rs));
+        return redirect()->route('admin.'.$this->moduleName)->with('notify', Notify::export($rs));
     }
 }

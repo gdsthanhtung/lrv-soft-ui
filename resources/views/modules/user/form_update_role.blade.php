@@ -1,5 +1,5 @@
 @php
-    $task = 'change-password';
+    $task = 'update-role';
 @endphp
 
 <div class="card card-body p-4">
@@ -10,12 +10,8 @@
     <form action="{{ route('admin.'.$ctrl.'.save') }}" method="POST" accept-charset="UTF-8" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
-            <label for="password" class="{{ $flClass }}">Password</label>
-            <div class=""><input type="password" class="form-control" id="password" name="password" placeholder="******" required></div>
-        </div>
-        <div class="form-group">
-            <label for="password_confirmation" class="{{ $flClass }}">Password confirmation</label>
-            <div class=""><input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="******" required></div>
+            <label for="password" class="{{ $flClass }}">Role</label>
+            <div class="">{!! $roleSelect !!}</div>
         </div>
         <div class="d-flex justify-content-end mt-4">
             <input type="hidden" class="form-control" id="id" name="id" value="{{ $id }}">

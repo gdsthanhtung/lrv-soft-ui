@@ -1,4 +1,4 @@
-<form action="{{ route($ctrl.'/save') }}" method="POST" accept-charset="UTF-8" enctype="multipart/form-data">
+<form action="{{ route('admin.'.$ctrl.'.save') }}" method="POST" accept-charset="UTF-8" enctype="multipart/form-data">
 	@csrf
 
 	<div class="form-group">
@@ -22,7 +22,7 @@
         <input type="hidden" class="form-control" id="id" name="id" value="{{ $id }}">
         <input type="hidden" class="form-control" id="task" name="task" value="{{ $task }}">
         {{--  --}}
-		<a href="{{ route($ctrl) }}" type="button" class="btn btn-light m-0">BACK</a>
+		<a href="{{ route('admin.'.$ctrl) }}" type="button" class="btn btn-light m-0">BACK</a>
 		<button type="submit" class="btn bg-gradient-primary m-0 ms-2">SUBMIT</button>
 	</div>
 </form>

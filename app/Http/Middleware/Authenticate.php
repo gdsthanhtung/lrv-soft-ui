@@ -15,7 +15,7 @@ class Authenticate extends Middleware
         }else{
             $user = Auth::user();
             $route = $request->route()->getName();
-            dump($user->can($route));
+            //GDSMARKED dump($user->can($route));
             return $next($request);
         }
     }

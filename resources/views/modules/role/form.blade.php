@@ -11,12 +11,11 @@
         $status = ($id) ? $data['status'] : '';
 
         use App\Helpers\Template;
-        $permission = Config::get('gds.permission');
+        $permission = $routeList;
         $permissionSelected = ($id) ? json_decode($data['permission']) : [];
         $permissionSelect = Template::checkboxSelect($permission, $elName = 'permission', $permissionSelected, 'col-4', $required = true);
 
         $statusSelect = Template::radioSelect($statusEnum, $elName = 'status', $status, $required = true);
-
     @endphp
     <div class="row">
 

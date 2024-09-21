@@ -90,26 +90,35 @@ class UserModel extends Model
     public function saveItem($params = null, $options = null){
         $result = null;
         $id = (isset($params['id'])) ? $params['id'] : null;
-        $loginUserId = Auth::id();
         $params['updated_at'] = Carbon::now();
 
         if($options['task'] == 'change-status'){
             $paramsNew = $params;
             $paramsNew['status'] = ($params['status'] == 'active') ? 'inactive' : 'active';
-            $paramsNew['updated_by'] = $loginUserId;
+            $paramsNew['updated_by'] = Auth::id();
             $result = Self::where('id', $id)->update($paramsNew);
         }
 
         if($options['task'] == 'change-level'){
             $paramsNew = $params;
-            $paramsNew['updated_by'] = $loginUserId;
+            $paramsNew['updated_by'] = Auth::id();
             $result = Self::where('id', $id)->update($paramsNew);
+        }
+
+        if($options['task'] == 'update-role'){
+            //Prepair data
+            $userId = $params['id'];
+            $roles = $params['roles'];
+
+            //Remove all old user's roles
+            $userRoleModel = new UserRoleModel();
+            $result = $userRoleModel::processAddRole($userId, $roles);
         }
 
         if($options['task'] == 'add'){
             $paramsNew = array_diff_key($params, array_flip($this->crudNotAccepted));
             $paramsNew['created_at']       = Carbon::now();
-            $paramsNew['created_by']    = $paramsNew['updated_by'] = $loginUserId;
+            $paramsNew['created_by']    = $paramsNew['updated_by'] = Auth::id();
             $paramsNew['password']      = md5($params['password']);
 
             if(isset($params['avatar']) && $params['avatar']){
@@ -125,7 +134,7 @@ class UserModel extends Model
 
         if($options['task'] == 'edit'){
             $paramsNew = array_diff_key($params, array_flip($this->crudNotAccepted));
-            $paramsNew['updated_by'] = $loginUserId;
+            $paramsNew['updated_by'] = Auth::id();
 
             if(isset($params['avatar']) && $params['avatar']){
                 $uploadRS = Resource::uploadImage($this->uploadDir, $params['avatar'], 'avatar');
@@ -159,5 +168,29 @@ class UserModel extends Model
             $result = ($result) ? $result->toArray() : null;
         }
         return $result;
+    }
+
+    public function getUserRoles($userIds = []){
+        $result = [];
+        if($userIds){
+            foreach($userIds as $userId){
+                $dataForSelect = [];
+                $dataForShow = [];
+                $roles = Self::select('*')->where('id', $userId)->first()->roles;
+                if($roles){
+                    foreach ($roles as $key => $role) {
+                        $dataForShow[$role->id] = $role->name;
+                        $dataForSelect[] = $role->id;
+                    }
+                }
+                $result[$userId] = ['dataForSelect' => $dataForSelect, 'dataForShow' => $dataForShow];
+            }
+
+        }
+        return $result;
+    }
+
+    public function roles(){
+        return $this->belongsToMany(RoleModel::class, 'user_roles', 'user_id', 'role_id');
     }
 }

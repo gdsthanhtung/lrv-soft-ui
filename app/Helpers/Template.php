@@ -34,17 +34,19 @@ class Template {
         ", $tooltips, $by, date(Config::get('gds.format.shortTime'), strtotime($time)));
     }
 
+
+
     public static function showItemStatus($ctrl, $id, $status){
         $rule = Config::get('gds.enum.ruleStatus');
         $tpl = (isset($rule[$status])) ? $rule[$status] : $rule['unknown'];
-        $link = route($ctrl.'/change-status', ['id' => $id, 'status' => $status]);
+        $link = route('admin.'.$ctrl.'.change-status', ['id' => $id, 'status' => $status]);
         return sprintf ("<a href='%s' type='button' class='btn btn-sm mb-0 bg-gradient-%s'>%s</a>", $link, $tpl['class'], $tpl['name']);
     }
 
     public static function showItemStatusHoaDon($ctrl, $id, $status){
         $rule = Config::get('gds.enum.ruleStatusHoaDon');
         $tpl = (isset($rule[$status])) ? $rule[$status] : $rule['unknown'];
-        $link = route($ctrl.'/change-status', ['id' => $id, 'status' => $status]);
+        $link = route('admin.'.$ctrl.'.change-status', ['id' => $id, 'status' => $status]);
         return sprintf ("<a href='%s' type='button' class='btn btn-sm mb-0 bg-gradient-%s'>%s</a>", $link, $tpl['class'], $tpl['name']);
     }
 
@@ -71,7 +73,7 @@ class Template {
 
         foreach($listBtn as $item){
             $button = $rule[$item];
-            $link = route($ctrl.$button['route'], ['id' => $id]);
+            $link = route('admin.'.$ctrl.$button['route'], ['id' => $id]);
             $html .= sprintf('<a href="%s" class="mx-2" data-bs-toggle="tooltip" data-bs-original-title="%s">
                                 <i class="fa %s text-secondary" aria-hidden="true"></i>
                             </a>', $link, $button['title'], $button['icon']);
@@ -96,7 +98,7 @@ class Template {
                 $status = $item['status'];
                 $tpl = (isset($rule[$status])) ? $rule[$status] : $rule['unknown'];
 
-                $link = route($ctrl).'?status='.$status.$searchField.$searchValue;
+                $link = route('admin.'.$ctrl).'?status='.$status.$searchField.$searchValue;
                 $class = ($params['filter']['status'] == $status) ? $tpl['class'] : 'secondary';
                 $html .= sprintf('<a href="%s" type="button" class="btn bg-gradient-%s btn-sm me-1">%s <span class="badge bg-white text-%s">%s</span></a>',
                                     $link, $class, ucfirst($tpl['name']), $class, $item['total']);
@@ -188,7 +190,7 @@ class Template {
         $enum = Config::get('gds.enum.select' . ucfirst($fieldName));
 
         foreach ($enum['value'] as $key => $value) {
-            $link = route($ctrl . '/change-' . $fieldName, [$fieldName => $key, 'id' => $id]);
+            $link = route('admin.'.$ctrl.'.change-' . $fieldName, [$fieldName => $key, 'id' => $id]);
             $list .= sprintf('<li><a class="dropdown-item" href="%s">%s</a></li>', $link, $value);
         }
 
@@ -291,5 +293,14 @@ class Template {
             $text = 'HĐ Thuê Nhà';
         }
         return "<a href=".route('hopdong/export', ['id' => $id, 'task' => $task, 'thoiHanONho' => 24, 'thoiHanTuNgay' => $date])." target='_blank' class='btn btn-$class btn-sm mb-1 mr-5'>$text</a>";
+    }
+
+    public static function showListUL($data){
+        $html = '';
+        if($data) foreach ($data as $key => $item) {
+            $html .= "<li>$item</li>";
+        }
+        $html = "<ul>$html</ul>";
+        return $html;
     }
 }
