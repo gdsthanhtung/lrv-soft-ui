@@ -127,7 +127,7 @@ class RoleController extends Controller
         $fullRoutes = Route::getRoutes();
         foreach ($fullRoutes as $key => $value) {
             if(strpos($value->getName(), 'admin.') !== false)
-                $routes[] = $value->getName();
+                $routes[$value->getName()] = $value->getName();
         }
         return $routes;
     }

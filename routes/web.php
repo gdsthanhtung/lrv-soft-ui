@@ -25,6 +25,10 @@ $prefixAdmin = Config::get('gds.route.prefix_admin', 'admin');
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
 
+Route::get('error', function () {
+    return view('modules.error.index');
+})->name('error');
+
 Route::prefix($prefixAdmin)->middleware('auth')->as("$prefixAdmin.")->group(function () {
 
 	Route::get('dashboard', function () {

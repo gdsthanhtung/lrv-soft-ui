@@ -47,7 +47,6 @@ class User extends Authenticatable
 
     public function hasPermission($route) {
         $pms = $this->routes();
-        //GDSMARKED dump($route);
         return (in_array($route, $pms)) ? true : false;
     }
 
@@ -58,7 +57,6 @@ class User extends Authenticatable
             $data = array_merge($data, $permission);
         }
         $data = array_unique($data);
-        //GDSMARKED dump($data);
         return $data;
     }
 
