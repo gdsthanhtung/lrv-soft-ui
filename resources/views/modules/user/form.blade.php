@@ -11,7 +11,7 @@
         $role       = ($id && $data['role']) ? $data['role'] : [];
 
         use App\Helpers\Template;
-        $roleSelect = Template::checkboxSelect($dataRole, $elName = 'roles', $userRole['dataForSelect'] , 'col-12', $required = false);
+        $roleSelect = Template::checkboxSelect($dataRole, $elName = 'roles', $role , 'col-12', $required = false);
     @endphp
 
     <div class="row">
