@@ -9,13 +9,15 @@
 	<div class="form-group">
 		<label for="email" class="{{ $flClass }}">Status</label>
 		<div class="">
-            {!! $statusSelect !!}
+            <x-select.radio :listToSelect="$statusEnum" elName='status' valToChecked='{{$status}}' required='true' />
         </div>
 	</div>
 
 	<div class="form-group">
 		<label for="name" class="{{ $flClass }}">Permission</label>
-		<div class="">{!! $permissionSelect !!}</div>
+		<div class="">
+            <x-select.checkbox :listToSelect="$permission" elName='permission' :valToChecked="$permissionSelected" required='true' col='col-4' />
+        </div>
 	</div>
 
 	<div class="d-flex justify-content-end mt-4">

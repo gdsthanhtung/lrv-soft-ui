@@ -29,11 +29,10 @@
 
                         $avatar     = Template::showItemAvatar($ctrl, $item['avatar'], $item['name']);
                         $status     = Template::showItemStatus($ctrl, $id, $item['status']);
-                        $level      = Template::showItemDropdown($ctrl, $id, $item['level'], 'level');
+                        $level      = $item['level'];
                         $roles      = Template::showListUL($item['role']);
                         $createdHis = Template::showItemHistory($item['created_by_name'], $item['created_at'], 'add');
                         $updatedHis = Template::showItemHistory($item['updated_by_name'], $item['updated_at'], 'edit');
-                        $actionBtn  = Template::showActionButton($ctrl, $id);
 
                     @endphp
 
@@ -44,10 +43,10 @@
                         <span class="text-sm mb-0 text-capitalize font-weight-bold">Email: </span> {!! $email !!}
                     </td>
                     <td class="text-sm">{!! $roles !!}</td>
-                    <td class="text-sm">{!! $level !!}</td>
+                    <td class="text-sm"><x-select.dropdown :ctrl="$ctrl" :id="$id" :displayValue="$level" fieldName='level' /></td>
                     <td class="text-sm text-center">{!! $status !!}</td>
                     <td class="text-sm">{!! $createdHis !!} <hr class='horizontal dark m-1'> {!! $updatedHis !!}</td>
-                    <td class="text-sm text-center">{!! $actionBtn !!}</td>
+                    <td class="text-sm text-center"><x-button.action :ctrl="$ctrl" :id="$id" /></td>
                 </tr>
             @endforeach
         @else

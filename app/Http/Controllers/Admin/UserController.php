@@ -94,13 +94,13 @@ class UserController extends Controller
         $dataRole = $roleModel->listItems([], ['task' => 'admin-list-items-to-select']);
 
         //Get user's role
-        $userRole = $this->mainModel->getUserRoles([$id]);
+        $userRole = ($id) ? $this->mainModel->getUserRoles([$id])[$id] : [];
 
         $shareData = [
             'data' => $data,
             'id' => $id,
             'dataRole' => $dataRole,
-            'userRole' => $userRole[$id]
+            'userRole' => $userRole
         ];
         return view($this->getPathView('form'), $shareData);
 

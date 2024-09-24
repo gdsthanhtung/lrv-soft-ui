@@ -11,7 +11,9 @@
         @csrf
         <div class="form-group">
             <label for="password" class="{{ $flClass }}">Role</label>
-            <div class="">{!! $roleSelect !!}</div>
+            <div class="">
+                <x-select.checkbox :listToSelect="$dataRole" elName='roles' :valToChecked="$uRole" required='true' col='col-12' />
+            </div>
         </div>
         <div class="d-flex justify-content-end mt-4">
             <input type="hidden" class="form-control" id="id" name="id" value="{{ $id }}">

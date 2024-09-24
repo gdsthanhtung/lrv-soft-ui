@@ -27,7 +27,6 @@
                         $status     = Template::showItemStatus($ctrl, $id, $item['status']);
                         $createdHis = Template::showItemHistory($item['created_by_name'], $item['created_at'], 'add');
                         $updatedHis = Template::showItemHistory($item['updated_by_name'], $item['updated_at'], 'edit');
-                        $actionBtn  = Template::showActionButton($ctrl, $id);
                     @endphp
 
                     <td class="text-sm">{{ $no }}</td>
@@ -35,7 +34,7 @@
                     <td class="text-sm text-center">{!! $status !!}</td>
                     <td class="text-sm">{!! $createdHis !!} </td>
                     <td class="text-sm">{!! $updatedHis !!}</td>
-                    <td class="text-sm text-center">{!! $actionBtn !!}</td>
+                    <td class="text-sm text-center"><x-button.action :ctrl="$ctrl" :id="$id" /></td>
                 </tr>
             @endforeach
         @else

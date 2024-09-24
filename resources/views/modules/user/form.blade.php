@@ -2,16 +2,16 @@
 
 @section('content')
     @php
-        $flClass = Config::get('gds.template.formLabel.class');
-        $fiClass = Config::get('gds.template.formInput.class');
+        use App\Helpers\Template;
+
+        $flClass    = Config::get('gds.template.formLabel.class');
+        $fiClass    = Config::get('gds.template.formInput.class');
 
         $statusEnum = Config::get('gds.enum.selectStatus');
-        $levelEnum  = Config::get('gds.enum.selectLevel')['value'];
         $task       = ($id) ? 'edit' : 'add';
-        $role       = ($id && $data['role']) ? $data['role'] : [];
 
-        use App\Helpers\Template;
-        $roleSelect = Template::checkboxSelect($dataRole, $elName = 'roles', $userRole['dataForSelect'] , 'col-12', $required = false);
+        $role       = ($id && $data['role']) ? $data['role'] : [];
+        $uRole      = ($id) ? $userRole['dataForSelect'] : [];
     @endphp
 
     <div class="row">

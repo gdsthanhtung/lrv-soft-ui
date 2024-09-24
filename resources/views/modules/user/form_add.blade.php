@@ -24,24 +24,7 @@
 	<div class="form-group">
 		<label for="email" class="{{ $flClass }}">Status</label>
 		<div class="">
-            <select class="form-control" id="status" name="status" required>
-                <option>Select a item...</option>
-                @foreach ($statusEnum as $key => $val)
-                    <option {{ old('status') == $key ? "selected" : "" }} value="{{ $key }}">{{ $val }}</option>
-                @endforeach
-            </select>
-        </div>
-	</div>
-
-	<div class="form-group">
-		<label for="email" class="{{ $flClass }}">Level</label>
-		<div class="">
-            <select class="form-control" id="level" name="level" required>
-                <option>Select a item...</option>
-                @foreach ($levelEnum as $key => $val)
-                    <option {{ old('level') == $key ? "selected" : "" }} value="{{ $key }}">{{ $val }}</option>
-                @endforeach
-            </select>
+            <x-select.radio :listToSelect="$statusEnum" elName='status' :valToChecked="old('status')" required='true' />
         </div>
 	</div>
 

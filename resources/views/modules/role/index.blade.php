@@ -1,8 +1,8 @@
 @php
     use App\Helpers\Template;
-    $statusFilter = Template::showButtonFilter($ctrl, $countByStatus, $params);
+    //$statusFilter = Template::showButtonFilter($ctrl, $countByStatus, $params);
     //$statusFilter = Template::showDropdownFilter($ctrl, $params, $enum = 'ruleStatus', $class = 'secondary', $filterName = 'status');
-    $searchArea = Template::showsearchArea($ctrl, $params);
+    //$searchArea = Template::showsearchArea($ctrl, $params);
 @endphp
 
 @extends('elements.auth')
@@ -28,8 +28,8 @@
                 <div class="table-responsive">
                     <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
                         <div class="dataTable-top">
-                            {!! $statusFilter !!}
-                            {!! $searchArea !!}
+                            <x-button.filter :ctrl="$ctrl" :countByStatus="$countByStatus" :params="$params" />
+                            <x-search.area :ctrl="$ctrl" :params="$params" />
                         </div>
 
                         @include($pathView.'list')
