@@ -1,5 +1,5 @@
 <tr>
     <td colspan="{{ $colspan }}" class="text-center">
-        Empty data!
+        <p class="btn btn-sm bg-gradient-secondary my-3">Empty Data</p>
     </td>
 </tr>

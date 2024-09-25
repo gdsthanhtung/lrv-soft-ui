@@ -10,7 +10,6 @@
                 <th>#</th>
                 <th>Avatar</th>
                 <th>Info</th>
-                <th>Role</th>
                 <th>Level</th>
                 <th class="text-center">Status</th>
                 <th>History</th>
@@ -30,10 +29,9 @@
                         $avatar     = Template::showItemAvatar($ctrl, $item['avatar'], $item['name']);
                         $status     = Template::showItemStatus($ctrl, $id, $item['status']);
                         $level      = $item['level'];
-                        $roles      = Template::showListUL($item['role']);
                         $createdHis = Template::showItemHistory($item['created_by_name'], $item['created_at'], 'add');
                         $updatedHis = Template::showItemHistory($item['updated_by_name'], $item['updated_at'], 'edit');
-
+                        $actionBtn  = Template::showActionButton($ctrl, $id);
                     @endphp
 
                     <td class="text-sm">{{ $no }}</td>
@@ -42,11 +40,10 @@
                         <span class="text-sm mb-0 text-capitalize font-weight-bold">Name: </span> {!! $name !!}<br>
                         <span class="text-sm mb-0 text-capitalize font-weight-bold">Email: </span> {!! $email !!}
                     </td>
-                    <td class="text-sm">{!! $roles !!}</td>
                     <td class="text-sm"><x-select.dropdown :ctrl="$ctrl" :id="$id" :displayValue="$level" fieldName='level' /></td>
                     <td class="text-sm text-center">{!! $status !!}</td>
                     <td class="text-sm">{!! $createdHis !!} <hr class='horizontal dark m-1'> {!! $updatedHis !!}</td>
-                    <td class="text-sm text-center"><x-button.action :ctrl="$ctrl" :id="$id" /></td>
+                    <td class="text-sm text-center">{!! $actionBtn !!}</td>
                 </tr>
             @endforeach
         @else

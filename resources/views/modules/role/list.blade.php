@@ -8,12 +8,10 @@
         <thead class="thead-light">
             <tr>
                 <th>#</th>
-                <th>Avatar</th>
-                <th>Info</th>
-                <th>Role</th>
-                <th>Level</th>
+                <th>Name</th>
                 <th class="text-center">Status</th>
-                <th>History</th>
+                <th>Create History</th>
+                <th>Update History</th>
                 <th class="text-center">Action</th>
             </tr>
         </thead>
@@ -25,27 +23,17 @@
                         $no = ++$key;
                         $id = $item['id'];
                         $name       = Highlight::show($item['name'], $params['filter'], 'name');
-                        $email      = Highlight::show($item['email'], $params['filter'], 'email');
 
-                        $avatar     = Template::showItemAvatar($ctrl, $item['avatar'], $item['name']);
                         $status     = Template::showItemStatus($ctrl, $id, $item['status']);
-                        $level      = $item['level'];
-                        $roles      = Template::showListUL($item['role']);
                         $createdHis = Template::showItemHistory($item['created_by_name'], $item['created_at'], 'add');
                         $updatedHis = Template::showItemHistory($item['updated_by_name'], $item['updated_at'], 'edit');
-
                     @endphp
 
                     <td class="text-sm">{{ $no }}</td>
-                    <td class="text-sm">{!! $avatar !!}</td>
-                    <td width="20%" class="text-sm">
-                        <span class="text-sm mb-0 text-capitalize font-weight-bold">Name: </span> {!! $name !!}<br>
-                        <span class="text-sm mb-0 text-capitalize font-weight-bold">Email: </span> {!! $email !!}
-                    </td>
-                    <td class="text-sm">{!! $roles !!}</td>
-                    <td class="text-sm"><x-select.dropdown :ctrl="$ctrl" :id="$id" :displayValue="$level" fieldName='level' /></td>
+                    <td width="20%" class="text-sm">{!! $name !!}</td>
                     <td class="text-sm text-center">{!! $status !!}</td>
-                    <td class="text-sm">{!! $createdHis !!} <hr class='horizontal dark m-1'> {!! $updatedHis !!}</td>
+                    <td class="text-sm">{!! $createdHis !!} </td>
+                    <td class="text-sm">{!! $updatedHis !!}</td>
                     <td class="text-sm text-center"><x-button.action :ctrl="$ctrl" :id="$id" /></td>
                 </tr>
             @endforeach

@@ -1,4 +1,4 @@
-<form action="{{ route('admin.'.$ctrl.'.save') }}" method="POST" accept-charset="UTF-8" enctype="multipart/form-data">
+<form action="{{ route($ctrl.'.save') }}" method="POST" accept-charset="UTF-8" enctype="multipart/form-data">
 	@csrf
 
 	<div class="form-group">
@@ -24,7 +24,24 @@
 	<div class="form-group">
 		<label for="email" class="{{ $flClass }}">Status</label>
 		<div class="">
-            <x-select.radio :listToSelect="$statusEnum" elName='status' :valToChecked="old('status')" required='true' />
+            <select class="form-control" id="status" name="status" required>
+                <option>Select a item...</option>
+                @foreach ($statusEnum as $key => $val)
+                    <option {{ old('status') == $key ? "selected" : "" }} value="{{ $key }}">{{ $val }}</option>
+                @endforeach
+            </select>
+        </div>
+	</div>
+
+	<div class="form-group">
+		<label for="email" class="{{ $flClass }}">Level</label>
+		<div class="">
+            <select class="form-control" id="level" name="level" required>
+                <option>Select a item...</option>
+                @foreach ($levelEnum as $key => $val)
+                    <option {{ old('level') == $key ? "selected" : "" }} value="{{ $key }}">{{ $val }}</option>
+                @endforeach
+            </select>
         </div>
 	</div>
 
@@ -36,7 +53,7 @@
 	<div class="d-flex justify-content-end mt-4">
         <input type="hidden" class="form-control" id="task" name="task" value="{{ $task }}">
         {{--  --}}
-		<a href="{{ route('admin.'.$ctrl) }}" type="button" class="btn btn-light m-0">BACK</a>
+		<a href="{{ route($ctrl) }}" type="button" class="btn btn-light m-0">BACK</a>
 		<button type="submit" class="btn bg-gradient-primary m-0 ms-2">SUBMIT</button>
 	</div>
 </form>

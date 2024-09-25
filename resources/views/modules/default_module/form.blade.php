@@ -2,43 +2,30 @@
 
 @section('content')
     @php
-        use App\Helpers\Template;
-
-        $flClass    = Config::get('gds.template.formLabel.class');
-        $fiClass    = Config::get('gds.template.formInput.class');
+        $flClass = Config::get('gds.template.formLabel.class');
+        $fiClass = Config::get('gds.template.formInput.class');
 
         $statusEnum = Config::get('gds.enum.selectStatus');
+        $levelEnum  = Config::get('gds.enum.selectLevel')['value'];
         $task       = ($id) ? 'edit' : 'add';
-
-        $role       = ($id && $data['role']) ? $data['role'] : [];
-        $uRole      = ($id) ? $userRole['dataForSelect'] : [];
     @endphp
-
     <div class="row">
+
         @php
             $tt = (($id) ? 'Modify' : 'New').' '.$pageTitle;
             $stt = (($id) ? 'Update the' : 'Add the new').' '.$pageTitle.' information';
         @endphp
 
         @if ($id)
-            <div class="col-12">
+            <div class="col-10 offset-1">
                 <div class="row">
                     <div class="px-2">
                         @includeWhen(session('notify'), $pathViewTemplate . 'notify')
                         @include($pathViewTemplate . 'error')
                     </div>
 
-                        <div class="col-lg-4 col-md-6 col-md-12 mb-5">
-                            @include($pathView.'form_edit')
-                        </div>
-
-                        <div class="col-lg-4 col-md-6 col-md-12 mb-5">
-                            @include($pathView.'form_update_role', ['tt' => 'Change Role', 'stt' => 'Update the Role for User'])
-                        </div>
-
-                        <div class="col-lg-4 col-md-6 col-md-12 mb-5">
-                            @include($pathView.'form_change_password', ['tt' => 'Reset Password', 'stt' => 'Update the New Password for User'])
-                        </div>
+                    @include($pathView.'form_edit')
+                    @include($pathView.'form_change_password', ['tt' => 'Reset Password', 'stt' => 'Update the New Password for User'])
                 </div>
             </div>
         @else

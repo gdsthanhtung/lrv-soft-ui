@@ -1,6 +1,6 @@
 @php
     use App\Helpers\Template;
-    //$statusFilter = Template::($ctrl, $countByStatus, $params);
+    //$statusFilter = Template::showButtonFilter($ctrl, $countByStatus, $params);
     //$statusFilter = Template::showDropdownFilter($ctrl, $params, $enum = 'ruleStatus', $class = 'secondary', $filterName = 'status');
     //$searchArea = Template::showsearchArea($ctrl, $params);
 @endphp
