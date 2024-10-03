@@ -11,7 +11,7 @@
         $task       = ($id) ? 'edit' : 'add';
 
         $role       = ($id && $data['role']) ? $data['role'] : [];
-        $uRole      = ($id) ? $userRole['dataForSelect'] : [];
+        $uRole      = ($id) ? $roleUser['dataForSelect'] : [];
     @endphp
 
     <div class="row">

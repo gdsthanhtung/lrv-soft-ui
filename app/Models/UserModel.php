@@ -116,8 +116,8 @@ class UserModel extends Model
             $roles = $params['roles'];
 
             //Remove all old user's roles
-            $userRoleModel = new UserRoleModel();
-            $result = $userRoleModel::processAddRole($userId, $roles);
+            $roleUserModel = new RoleUserModel();
+            $result = $roleUserModel::processAddRole($userId, $roles);
         }
 
         if($options['task'] == 'add'){
@@ -175,7 +175,7 @@ class UserModel extends Model
         return $result;
     }
 
-    public function getUserRoles($userIds = []){
+    public function getRoleUsers($userIds = []){
         $result = [];
         if($userIds){
             foreach($userIds as $userId){

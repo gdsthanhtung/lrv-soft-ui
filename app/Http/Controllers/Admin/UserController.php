@@ -10,7 +10,7 @@ use App\Http\Requests\UserRequest as MainRequest;
 use App\Helpers\Notify;
 use App\Models\RoleModel;
 use App\Models\User;
-use Config;
+use Illuminate\Support\Facades\Config;
 
 class UserController extends Controller
 {
@@ -61,8 +61,8 @@ class UserController extends Controller
 
         if($data){
             foreach ($data as $key => $user) {
-                $userRole = $this->mainModel->getUserRoles([$user['id']]);
-                $data[$key]['role'] = $userRole[$user['id']]['dataForShow'];
+                $roleUser = $this->mainModel->getRoleUsers([$user['id']]);
+                $data[$key]['role'] = $roleUser[$user['id']]['dataForShow'];
             }
         }
 
@@ -94,13 +94,13 @@ class UserController extends Controller
         $dataRole = $roleModel->listItems([], ['task' => 'admin-list-items-to-select']);
 
         //Get user's role
-        $userRole = ($id) ? $this->mainModel->getUserRoles([$id])[$id] : [];
+        $roleUser = ($id) ? $this->mainModel->getRoleUsers([$id])[$id] : [];
 
         $shareData = [
             'data' => $data,
             'id' => $id,
             'dataRole' => $dataRole,
-            'userRole' => $userRole
+            'roleUser' => $roleUser
         ];
         return view($this->getPathView('form'), $shareData);
 

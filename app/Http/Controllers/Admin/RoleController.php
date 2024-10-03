@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use App\Http\Requests\RoleRequest as MainRequest;
 use App\Helpers\Notify;
-use Config;
-use Route;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Route;
 
 class RoleController extends Controller
 {
