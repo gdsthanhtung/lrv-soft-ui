@@ -17,9 +17,13 @@ class UserSeeder extends Seeder
     {
         DB::table('users')->insert([
             'id' => 1,
-            'name' => 'admin',
-            'email' => 'admin@softui.com',
-            'password' => Hash::make('secret'),
+            'name' => 'Gds-Admin',
+            'email' => 'gds.thanhtung@gmail.com',
+            'password' => Hash::make('123123'),
+            'status' => 'active',
+            'avatar' => 'default/user-avatar.jpg',
+            'created_by' => 1,
+            'updated_by' => 1,
             'created_at' => now(),
             'updated_at' => now()
         ]);

@@ -16,8 +16,11 @@ return new class extends Migration
             $table->string('name', 150)->unique();
             $table->text('permission')->nullable();
             $table->string('status', 20)->nullable();
-            $table->bigInteger('created_by')->nullable();
-            $table->bigInteger('updated_by')->nullable();
+
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('updated_by')->references('id')->on('users');
             $table->timestamps();
         });
     }
