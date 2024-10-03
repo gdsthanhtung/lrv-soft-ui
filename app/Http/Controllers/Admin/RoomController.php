@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
-use App\Models\RoleModel as MainModel;
+use App\Models\RoomModel as MainModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
-use App\Http\Requests\RoleRequest as MainRequest;
+use App\Http\Requests\RoomRequest as MainRequest;
 use App\Helpers\Notify;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 
-class RoleController extends Controller
+class RoomController extends Controller
 {
     private $mainModel;
     private $pathView;
     private $pathViewTemplate;
-    private $moduleName = "role";
-    private $pageTitle = "Role";
+    private $moduleName = "room";
+    private $pageTitle = "Room";
     private $params = [];
 
     public function __construct(){

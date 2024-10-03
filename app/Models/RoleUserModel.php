@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class UserRoleModel extends Model
+class RoleUserModel extends Model
 {
     use HasFactory;
-    protected $table = 'user_roles';
+    protected $table = 'role_users';
 
     public static function processAddRole($userId, $roles, $author = 0){
         $author = ($author) ? $author : Auth::id();
