@@ -17,7 +17,7 @@ class Authenticate extends Middleware
             $route = $request->route()->getName();
 
             if($user->cant($route)){
-                return redirect()->route('error', ['code' => 403]);
+                //return redirect()->route('error', ['code' => 403]);
             }
             //GDSMARKED dump($user->can($route));
             return $next($request);

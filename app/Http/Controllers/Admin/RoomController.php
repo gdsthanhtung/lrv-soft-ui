@@ -1,134 +1,101 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
-use App\Models\RoomModel as MainModel;
+use App\Models\RoomModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\View;
-use App\Http\Requests\RoomRequest as MainRequest;
-use App\Helpers\Notify;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 class RoomController extends Controller
 {
-    private $mainModel;
-    private $pathView;
-    private $pathViewTemplate;
-    private $moduleName = "room";
-    private $pageTitle = "Room";
-    private $params = [];
+    public function index(Request $request)
+    {
+        // Retrieve filters and sorting from session or use default values
+        $search = $request->input('search', session('search', ''));
+        $status = $request->input('status', session('status', ''));
+        $perPage = $request->input('per_page', session('per_page', 10));
+        $sortBy = $request->input('sort_by', session('sort_by', 'name'));
+        $sortOrder = $request->input('sort_order', session('sort_order', 'asc'));
+        $page = $request->input('page', session('page', 1));
 
-    public function __construct(){
-        $this->mainModel = new MainModel();
-        $this->pathView = "modules.$this->moduleName.";
-        $this->pathViewTemplate = "templates.";
-
-        $ctrl = Config::get("gds.route.$this->moduleName.ctrl");
-        View::share([
-            'ctrl' => $ctrl,
-            'pathView' => $this->pathView,
-            'pathViewTemplate' => $this->pathViewTemplate,
-            'pageTitle' => $this->pageTitle
+        // Store filters, sorting, and page in session
+        session([
+            'search' => $search,
+            'status' => $status,
+            'per_page' => $perPage,
+            'sort_by' => $sortBy,
+            'sort_order' => $sortOrder,
+            'page' => $page,
         ]);
-    }
 
-    private function getPathView(string $file = 'index'){
-        return $this->pathView.$file;
-    }
+        $query = RoomModel::query();
 
-    //=====================================================
-
-    public function show(Request $rq)
-    {
-        $searchField = $rq->input('searchField', 'all');
-        $fieldAccepted = Config::get("gds.enum.selectionInModule.".$this->moduleName);
-
-        $ppEnum = Config::get('gds.perPage');
-        $this->params["pagination"]['perPage'] = (in_array($rq->input('perPage'), $ppEnum)) ? $rq->input('perPage') : $ppEnum[0];
-        $this->params['pagination']['page'] = $rq->input('page', 1);
-
-        $this->params['filter']['fieldAccepted'] = $fieldAccepted;
-        $this->params['filter']['searchField'] = (in_array($searchField, $fieldAccepted)) ? $searchField : 'all';
-        $this->params['filter']['searchValue'] = $rq->input('searchValue', '');
-        $this->params['filter']['status'] = $rq->input('status', 'all');
-
-        $data = $this->mainModel->listItems($this->params, ['task' => 'admin-list-items']);
-        $countByStatus = $this->mainModel->countItems($this->params, ['task' => 'admin-count-items']);
-
-        $shareData = [
-            'data' => $data,
-            'countByStatus' => $countByStatus,
-            'params' => $this->params
-        ];
-        return view($this->getPathView('index'), $shareData);
-    }
-
-    public function form(Request $rq)
-    {
-        $data = [];
-        $id = $rq->id;
-
-        if($id){
-             $params = [
-                'id'    => $id
-            ];
-            $data = $this->mainModel->getItem($params, ['task' => 'get-item']);
+        if ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                      ->orWhere('note', 'like', '%' . $search . '%');
+            });
         }
 
-        if(!$data && $id)
-            return redirect()->route($this->moduleName)->with('notify', ['type' => 'danger', 'message' => $this->pageTitle.' id is invalid!']);
-
-        $routeList = $this->getRouteList();
-
-        $shareData = [
-            'data' => $data,
-            'id' => $id,
-            'routeList' => $routeList
-        ];
-        return view($this->getPathView('form'), $shareData);
-
-    }
-
-    public function delete(Request $rq)
-    {
-        $params = [
-            'id'    => $rq->id
-        ];
-        $rs = $this->mainModel->delete($params);
-        return redirect()->route('admin.'.$this->moduleName)->with('notify', Notify::export($rs));
-    }
-
-    public function change_status(Request $rq)
-    {
-        $params = [
-            'id'    => $rq->id,
-            'status'  => $rq->status
-        ];
-
-        $rs = $this->mainModel->saveItem($params, ['task' => 'change-status']);
-        return redirect()->route('admin.'.$this->moduleName)->with('notify', Notify::export($rs));
-
-    }
-
-    public function save(MainRequest $rq)
-    {
-        if($rq->method() == 'POST'){
-            $params = $rq->all();
-
-            $rs = $this->mainModel->saveItem($params, ['task' => $params['task']]);
+        if ($status) {
+            $query->where('status', $status);
         }
-        return redirect()->route('admin.'.$this->moduleName)->with('notify', Notify::export($rs));
+
+        $rooms = $query->orderBy($sortBy, $sortOrder)->paginate($perPage, ['*'], 'page', $page);
+
+        return view('modules.room.index', compact('rooms'));
     }
 
-    public function getRouteList(){
-        $routes = [];
-        $fullRoutes = Route::getRoutes();
-        foreach ($fullRoutes as $key => $value) {
-            if(strpos($value->getName(), 'admin.') !== false)
-                $routes[$value->getName()] = $value->getName();
-        }
-        return $routes;
+    public function create()
+    {
+        return view('modules.room.create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:rooms,name',
+            'note' => 'nullable|string',
+            'status' => 'required|in:active,inactive',
+        ]);
+
+        RoomModel::create([
+            'name' => $request->name,
+            'note' => $request->note,
+            'status' => $request->status,
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
+        ]);
+
+        return redirect()->route('admin.room.index')->with('success', 'Room created successfully.');
+    }
+
+    public function edit(RoomModel $room)
+    {
+        return view('modules.room.edit', compact('room'));
+    }
+
+    public function update(Request $request, RoomModel $room)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:rooms,name,' . $room->id,
+            'note' => 'nullable|string',
+            'status' => 'required|in:active,inactive',
+        ]);
+
+        $room->update([
+            'name' => $request->name,
+            'note' => $request->note,
+            'status' => $request->status,
+            'updated_by' => Auth::id(),
+        ]);
+
+        return redirect()->route('admin.room.index')->with('success', 'Room updated successfully.');
+    }
+
+    public function destroy(RoomModel $room)
+    {
+        $room->delete();
+        return redirect()->route('admin.room.index')->with('success', 'Room deleted successfully.');
     }
 }
