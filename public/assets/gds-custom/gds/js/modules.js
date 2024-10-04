@@ -1,11 +1,4 @@
 $(document).ready(function() {
-	let $btnSearch        = $("#btn-search");
-	let $btnClearSearch	  = $("#btn-clear");
-
-	let $inputSearchField = $("#search-field");
-	let $inputSearchValue = $("#search-value");
-
-	let $inputPerPage = $("#per-page");
 
     $.fn.datepicker.defaults.format = "dd-mm-yyyy";
     $('.datepicker').datepicker();
@@ -298,101 +291,6 @@ $(document).ready(function() {
         return str[0].toUpperCase() + str.slice(1);
     }
     // END MODAL NHAN KHAU IN HOP DONG MODULE LIST ===========================================================================
-
-    //Cap nhat val cua hidden input search field/type
-	$("a.select-field").click(function(e) {
-		e.preventDefault();
-
-		let field 		= $(this).data('field');
-		let fieldName 	= $(this).html();
-		$("button.btn-active-field").html(fieldName + ' <span class="caret"></span>');
-    	$inputSearchField.val(field);
-	});
-
-    $inputSearchValue.on('keypress', function (e) {
-        if(e.which === 13){
-           //Disable textbox to prevent multiple submit
-           $(this).attr("disabled", "disabled");
-
-           //Do Stuff, submit, etc..
-           executeSearch();
-
-           //Enable the textbox again if needed.
-           $(this).removeAttr("disabled");
-        }
-    });
-
-	$btnSearch.on('click', function () {
-        executeSearch();
-	});
-
-	$inputPerPage.on('change', function () {
-        executeSearch();
-	});
-
-    function executeSearch(){
-        let perPage     = $inputPerPage.find('option:selected').val();
-        let searchField = $inputSearchField.find('option:selected').val();
-        let searchValue = $inputSearchValue.val();
-
-		let link		= "";
-		var pathname	= window.location.pathname;
-		let searchParams= new URLSearchParams(window.location.search);
-		let params      = ['page', 'status'];
-
-		$.each( params, function( key, value ) {
-			if (searchParams.has(value) ) {
-				link += value + "=" + searchParams.get(value) + "&"
-			}
-		});
-        let searchFieldStr = (searchValue) ?  '&searchField='+ searchField : '';
-        let searchValueStr = (searchValue) ?  '&searchValue=' + searchValue.replace(/\s+/g, '+').toLowerCase() : '';
-        let perPageStr = (perPage) ? 'perPage='+ perPage : '';
-        window.location.href = pathname + "?" + link + perPageStr + searchFieldStr + searchValueStr;
-    }
-
-
-	$btnClearSearch.click(function() {
-		var pathname	= window.location.pathname;
-		let searchParams= new URLSearchParams(window.location.search);
-
-		params 			= ['status'];
-
-		let link		= "";
-		$.each( params, function( key, value ) {
-			if (searchParams.has(value) ) {
-				link += value + "=" + searchParams.get(value) + "&"
-			}
-		});
-
-		window.location.href = pathname + "?" + link.slice(0,-1);
-	});
-
-	// $selectChangeAttrAjax.on('change', function() {
-	// 	let selectValue = $(this).val();
-	// 	let $url = $(this).data('url');
-	// 	let csrf_token = $("input[name=csrf-token]").val();
-
-	// 	$.ajax({
-	// 		url : $url.replace('value_new', selectValue),
-	// 		type : "GET",
-	// 		dataType: "json",
-	// 		headers: {'X-CSRF-TOKEN': csrf_token},
-	// 		success : function (result){
-	// 			if(result) {
-	// 				$.notify({
-	// 					message: "Cập nhật giá trị thành công!"
-	// 				}, {
-	// 					delay: 500,
-	// 					allow_dismiss: false
-	// 				});
-	// 			}else {
-	// 				console.log(result)
-	// 			}
-	// 		}
-	// 	});
-
-	// });
 
     $('.btn-delete').on('click', function() {
 		if(!confirm('Are you sure?'))

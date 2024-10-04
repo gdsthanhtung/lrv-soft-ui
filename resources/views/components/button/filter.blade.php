@@ -2,8 +2,8 @@
     $html = "";
     $rule = Config::get('gds.enum.'.$enum);
 
-    $searchValue    = ($params["filter"]['searchValue']) ? '&searchValue='.$params["filter"]['searchValue'] : '';
-    $searchField    = ($params["filter"]['searchValue']) ? '&searchField='.$params["filter"]['searchField'] : '';
+    $searchValue    = ($params['searchValue']) ? '&searchValue='.$params['searchValue'] : '';
+    $searchField    = ($params['searchValue']) ? '&searchField='.$params['searchField'] : '';
 
     if($countByStatus) {
         array_unshift($countByStatus, [

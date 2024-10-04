@@ -27,19 +27,14 @@ class UserModel extends Model
     public function listItems($params = null, $options = null){
         $this->table = $this->table.' as main';
         $result = null;
-        $perPage = $params["pagination"]['perPage'];
-
-        $filterStatus   = $params['filter']['status'];
-        $searchField    = $params['filter']['searchField'];
-        $searchValue    = $params["filter"]['searchValue'];
-        $fieldAccepted  = $params["filter"]['fieldAccepted'];
+        extract($params);
 
         if($options['task'] == 'admin-list-items'){
             $query = Self::select(DB::raw('main.*, c_user.name as created_by_name, u_user.name as updated_by_name'));
             if($searchValue)
                 if($searchField == 'all'){
-                    $query->where(function($query) use ($fieldAccepted, $searchValue){
-                        foreach($fieldAccepted as $field){
+                    $query->where(function($query) use ($searchFieldAccepted, $searchValue){
+                        foreach($searchFieldAccepted as $field){
                             if($field != 'all') $query->orWhere('main.'.$field, 'LIKE', "%$searchValue%");
                         }
                     });
@@ -47,37 +42,12 @@ class UserModel extends Model
                     $query->where('main.'.$searchField, 'LIKE', "%$searchValue%");
                 }
 
-            if($filterStatus != 'all'){
-                $query->where('main.status', $filterStatus);
+            if($status != 'all'){
+                $query->where('main.status', $status);
             }
             $query->leftJoin('users as c_user', 'c_user.id', '=', 'main.created_by');
             $query->leftJoin('users as u_user', 'u_user.id', '=', 'main.updated_by');
-            $result = $query->orderBy('main.id', 'desc')->paginate($perPage);
-        }
-
-        return $result;
-    }
-
-    public function countItems($params = null, $options = null){
-        $result = null;
-
-        $searchField    = $params['filter']['searchField'];
-        $searchValue    = $params["filter"]['searchValue'];
-        $fieldAccepted  = $params["filter"]['fieldAccepted'];
-
-        if($options['task'] == 'admin-count-items'){
-            $query = Self::selectRaw('count(id) as total, status');
-            if($searchValue)
-                if($searchField == 'all'){
-                    $query->where(function($query) use ($fieldAccepted, $searchValue){
-                        foreach($fieldAccepted as $field){
-                            if($field != 'all') $query->orWhere($field, 'LIKE', "%$searchValue%");
-                        }
-                    });
-                }else{
-                    $query->where($searchField, 'LIKE', "%$searchValue%");
-                }
-            $result = $query->groupBy('status')->get()->toArray();
+            $result = $query->orderBy($sortBy, $sortOrder)->paginate($perPage, $columns = ['*'], $pageName = 'page', $page);
         }
 
         return $result;

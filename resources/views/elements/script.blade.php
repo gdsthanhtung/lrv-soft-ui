@@ -18,19 +18,18 @@
         Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
 </script>
+
 <!-- Github buttons -->
 <script async defer src="https://buttons.github.io/buttons.js') }}"></script>
 <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
 <script src="{{ asset('assets/js/soft-ui-dashboard.min.js?v=1.0.3') }}"></script>
 
 <!-- CUSTOM JS Files -->
-
-<script src="{{ asset('assets/gds-custom/datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+{{-- <script src="{{ asset('assets/gds-custom/datepicker/js/bootstrap-datepicker.min.js') }}"></script>
 <script src="{{ asset('assets/gds-custom/selectpicker/js/bootstrap-multiselect.js') }}"></script>
-<script src="{{ asset('assets/gds-custom/moment/moment.min.js') }}"></script>
+<script src="{{ asset('assets/gds-custom/moment/moment.min.js') }}"></script> --}}
 
-<script src="{{ asset('assets/gds-custom/gds/js/modules.js') }}"></script>
+<!-- CUSTOM JS Files -->
+{{-- <script src="{{ asset('assets/gds-custom/gds/js/modules.js') }}"></script> --}}
 
-@if(Route::current()->getName() == 'hopdong/form')
-    <script src="{{ asset('assets/gds-custom/gds/js/hopdong.js') }}"></script>
-@endif
+@yield('modules_script')

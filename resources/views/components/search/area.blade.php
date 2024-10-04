@@ -1,10 +1,7 @@
 @php
     $html = "";
     $selections = "";
-
     extract($params);
-    $searchField = $filter['searchField'];
-    $searchValue = $filter['searchValue'];
 
     $rule = Config::get('gds.enum.'.$searchSelection);
     $selectionInModule = Config::get('gds.enum.selectionInModule');

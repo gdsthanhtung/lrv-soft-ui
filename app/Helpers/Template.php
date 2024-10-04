@@ -1,6 +1,6 @@
 <?php
 namespace App\Helpers;
-use Config;
+use Illuminate\Support\Facades\Config;
 use Carbon\Carbon;
 
 class Template {
@@ -34,10 +34,10 @@ class Template {
         ", $tooltips, $by, date(Config::get('gds.format.shortTime'), strtotime($time)));
     }
 
-    public static function showItemStatus($ctrl, $id, $status){
+    public static function showItemStatus($ctrl, $id, $status, $withLink = true){
         $rule = Config::get('gds.enum.ruleStatus');
         $tpl = (isset($rule[$status])) ? $rule[$status] : $rule['unknown'];
-        $link = route('admin.'.$ctrl.'.change-status', ['id' => $id, 'status' => $status]);
+        $link = ($withLink) ? route('admin.'.$ctrl.'.change-status', ['id' => $id, 'status' => $status]) : '#';
         return sprintf ("<a href='%s' type='button' class='btn btn-sm mb-0 bg-gradient-%s'>%s</a>", $link, $tpl['class'], $tpl['name']);
     }
 

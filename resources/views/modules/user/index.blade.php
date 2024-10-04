@@ -1,10 +1,3 @@
-@php
-    use App\Helpers\Template;
-    //$statusFilter = Template::($ctrl, $countByStatus, $params);
-    //$statusFilter = Template::showDropdownFilter($ctrl, $params, $enum = 'ruleStatus', $class = 'secondary', $filterName = 'status');
-    //$searchArea = Template::showsearchArea($ctrl, $params);
-@endphp
-
 @extends('elements.auth')
 
 @section('content')
@@ -27,19 +20,25 @@
             <div class="card-body px-0 pb-0 pt-0">
                 <div class="table-responsive">
                     <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
-                        <div class="dataTable-top">
-                            <x-button.filter :ctrl="$ctrl" :countByStatus="$countByStatus" :params="$params" />
-                            <x-search.area :ctrl="$ctrl" :params="$params" />
-                        </div>
+                        {{-- <form action="{{ route('admin.'.$ctrl) }}" method="post" name="filterForm" id="filterForm"> --}}
+                            <div class="dataTable-top">
+                                <x-button.filter :ctrl="$ctrl" :countByStatus="[]" :params="$params" />
+                                <x-search.area :ctrl="$ctrl" :params="$params" />
+                            </div>
 
-                        @include($pathView.'list')
+                            @include($pathView.'list')
 
-                        @include($pathViewTemplate.'pagination')
-
+                            @include($pathViewTemplate.'pagination')
+                        {{-- </form> --}}
+                        {{-- @include($pathView.'list_filter') --}}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+@endsection
+
+@section('modules_script')
+    <script src="{{ asset('assets/gds-custom/gds/js/modules_filter.js') }}"></script>
 @endsection

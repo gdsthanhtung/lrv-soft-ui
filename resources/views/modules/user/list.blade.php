@@ -11,7 +11,6 @@
                 <th>Avatar</th>
                 <th>Info</th>
                 <th>Role</th>
-                <th>Level</th>
                 <th class="text-center">Status</th>
                 <th>History</th>
                 <th class="text-center">Action</th>
@@ -24,12 +23,11 @@
                     @php
                         $no = ++$key;
                         $id = $item['id'];
-                        $name       = Highlight::show($item['name'], $params['filter'], 'name');
-                        $email      = Highlight::show($item['email'], $params['filter'], 'email');
+                        $name       = Highlight::show($item['name'], $params, 'name');
+                        $email      = Highlight::show($item['email'], $params, 'email');
 
                         $avatar     = Template::showItemAvatar($ctrl, $item['avatar'], $item['name']);
-                        $status     = Template::showItemStatus($ctrl, $id, $item['status']);
-                        $level      = $item['level'];
+                        $status     = Template::showItemStatus($ctrl, $id, $item['status'], false);
                         $roles      = Template::showListUL($item['role']);
                         $createdHis = Template::showItemHistory($item['created_by_name'], $item['created_at'], 'add');
                         $updatedHis = Template::showItemHistory($item['updated_by_name'], $item['updated_at'], 'edit');
@@ -43,7 +41,6 @@
                         <span class="text-sm mb-0 text-capitalize font-weight-bold">Email: </span> {!! $email !!}
                     </td>
                     <td class="text-sm">{!! $roles !!}</td>
-                    <td class="text-sm"><x-select.dropdown :ctrl="$ctrl" :id="$id" :displayValue="$level" fieldName='level' /></td>
                     <td class="text-sm text-center">{!! $status !!}</td>
                     <td class="text-sm">{!! $createdHis !!} <hr class='horizontal dark m-1'> {!! $updatedHis !!}</td>
                     <td class="text-sm text-center"><x-button.action :ctrl="$ctrl" :id="$id" /></td>

@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\View;
 use App\Http\Requests\UserRequest as MainRequest;
 use App\Helpers\Notify;
 use App\Models\RoleModel;
-use App\Models\User;
 use Illuminate\Support\Facades\Config;
+use App\Helpers\FilterList;
 
 class UserController extends Controller
 {
@@ -19,16 +19,16 @@ class UserController extends Controller
     private $pathViewTemplate;
     private $moduleName = "user";
     private $pageTitle = "User";
-    private $params = [];
+    private $ctrl = '';
 
     public function __construct(){
         $this->mainModel = new MainModel();
         $this->pathView = "modules.$this->moduleName.";
         $this->pathViewTemplate = "templates.";
+        $this->ctrl = Config::get("gds.route.$this->moduleName.ctrl");
 
-        $ctrl = Config::get("gds.route.$this->moduleName.ctrl");
         View::share([
-            'ctrl' => $ctrl,
+            'ctrl' => $this->ctrl,
             'pathView' => $this->pathView,
             'pathViewTemplate' => $this->pathViewTemplate,
             'pageTitle' => $this->pageTitle
@@ -43,33 +43,35 @@ class UserController extends Controller
 
     public function show(Request $rq)
     {
-        $searchField = $rq->input('searchField', 'all');
-        $fieldAccepted = Config::get("gds.enum.selectionInModule.".$this->moduleName);
+        $moduleFilter = [
+            "status" => $rq->input('status', 'all')
+        ];
+        FilterList::checkClear($rq, $this->ctrl);
+        $params = FilterList::export($rq, $this->ctrl, $moduleFilter);
+        $params["searchFieldAccepted"] = Config::get("gds.enum.selectionInModule.".$this->moduleName);
 
-        $ppEnum = Config::get('gds.perPage');
-        $this->params["pagination"]['perPage'] = (in_array($rq->input('perPage'), $ppEnum)) ? $rq->input('perPage') : $ppEnum[0];
-        $this->params['pagination']['page'] = $rq->input('page', 1);
+        $data = $this->mainModel->listItems($params, ['task' => 'admin-list-items']);
 
-        $this->params['filter']['fieldAccepted'] = $fieldAccepted;
-        $this->params['filter']['searchField'] = (in_array($searchField, $fieldAccepted)) ? $searchField : 'all';
-        $this->params['filter']['searchValue'] = $rq->input('searchValue', '');
-        $this->params['filter']['status'] = $rq->input('status', 'all');
-        $this->params['filter']['level'] = $rq->input('level', 'all');
+        if ($data) {
+            $dataArray = $data->toArray()['data']; // Convert paginated data to array
+            $userIds = array_column($dataArray, 'id');
+            $roleUsers = $this->mainModel->getRoleUsers($userIds);
 
-        $data = $this->mainModel->listItems($this->params, ['task' => 'admin-list-items']);
-        $countByStatus = $this->mainModel->countItems($this->params, ['task' => 'admin-count-items']);
-
-        if($data){
-            foreach ($data as $key => $user) {
-                $roleUser = $this->mainModel->getRoleUsers([$user['id']]);
-                $data[$key]['role'] = $roleUser[$user['id']]['dataForShow'];
+            foreach ($dataArray as $key => $user) {
+                if (isset($roleUsers[$user['id']])) {
+                    $dataArray[$key]['role'] = $roleUsers[$user['id']]['dataForShow'];
+                } else {
+                    $dataArray[$key]['role'] = null; // Handle case where role data is missing
+                }
             }
+
+            // Update the original paginated data with the modified array
+            $data->setCollection(collect($dataArray));
         }
 
         $shareData = [
             'data' => $data,
-            'countByStatus' => $countByStatus,
-            'params' => $this->params
+            'params' => $params
         ];
         return view($this->getPathView('index'), $shareData);
     }

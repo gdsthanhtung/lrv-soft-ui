@@ -10,3 +10,7 @@
 .clear-search > i{
     color: #8392ab;
 }
+
+mark {
+    border-radius: 3px;
+}

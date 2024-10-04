@@ -1,6 +1,6 @@
 @php
     $ppEnum = Config::get('gds.perPage');
-    $pp = (($params['pagination']['perPage'])) ?? $ppEnum[0];
+    $pp = (($params['perPage'])) ?? $ppEnum[0];
 @endphp
 
 <div class="dataTable-dropdown">
