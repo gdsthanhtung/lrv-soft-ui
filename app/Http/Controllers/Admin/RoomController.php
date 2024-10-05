@@ -1,49 +1,39 @@
 <?php
 namespace App\Http\Controllers\Admin;
-use App\Http\Controllers\Controller;
 
+use App\Http\Controllers\AdminBaseController;
 use App\Models\RoomModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class RoomController extends Controller
+class RoomController extends AdminBaseController
 {
+    protected $sessionKey = 'room.';
+
     public function index(Request $request)
     {
-        // Retrieve filters and sorting from session or use default values
-        $search = $request->input('search', session('search', ''));
-        $status = $request->input('status', session('status', ''));
-        $perPage = $request->input('per_page', session('per_page', 10));
-        $sortBy = $request->input('sort_by', session('sort_by', 'name'));
-        $sortOrder = $request->input('sort_order', session('sort_order', 'asc'));
-        $page = $request->input('page', session('page', 1));
+        list($query, $perPage, $page) = $this->handleFilters(
+            RoomModel::class,
+            $request,
+            $this->sessionKey, // Session key prefix
+            ['name', 'note'], // Search fields like %%
+            ['status'], // Filter fields equals
+            'name', // Default sort by
+            'asc', // Default sort order
+        );
 
-        // Store filters, sorting, and page in session
-        session([
-            'search' => $search,
-            'status' => $status,
-            'per_page' => $perPage,
-            'sort_by' => $sortBy,
-            'sort_order' => $sortOrder,
-            'page' => $page,
-        ]);
-
-        $query = RoomModel::query();
-
-        if ($search) {
-            $query->where(function ($query) use ($search) {
-                $query->where('name', 'like', '%' . $search . '%')
-                      ->orWhere('note', 'like', '%' . $search . '%');
-            });
-        }
-
-        if ($status) {
-            $query->where('status', $status);
-        }
-
-        $rooms = $query->orderBy($sortBy, $sortOrder)->paginate($perPage, ['*'], 'page', $page);
+        $rooms = $query->with(['createdBy', 'updatedBy'])->paginate($perPage, ['*'], 'page', $page);
 
         return view('modules.room.index', compact('rooms'));
+    }
+
+    public function clear(Request $request)
+    {
+        // Clear the relevant session data
+        $request->session()->forget(substr($this->sessionKey, 0, -1));
+
+        // Redirect back to the index route
+        return redirect()->route('admin.room.index');
     }
 
     public function create()

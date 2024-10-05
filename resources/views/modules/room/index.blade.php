@@ -3,19 +3,20 @@
 
 @section('content')
 <form method="GET" action="{{ route('admin.room.index') }}">
-    <input type="text" name="search" value="{{ session('search') }}" placeholder="Search by name or note">
+    <input type="text" name="search" value="{{ session('room.search') }}" placeholder="Search by name or note">
     <select name="status">
         <option value="">All</option>
-        <option value="active" {{ session('status') == 'active' ? 'selected' : '' }}>Active</option>
-        <option value="inactive" {{ session('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+        <option value="active" {{ session('room.status') == 'active' ? 'selected' : '' }}>Active</option>
+        <option value="inactive" {{ session('room.status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
     </select>
     <select name="per_page">
-        <option value="10" {{ session('per_page') == 10 ? 'selected' : '' }}>10</option>
-        <option value="25" {{ session('per_page') == 25 ? 'selected' : '' }}>25</option>
-        <option value="50" {{ session('per_page') == 50 ? 'selected' : '' }}>50</option>
+        <option value="10" {{ session('room.per_page') == 10 ? 'selected' : '' }}>10</option>
+        <option value="25" {{ session('room.per_page') == 25 ? 'selected' : '' }}>25</option>
+        <option value="50" {{ session('room.per_page') == 50 ? 'selected' : '' }}>50</option>
     </select>
-    <input type="hidden" name="page" value="{{ session('page', 1) }}">
+    <input type="hidden" name="page" value="{{ session('room.page', 1) }}">
     <button type="submit">Filter</button>
+    <a href="{{ route('admin.room.clear') }}" class="btn btn-secondary">Clear</a>
 </form>
 
 <a href="{{ route('admin.room.create') }}">Create Room</a>
@@ -23,11 +24,11 @@
 <table>
     <thead>
         <tr>
-            <th><a href="{{ route('admin.room.index', array_merge(request()->all(), ['sort_by' => 'name', 'sort_order' => session('sort_order') == 'asc' ? 'desc' : 'asc'])) }}">Name</a></th>
-            <th><a href="{{ route('admin.room.index', array_merge(request()->all(), ['sort_by' => 'note', 'sort_order' => session('sort_order') == 'asc' ? 'desc' : 'asc'])) }}">Note</a></th>
-            <th><a href="{{ route('admin.room.index', array_merge(request()->all(), ['sort_by' => 'status', 'sort_order' => session('sort_order') == 'asc' ? 'desc' : 'asc'])) }}">Status</a></th>
-            <th><a href="{{ route('admin.room.index', array_merge(request()->all(), ['sort_by' => 'created_by', 'sort_order' => session('sort_order') == 'asc' ? 'desc' : 'asc'])) }}">Created By</a></th>
-            <th><a href="{{ route('admin.room.index', array_merge(request()->all(), ['sort_by' => 'updated_by', 'sort_order' => session('sort_order') == 'asc' ? 'desc' : 'asc'])) }}">Updated By</a></th>
+            <th><a href="{{ route('admin.room.index', array_merge(request()->all(), ['sort_by' => 'name', 'sort_order' => session('room.sort_order') == 'asc' ? 'desc' : 'asc'])) }}">Name</a></th>
+            <th><a href="{{ route('admin.room.index', array_merge(request()->all(), ['sort_by' => 'note', 'sort_order' => session('room.sort_order') == 'asc' ? 'desc' : 'asc'])) }}">Note</a></th>
+            <th><a href="{{ route('admin.room.index', array_merge(request()->all(), ['sort_by' => 'status', 'sort_order' => session('room.sort_order') == 'asc' ? 'desc' : 'asc'])) }}">Status</a></th>
+            <th><a href="{{ route('admin.room.index', array_merge(request()->all(), ['sort_by' => 'created_by', 'sort_order' => session('room.sort_order') == 'asc' ? 'desc' : 'asc'])) }}">Created By</a></th>
+            <th><a href="{{ route('admin.room.index', array_merge(request()->all(), ['sort_by' => 'updated_by', 'sort_order' => session('room.sort_order') == 'asc' ? 'desc' : 'asc'])) }}">Updated By</a></th>
             <th>Actions</th>
         </tr>
     </thead>

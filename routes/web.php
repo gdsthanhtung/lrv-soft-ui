@@ -61,17 +61,13 @@ Route::prefix($prefixAdmin)->middleware('auth')->as("$prefixAdmin.")->group(func
         });
     });
 
-    // $prefix = Config::get('gds.route.room.prefix', 'room');
-    // $ctrl   = Config::get('gds.route.room.ctrl', 'room');
-    // Route::prefix($prefix)->group(function () use ($ctrl) {
-    //     Route::controller(RoomController::class)->group(function () use ($ctrl) {
-    //         Route::get('/', 'show')->name($ctrl);
-    //         Route::get('/form/{id?}', 'form')->where(['id' => '[0-9]+'])->name($ctrl.'.form');
-    //         Route::get('/delete/{id}', 'delete')->where(['id' => '[0-9]+'])->name($ctrl.'.delete');
-    //         Route::get('/change-status/{id}/{status}', 'change_status')->where(['id' => '[0-9]+', 'status' => '[a-z]+'])->name($ctrl.'.change-status');
-    //         Route::post('/save', 'save')->name($ctrl.'.save');
-    //     });
-    // });
+    $prefix = Config::get('gds.route.room.prefix', 'room');
+    $ctrl   = Config::get('gds.route.room.ctrl', 'room');
+    Route::prefix($prefix)->group(function () use ($ctrl) {
+        Route::controller(RoomController::class)->group(function () use ($ctrl) {
+            Route::get('/clear', [RoomController::class, 'clear'])->name($ctrl.'.clear');
+        });
+    });
 
     Route::resource('room', RoomController::class);
 
