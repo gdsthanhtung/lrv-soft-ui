@@ -2,10 +2,10 @@
 @extends('elements.auth')
 
 @section('content')
-<form method="POST" action="{{ route('admin.room.update', $room->id) }}">
+<form method="POST" action="{{ route($routePrefix.'update', ['room' => $data->id]) }}">
     @csrf
     @method('PUT')
-    <div>
+    {{-- <div>
         <label for="name">Name</label>
         <input type="text" id="name" name="name" value="{{ old('name', $room->name) }}" required>
         @error('name')
@@ -30,6 +30,6 @@
         @enderror
     </div>
     <button type="submit">Update Room</button>
-    <button type="button" onclick="window.history.back()" class="btn btn-secondary">Back</button>
+    <button type="button" onclick="window.history.back()" class="btn btn-secondary">Back</button> --}}
 </form>
 @endsection

@@ -1,3 +1,5 @@
+@props(['ctrl', 'id', 'fieldName', 'displayValue'])
+
 @php
     $html = $list = '';
     $enum = Config::get('gds.enum.select' . ucfirst($fieldName));

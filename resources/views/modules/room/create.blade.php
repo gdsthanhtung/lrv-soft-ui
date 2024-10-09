@@ -1,34 +1,25 @@
-<!-- resources/views/rooms/create.blade.php -->
-@extends('elements.auth')
+<form action="{{ route($routePrefix.'store') }}" method="POST" accept-charset="UTF-8">
+	@csrf
 
-@section('content')
-<form method="POST" action="{{ route('admin.room.store') }}">
-    @csrf
-    <div>
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" value="{{ old('name') }}" required>
-        @error('name')
-            <div>{{ $message }}</div>
-        @enderror
-    </div>
-    <div>
-        <label for="note">Note</label>
-        <textarea id="note" name="note">{{ old('note') }}</textarea>
-        @error('note')
-            <div>{{ $message }}</div>
-        @enderror
-    </div>
-    <div>
-        <label for="status">Status</label>
-        <select id="status" name="status" required>
-            <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active</option>
-            <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
-        </select>
-        @error('status')
-            <div>{{ $message }}</div>
-        @enderror
-    </div>
-    <button type="submit">Create Room</button>
-    <button type="button" onclick="window.history.back()" class="btn btn-secondary">Back</button>
+	<div class="form-group">
+		<label for="name" class="{{ $flClass }}">Name</label>
+		<div class=""><input type="name" class="form-control" id="name" name="name" value="{{ old('name') }}" required></div>
+	</div>
+
+	<div class="form-group">
+		<label for="note" class="{{ $flClass }}">Note</label>
+		<div class=""><input type="note" class="form-control" id="note" name="note"></div>
+	</div>
+
+	<div class="form-group">
+		<label for="stasus" class="{{ $flClass }}">Status</label>
+		<div class="">
+            <x-select.radio :listToSelect="$statusEnum" elName='status' :valToChecked="old('status')" required='true' />
+        </div>
+	</div>
+
+	<div class="d-flex justify-content-end mt-4">
+		<a href="{{ route($routePrefix.'index') }}" type="button" class="btn btn-light m-0">BACK</a>
+		<button type="submit" class="btn bg-gradient-primary m-0 ms-2">SUBMIT</button>
+	</div>
 </form>
-@endsection

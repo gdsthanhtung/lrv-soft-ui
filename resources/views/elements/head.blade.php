@@ -22,3 +22,5 @@
 
 <!-- CUSTOM CSS Files -->
 <link href="{{ asset('assets/gds-custom/gds/css/gds.css') }}" rel="stylesheet">
+
+@yield('modules_css')

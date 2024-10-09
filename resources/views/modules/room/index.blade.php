@@ -1,57 +1,52 @@
-<!-- resources/views/rooms/index.blade.php -->
 @extends('elements.auth')
 
 @section('content')
-<form method="GET" action="{{ route('admin.room.index') }}">
-    <input type="text" name="search" value="{{ session('room.search') }}" placeholder="Search by name or note">
-    <select name="status">
-        <option value="">All</option>
-        <option value="active" {{ session('room.status') == 'active' ? 'selected' : '' }}>Active</option>
-        <option value="inactive" {{ session('room.status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
-    </select>
-    <select name="per_page">
-        <option value="10" {{ session('room.per_page') == 10 ? 'selected' : '' }}>10</option>
-        <option value="25" {{ session('room.per_page') == 25 ? 'selected' : '' }}>25</option>
-        <option value="50" {{ session('room.per_page') == 50 ? 'selected' : '' }}>50</option>
-    </select>
-    <input type="hidden" name="page" value="{{ session('room.page', 1) }}">
-    <button type="submit">Filter</button>
-    <a href="{{ route('admin.room.clear') }}" class="btn btn-secondary">Clear</a>
-</form>
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card">
 
-<a href="{{ route('admin.room.create') }}">Create Room</a>
+            @include($pathViewTemplate . 'page_header',
+            [
+                'title' => $pageTitle. ' management',
+                'subTitle' => 'The '.$pageTitle. ' information list',
+                'button' => '<a href="'.route('admin.'.$ctrl.'.create').'" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; Add New</a>'
+            ])
 
-<table>
-    <thead>
-        <tr>
-            <th><a href="{{ route('admin.room.index', array_merge(request()->all(), ['sort_by' => 'name', 'sort_order' => session('room.sort_order') == 'asc' ? 'desc' : 'asc'])) }}">Name</a></th>
-            <th><a href="{{ route('admin.room.index', array_merge(request()->all(), ['sort_by' => 'note', 'sort_order' => session('room.sort_order') == 'asc' ? 'desc' : 'asc'])) }}">Note</a></th>
-            <th><a href="{{ route('admin.room.index', array_merge(request()->all(), ['sort_by' => 'status', 'sort_order' => session('room.sort_order') == 'asc' ? 'desc' : 'asc'])) }}">Status</a></th>
-            <th><a href="{{ route('admin.room.index', array_merge(request()->all(), ['sort_by' => 'created_by', 'sort_order' => session('room.sort_order') == 'asc' ? 'desc' : 'asc'])) }}">Created By</a></th>
-            <th><a href="{{ route('admin.room.index', array_merge(request()->all(), ['sort_by' => 'updated_by', 'sort_order' => session('room.sort_order') == 'asc' ? 'desc' : 'asc'])) }}">Updated By</a></th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach($rooms as $room)
-        <tr>
-            <td>{{ $room->name }}</td>
-            <td>{{ $room->note }}</td>
-            <td>{{ $room->status }}</td>
-            <td>{{ $room->createdBy->name }}</td>
-            <td>{{ $room->updatedBy->name }}</td>
-            <td>
-                <a href="{{ route('admin.room.edit', $room->id) }}">Edit</a>
-                <form action="{{ route('admin.room.destroy', $room->id) }}" method="POST" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit">Delete</button>
-                </form>
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
+            @if ($errors->any() || session('notify'))
+                <div class="m-3 mb-0">
+                    @includeWhen(session('notify'), $pathViewTemplate . 'notify')
+                    @include($pathViewTemplate . 'error')
+                </div>
+            @endif
 
-{{ $rooms->appends(request()->query())->links() }}
+            <div class="card-body px-0 pb-0 pt-0">
+                <div class="table-responsive">
+                    <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                        <div class="dataTable-top">
+
+                            <form method="GET" action="{{ route($routePrefix.'index') }}" id="filter-form">
+                                <div class="d-flex justify-content-between">
+                                    @include($pathViewTemplate.'per_page')
+                                    <div class="d-flex">
+                                        <div class="me-2">
+                                            <x-search.filter :ctrl="$ctrl" :selected="session($ctrl . '.status')" :ruleName="'selectStatus'" :name="'status'" />
+                                        </div>
+                                        <div class="me-0">
+                                            <x-search.area :ctrl="$ctrl" :params="[session($ctrl . '.search_field', 'all'), session($ctrl . '.search_value')]" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+
+                        @include($pathView.'list')
+
+                        @include($pathViewTemplate.'pagination')
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

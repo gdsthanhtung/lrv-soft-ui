@@ -12,10 +12,12 @@
                 'button' => '<a href="'.route('admin.'.$ctrl.'.form').'" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; Add New</a>'
             ])
 
+            @if ($errors->any() || session('notify'))
             <div class="m-3 mb-0">
                 @includeWhen(session('notify'), $pathViewTemplate . 'notify')
                 @include($pathViewTemplate . 'error')
             </div>
+            @endif
 
             <div class="card-body px-0 pb-0 pt-0">
                 <div class="table-responsive">
@@ -37,8 +39,4 @@
         </div>
     </div>
 </div>
-@endsection
-
-@section('modules_script')
-    <script src="{{ asset('assets/gds-custom/gds/js/modules_filter.js') }}"></script>
 @endsection

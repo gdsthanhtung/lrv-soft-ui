@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 
 class AdminBaseController extends Controller
 {
@@ -9,7 +10,7 @@ class AdminBaseController extends Controller
         $modelClass,
         Request $request,
         $sessionKey = '',
-        array $searchFields,
+        $moduleName = '',
         array $filterFields,
         $defaultSortBy,
         $defaultSortOrder
@@ -17,7 +18,7 @@ class AdminBaseController extends Controller
         $query = $modelClass::query();
 
         // Handle search
-        $this->applySearch($request, $query, $searchFields, $sessionKey);
+        $this->applySearch($request, $query, $moduleName, $sessionKey);
 
         // Handle filters
         $this->applyFilters($request, $query, $filterFields, $sessionKey);
@@ -31,13 +32,33 @@ class AdminBaseController extends Controller
         return [$query, $perPage, $page];
     }
 
-    protected function applySearch(Request $request, $query, array $searchFields, $sessionKey)
+    protected function applySearch(Request $request, $query, $moduleName, $sessionKey)
     {
-        if ($search = $request->input('search', session($sessionKey . 'search'))) {
-            session([$sessionKey . 'search' => $search]);
-            $query->where(function ($q) use ($search, $searchFields) {
-                foreach ($searchFields as $field) {
-                    $q->orWhere($field, 'like', '%' . $search . '%');
+        if (!$moduleName) return;
+
+        // Fetch the configuration
+        $searchFields = Config::get("gds.enum.selectionInModule." . $moduleName);
+
+        // Filter out the 'all' element
+        $searchFields = array_filter($searchFields, function ($field) {
+            return $field !== 'all';
+        });
+
+        $searchValue = $request->input('search_value', session($sessionKey . 'search_value'));
+        $searchField = $request->input('search_field', session($sessionKey . 'search_field'));
+
+        if ($searchValue) {
+            // Corrected the session call to store the correct values
+            session([
+                $sessionKey . 'search_field' => $searchField,
+                $sessionKey . 'search_value' => $searchValue
+            ]);
+
+            $query->where(function ($q) use ($searchValue, $searchFields, $searchField) {
+                if ($searchField == 'all') {
+                    $q->whereAny($searchFields, 'like', '%' . $searchValue . '%');
+                } else {
+                    $q->where($searchField, 'like', '%' . $searchValue . '%');
                 }
             });
         }
@@ -59,6 +80,19 @@ class AdminBaseController extends Controller
         $sortOrder = $request->input('sort_order', session($sessionKey . 'sort_order', $defaultSortOrder));
         session([$sessionKey . 'sort_by' => $sortBy, $sessionKey . 'sort_order' => $sortOrder]);
         $query->orderBy($sortBy, $sortOrder);
+    }
+
+    protected function applyDateFilters(Request $request, $query, $sessionKey, $fieldName = 'created_at')
+    {
+        if ($dateRange = $request->input('date_range_'.$fieldName)) {
+            list($startDate, $endDate) = explode(' - ', $dateRange);
+            session([$sessionKey . 'start_date' => $startDate]);
+            session([$sessionKey . 'end_date' => $endDate]);
+            $query->whereDate($fieldName, '>=', $startDate)
+                  ->whereDate($fieldName, '<=', $endDate);
+        } else {
+            session()->forget([$sessionKey . 'start_date', $sessionKey . 'end_date']);
+        }
     }
 
     protected function getPaginationParams(Request $request, $sessionKey)

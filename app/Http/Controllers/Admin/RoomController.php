@@ -2,29 +2,38 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminBaseController;
-use App\Models\RoomModel;
+use App\Models\RoomModel as MainModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\ModuleControllerHelper;
 
 class RoomController extends AdminBaseController
 {
-    protected $sessionKey = 'room.';
+    use ModuleControllerHelper;
+
+    public function __construct()
+    {
+        $this->initializeModuleController('room', 'Room');
+    }
 
     public function index(Request $request)
     {
         list($query, $perPage, $page) = $this->handleFilters(
-            RoomModel::class,
+            MainModel::class,
             $request,
             $this->sessionKey, // Session key prefix
-            ['name', 'note'], // Search fields like %%
+            $this->moduleName, // Search fields like %%
             ['status'], // Filter fields equals
             'name', // Default sort by
             'asc', // Default sort order
         );
 
-        $rooms = $query->with(['createdBy', 'updatedBy'])->paginate($perPage, ['*'], 'page', $page);
+        // Apply date filters
+        $this->applyDateFilters($request, $query, $this->sessionKey, 'created_at');
 
-        return view('modules.room.index', compact('rooms'));
+        $data = $query->with(['createdBy', 'updatedBy'])->paginate($perPage, ['*'], 'page', $page);
+
+        return view('modules.room.index', compact('data'));
     }
 
     public function clear(Request $request)
@@ -38,7 +47,7 @@ class RoomController extends AdminBaseController
 
     public function create()
     {
-        return view('modules.room.create');
+        return view('modules.room.form');
     }
 
     public function store(Request $request)
@@ -49,7 +58,7 @@ class RoomController extends AdminBaseController
             'status' => 'required|in:active,inactive',
         ]);
 
-        RoomModel::create([
+        MainModel::create([
             'name' => $request->name,
             'note' => $request->note,
             'status' => $request->status,
@@ -60,12 +69,12 @@ class RoomController extends AdminBaseController
         return redirect()->route('admin.room.index')->with('success', 'Room created successfully.');
     }
 
-    public function edit(RoomModel $room)
+    public function edit(MainModel $data)
     {
-        return view('modules.room.edit', compact('room'));
+        return view('modules.room.form', compact('data'));
     }
 
-    public function update(Request $request, RoomModel $room)
+    public function update(Request $request, MainModel $room)
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:rooms,name,' . $room->id,
@@ -83,7 +92,7 @@ class RoomController extends AdminBaseController
         return redirect()->route('admin.room.index')->with('success', 'Room updated successfully.');
     }
 
-    public function destroy(RoomModel $room)
+    public function destroy(MainModel $room)
     {
         $room->delete();
         return redirect()->route('admin.room.index')->with('success', 'Room deleted successfully.');

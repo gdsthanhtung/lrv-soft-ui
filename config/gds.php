@@ -115,6 +115,7 @@ return [
             'cccd_number' => ['name' => 'Tìm số CCCD'],
             'address' => ['name' => 'Tìm theo Đ/C thường trú'],
             'phone' => ['name' => 'Tìm theo Số điện thoại'],
+            'note' => ['name' => 'Tìm theo Ghi chú'],
         ],
         'searchSelectionHopDong' => [
             'all' => ['name' => 'Tìm Tất cả'],
@@ -131,15 +132,14 @@ return [
             'default' => ['all'],
             'user' => ['all', 'email', 'name'],
             'role' => ['all', 'name'],
-            'room' => ['all', 'name'],
+            'room' => ['all', 'name', 'note'],
             'congdan' => ['all', 'name', 'cccd_number', 'address', 'phone'],
             'hopdong' => ['all', 'main.id', 'main.ma_hop_dong', 'cd.name', 'cd.cccd_number', 'pt.name'],
             'hoadon' => ['all'],
         ],
         'ruleBtn' => [
-            'edit'      => ['class' => 'btn-primary',               'title' => 'Edit',    'icon' => 'fa-pencil',  'route' => ".form"],
-            'delete'    => ['class' => 'btn-delete btn-danger',     'title' => 'Remove',           'icon' => 'fa-trash',   'route' => ".delete"],
-            'info'      => ['class' => 'btn-info',                  'title' => 'Info',     'icon' => 'fa-info',    'route' => ".form"],
+            'edit'      => ['class' => 'btn-primary',               'title' => 'Edit',    'icon' => 'fa-pencil',  'route' => "edit"],
+            'delete'    => ['class' => 'btn-delete btn-danger',     'title' => 'Remove',           'icon' => 'fa-trash',   'route' => "destroy"]
         ],
         'btnInArea' => [
             'default' => ['edit', 'delete'],
