@@ -63,13 +63,13 @@ Route::prefix($prefixAdmin)->middleware('auth')->as("$prefixAdmin.")->group(func
 
     $prefix = Config::get('gds.route.room.prefix', 'room');
     $ctrl   = Config::get('gds.route.room.ctrl', 'room');
+    Route::resource('room', RoomController::class);
     Route::prefix($prefix)->group(function () use ($ctrl) {
         Route::controller(RoomController::class)->group(function () use ($ctrl) {
             Route::get('/clear', [RoomController::class, 'clear'])->name($ctrl.'.clear');
         });
     });
 
-    Route::resource('room', RoomController::class);
 
     Route::get('/logout', [SessionsController::class, 'destroy'])->name('logout');
     Route::get('/login', function () {

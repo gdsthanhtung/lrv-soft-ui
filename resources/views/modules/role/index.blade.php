@@ -30,8 +30,8 @@
                 <div class="table-responsive">
                     <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
                         <div class="dataTable-top">
-                            <x-button.filter :ctrl="$ctrl" :countByStatus="$countByStatus" :params="$params" />
-                            <x-search.area :ctrl="$ctrl" :params="$params" />
+                            {{-- <x-button.filter :ctrl="$ctrl" :countByStatus="$countByStatus" :params="$params" />
+                            <x-search.area :ctrl="$ctrl" :params="$params" /> --}}
                         </div>
 
                         @include($pathView.'list')

@@ -12,7 +12,7 @@
         @php
             $tt = (($id) ? 'Modify' : 'New').' '.$pageTitle;
             $stt = (($id) ? 'Update the' : 'Add the new').' '.$pageTitle.' information';
-        dump($data->id);@endphp
+        @endphp
 
         <div class="col-lg-6 col-md-8 col-sm-12 mx-auto mb-5">
             @includeWhen(session('notify'), $pathViewTemplate . 'notify')
@@ -23,7 +23,7 @@
                 <p class="text-sm mb-0">{{ $stt }}</p>
                 <hr class="horizontal dark my-3">
 
-                @includeWhen(!$id, $pathView.'edit')
+                @includeWhen(!$id, $pathView.'create')
                 @includeWhen($id, $pathView.'edit')
             </div>
         </div>

@@ -1,23 +1,23 @@
 /* font for all page */
 html {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
 }
 
 @include media-breakpoint-up(sm) {
     html {
-        font-size: 1.1rem;
+        font-size: 1.15rem;
     }
 }
 
 @include media-breakpoint-up(md) {
     html {
-        font-size: 1.3rem;
+        font-size: 1.35rem;
     }
 }
 
 @include media-breakpoint-up(lg) {
     html {
-        font-size: 1.5rem;
+        font-size: 1.55rem;
     }
 }
 
@@ -60,4 +60,8 @@ mark {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.action-button-col {
+    min-width: 100px;
 }

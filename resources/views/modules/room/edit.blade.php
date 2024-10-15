@@ -1,35 +1,29 @@
-<!-- resources/views/rooms/edit.blade.php -->
-@extends('elements.auth')
-
-@section('content')
-<form method="POST" action="{{ route($routePrefix.'update', ['room' => $data->id]) }}">
+<form method="POST" action="{{ route($routePrefix.'update', [$ctrl => $data->id, 'id' => $data->id]) }}">
     @csrf
     @method('PUT')
-    {{-- <div>
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" value="{{ old('name', $room->name) }}" required>
-        @error('name')
-            <div>{{ $message }}</div>
-        @enderror
+    <div class="form-group">
+        <label for="name" class="{{ $flClass }}">Name</label>
+        <div class="">
+            <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $data->name) }}" required>
+        </div>
     </div>
-    <div>
-        <label for="note">Note</label>
-        <textarea id="note" name="note">{{ old('note', $room->note) }}</textarea>
-        @error('note')
-            <div>{{ $message }}</div>
-        @enderror
+
+    <div class="form-group">
+        <label for="note" class="{{ $flClass }}">Note</label>
+        <div class="">
+            <input type="text" class="form-control" id="note" name="note" value="{{ old('note', $data->note) }}">
+        </div>
     </div>
-    <div>
-        <label for="status">Status</label>
-        <select id="status" name="status" required>
-            <option value="active" {{ old('status', $room->status) == 'active' ? 'selected' : '' }}>Active</option>
-            <option value="inactive" {{ old('status', $room->status) == 'inactive' ? 'selected' : '' }}>Inactive</option>
-        </select>
-        @error('status')
-            <div>{{ $message }}</div>
-        @enderror
+
+    <div class="form-group">
+        <label for="status" class="{{ $flClass }}">Status</label>
+        <div class="">
+            <x-select.radio :listToSelect="$statusEnum" elName="status" :valToChecked="old('status', $data->status)" :required="true" />
+        </div>
     </div>
-    <button type="submit">Update Room</button>
-    <button type="button" onclick="window.history.back()" class="btn btn-secondary">Back</button> --}}
+
+    <div class="d-flex justify-content-end mt-4">
+        <a href="{{ route($routePrefix.'index') }}" type="button" class="btn btn-light m-0">BACK</a>
+        <button type="submit" class="btn bg-gradient-primary m-0 ms-2">SUBMIT</button>
+    </div>
 </form>
-@endsection

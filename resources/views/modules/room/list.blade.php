@@ -14,7 +14,7 @@
                 <x-list.sortable-header field="created_at" label="Created At" />
                 <th>Created By</th>
                 <th>Updated By</th>
-                <th class="text-center">Action</th>
+                <th class="text-center action-button-col">Action</th>
             </tr>
         </thead>
 

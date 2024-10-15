@@ -24,8 +24,8 @@
                     <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
                         {{-- <form action="{{ route('admin.'.$ctrl) }}" method="post" name="filterForm" id="filterForm"> --}}
                             <div class="dataTable-top">
-                                <x-button.filter :ctrl="$ctrl" :countByStatus="[]" :params="$params" />
-                                <x-search.area :ctrl="$ctrl" :params="$params" />
+                                {{-- <x-button.filter :ctrl="$ctrl" :countByStatus="[]" :params="$params" />
+                                <x-search.area :ctrl="$ctrl" :params="$params" /> --}}
                             </div>
 
                             @include($pathView.'list')
