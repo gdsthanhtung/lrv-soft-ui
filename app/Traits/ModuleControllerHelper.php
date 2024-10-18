@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\View;
+use Illuminate\Http\Request;
 
 trait ModuleControllerHelper
 {
@@ -32,5 +33,15 @@ trait ModuleControllerHelper
             'pageTitle' => $this->pageTitle,
             'routePrefix' => $this->routePrefix
         ]);
+    }
+
+    // Remove all filter and sorting session data, then redirect back to the index route
+    public function clear(Request $request)
+    {
+        // Clear the relevant session data
+        $request->session()->forget(substr($this->sessionKey, 0, -1));
+
+        // Redirect back to the index route
+        return redirect()->route($this->routePrefix.'index');
     }
 }

@@ -38,15 +38,6 @@ class RoomController extends AdminBaseController
         return view($this->pathView.'index', compact('data'));
     }
 
-    public function clear(Request $request)
-    {
-        // Clear the relevant session data
-        $request->session()->forget(substr($this->sessionKey, 0, -1));
-
-        // Redirect back to the index route
-        return redirect()->route($this->routePrefix.'index');
-    }
-
     public function create()
     {
         return view($this->pathView.'form');
@@ -96,8 +87,9 @@ class RoomController extends AdminBaseController
         return redirect()->route($this->routePrefix.'index')->with('notify', Notify::export($rs));
     }
 
-    public function destroy(MainModel $data)
+    public function destroy(MainModel $room)
     {
+        $data = $room;
         $rs = $data->delete();
         return redirect()->route($this->routePrefix.'index')->with('notify', Notify::export($rs));
     }
