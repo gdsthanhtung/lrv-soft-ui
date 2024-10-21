@@ -10,6 +10,7 @@ trait ModuleControllerHelper
 {
     protected $sessionKey;
     private $moduleName;
+    private $table;
     private $pageTitle;
     private $routePrefix;
     private $pathView;
@@ -18,11 +19,12 @@ trait ModuleControllerHelper
 
     public function initializeModuleController($moduleName, $pageTitle)
     {
-        $this->moduleName = $moduleName;
-        $this->pageTitle = $pageTitle;
-        $this->sessionKey = "$moduleName.";
-        $this->routePrefix = "admin.$moduleName.";
-        $this->pathView = "modules.$moduleName.";
+        $this->pageTitle        = $pageTitle;
+        $this->moduleName       = $moduleName;
+        $this->table            = $moduleName.'s';
+        $this->sessionKey       = $moduleName.'.';
+        $this->routePrefix      = "admin.$moduleName.";
+        $this->pathView         = "modules.$moduleName.";
         $this->pathViewTemplate = "templates.";
         $this->ctrl = Config::get("gds.route.$moduleName.ctrl");
 

@@ -7,7 +7,6 @@ use App\Models\RoomModel as MainModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\ModuleControllerHelper;
-use Illuminate\Support\Facades\DB;
 
 class RoomController extends AdminBaseController
 {
@@ -46,7 +45,7 @@ class RoomController extends AdminBaseController
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:rooms,name',
+            'name' => "required|string|max:255|unique:{$this->table},name",
             'note' => 'nullable|string',
             'status' => 'required|in:active,inactive',
         ]);
@@ -72,7 +71,7 @@ class RoomController extends AdminBaseController
     {
         $data = $room;
         $request->validate([
-            'name' => "required|string|max:255|unique:rooms,name,{$data->id}",
+            'name' => "required|string|max:255|unique:{$this->table},name,{$data->id}",
             'note' => 'nullable|string',
             'status' => 'required|in:active,inactive',
         ]);

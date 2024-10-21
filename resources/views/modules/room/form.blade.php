@@ -6,6 +6,8 @@
         $flClass    = Config::get('gds.template.formLabel.class');
         $fiClass    = Config::get('gds.template.formInput.class');
         $statusEnum = Config::get('gds.enum.selectStatus');
+        $method     = ($id) ? 'PUT' : 'POST';
+        $action     = ($id) ? route($routePrefix.'update', [$ctrl => $data['id'], 'id' => $data['id']]) : route($routePrefix.'store');
     @endphp
 
     <div class="row">

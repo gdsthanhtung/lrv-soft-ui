@@ -1,6 +1,7 @@
-<form method="POST" action="{{ route($routePrefix.'update', [$ctrl => $data->id, 'id' => $data->id]) }}">
-    @csrf
-    @method('PUT')
+<form action="{{ $action }}" method="POST" accept-charset="UTF-8">
+	@csrf
+    @method($method)
+
     <div class="form-group">
         <label for="name" class="{{ $flClass }}">Name</label>
         <div class="">

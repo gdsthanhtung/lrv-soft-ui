@@ -1,5 +1,6 @@
-<form action="{{ route($routePrefix.'store') }}" method="POST" accept-charset="UTF-8">
-    @csrf
+<form action="{{ $action }}" method="POST" accept-charset="UTF-8">
+	@csrf
+    @method($method)
 
     <div class="form-group">
         <label for="name" class="{{ $flClass }}">Name</label>

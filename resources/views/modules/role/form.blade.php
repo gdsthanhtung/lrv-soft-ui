@@ -6,6 +6,14 @@
         $flClass    = Config::get('gds.template.formLabel.class');
         $fiClass    = Config::get('gds.template.formInput.class');
         $statusEnum = Config::get('gds.enum.selectStatus');
+        $method     = ($id) ? 'PUT' : 'POST';
+        $action     = ($id) ? route($routePrefix.'update', [$ctrl => $data['id'], 'id' => $data['id']]) : route($routePrefix.'store');
+        $name       = ($id) ? $data['name'] : '';
+        $status     = ($id) ? $data['status'] : '';
+
+        use App\Helpers\Template;
+        $permission = $routeList;
+        $permissionSelected = ($id) ? json_decode($data['permission']) : [];
     @endphp
 
     <div class="row">
@@ -23,8 +31,7 @@
                 <p class="text-sm mb-0">{{ $stt }}</p>
                 <hr class="horizontal dark my-3">
 
-                @includeWhen(!$id, $pathView.'create')
-                @includeWhen($id, $pathView.'edit')
+                @include($pathView.'form_content')
             </div>
         </div>
     </div>

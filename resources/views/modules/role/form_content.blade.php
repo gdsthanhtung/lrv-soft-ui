@@ -1,5 +1,6 @@
-<form action="{{ route('admin.'.$ctrl.'.save') }}" method="POST" accept-charset="UTF-8" enctype="multipart/form-data">
+<form action="{{ $action }}" method="POST" accept-charset="UTF-8">
 	@csrf
+    @method($method)
 
 	<div class="form-group">
 		<label for="name" class="{{ $flClass }}">Name</label>
@@ -18,13 +19,20 @@
 		<div class="">
             <x-select.checkbox :listToSelect="$permission" elName='permission' :valToChecked="$permissionSelected" required='true' col='col-4' />
         </div>
+        <button type="button" id="toggleCheckboxPermission" class="btn btn-sm btn-secondary">Check all</button>
 	</div>
 
 	<div class="d-flex justify-content-end mt-4">
-        <input type="hidden" class="form-control" id="id" name="id" value="{{ $id }}">
-        <input type="hidden" class="form-control" id="task" name="task" value="{{ $task }}">
-        {{--  --}}
-		<a href="{{ route('admin.'.$ctrl) }}" type="button" class="btn btn-light m-0">BACK</a>
-		<button type="submit" class="btn bg-gradient-primary m-0 ms-2">SUBMIT</button>
-	</div>
+        <a href="{{ route($routePrefix.'index') }}" type="button" class="btn btn-light m-0">BACK</a>
+        <button type="submit" class="btn bg-gradient-primary m-0 ms-2">SUBMIT</button>
+    </div>
 </form>
+
+@section('modules_script')
+    <script src="{{ asset('assets/gds-custom/gds/js/toggle_checkbox.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            toggleCheckbox('toggleCheckboxPermission', 'permission[]');
+        });
+    </script>
+@endsection
