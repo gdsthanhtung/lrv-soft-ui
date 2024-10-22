@@ -36,18 +36,18 @@ Route::prefix($prefixAdmin)->middleware('auth')->as("$prefixAdmin.")->group(func
 		return view('modules.dashboard.index');
 	})->name('dashboard');
 
-    $prefix = Config::get('gds.route.user.prefix');
-    $ctrl   = Config::get('gds.route.user.ctrl');
-    Route::prefix($prefix)->group(function () use ($ctrl) {
-        Route::controller(UserController::class)->group(function () use ($ctrl) {
-            Route::get('/', 'show')->name($ctrl);
-            Route::get('/form/{id?}', 'form')->where(['id' => '[0-9]+'])->name($ctrl.'.form');
-            Route::get('/delete/{id}', 'delete')->where(['id' => '[0-9]+'])->name($ctrl.'.delete');
-            Route::get('/change-status/{id}/{status}', 'change_status')->where(['id' => '[0-9]+', 'status' => '[a-z]+'])->name($ctrl.'.change-status');
-            Route::get('/change-level/{id}/{level}', 'change_level')->where(['id' => '[0-9]+', 'level' => '[a-z]+'])->name($ctrl.'.change-level');
-            Route::post('/save', 'save')->name($ctrl.'.save');
-        });
-    });
+    // $prefix = Config::get('gds.route.user.prefix');
+    // $ctrl   = Config::get('gds.route.user.ctrl');
+    // Route::prefix($prefix)->group(function () use ($ctrl) {
+    //     Route::controller(UserController::class)->group(function () use ($ctrl) {
+    //         Route::get('/', 'show')->name($ctrl);
+    //         Route::get('/form/{id?}', 'form')->where(['id' => '[0-9]+'])->name($ctrl.'.form');
+    //         Route::get('/delete/{id}', 'delete')->where(['id' => '[0-9]+'])->name($ctrl.'.delete');
+    //         Route::get('/change-status/{id}/{status}', 'change_status')->where(['id' => '[0-9]+', 'status' => '[a-z]+'])->name($ctrl.'.change-status');
+    //         Route::get('/change-level/{id}/{level}', 'change_level')->where(['id' => '[0-9]+', 'level' => '[a-z]+'])->name($ctrl.'.change-level');
+    //         Route::post('/save', 'save')->name($ctrl.'.save');
+    //     });
+    // });
 
     // $prefix = Config::get('gds.route.role.prefix', 'role');
     // $ctrl   = Config::get('gds.route.role.ctrl', 'role');
@@ -61,11 +61,19 @@ Route::prefix($prefixAdmin)->middleware('auth')->as("$prefixAdmin.")->group(func
     //     });
     // });
 
+    $prefix = Config::get('gds.route.user.prefix');
+    $ctrl   = Config::get('gds.route.user.ctrl');
+    Route::prefix($prefix)->group(function () use ($ctrl) {
+        Route::controller(UserController::class)->group(function () use ($ctrl) {
+            Route::get('/clear', 'clear')->name($ctrl.'.clear');
+        });
+    });
+
     $prefix = Config::get('gds.route.role.prefix');
     $ctrl   = Config::get('gds.route.role.ctrl');
     Route::prefix($prefix)->group(function () use ($ctrl) {
         Route::controller(RoleController::class)->group(function () use ($ctrl) {
-            Route::get('/clear', [RoleController::class, 'clear'])->name($ctrl.'.clear');
+            Route::get('/clear', 'clear')->name($ctrl.'.clear');
         });
     });
 
@@ -73,10 +81,11 @@ Route::prefix($prefixAdmin)->middleware('auth')->as("$prefixAdmin.")->group(func
     $ctrl   = Config::get('gds.route.room.ctrl');
     Route::prefix($prefix)->group(function () use ($ctrl) {
         Route::controller(RoomController::class)->group(function () use ($ctrl) {
-            Route::get('/clear', [RoomController::class, 'clear'])->name($ctrl.'.clear');
+            Route::get('/clear', 'clear')->name($ctrl.'.clear');
         });
     });
 
+    Route::resource('user', UserController::class);
     Route::resource('room', RoomController::class);
     Route::resource('role', RoleController::class);
 

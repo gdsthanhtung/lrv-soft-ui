@@ -1,22 +1,20 @@
 <?php
 namespace App\Helpers;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Intervention\Image\Laravel\Facades\Image;
 
 class Resource {
-    public static function delete($dirName, $file){
-        $path = $dirName.'/'.$file;
-        if(Storage::exists($path)){
-            $rs = Storage::delete($dirName.'/'.$file);
-            return ($rs) ? $rs : false;
+    public static function delete($dirName, $file, $rootDir = 'images'){
+        $path = $rootDir.'/'.$dirName.'/'.$file;
+        if(File::exists($path)){
+            return File::delete($path);
         }else{
             return true;
         }
     }
 
-    public static function uploadImage($dirName, $image, $type = 'default')
+    public static function uploadImage($dirName, $image, $type = 'default', $rootDir = 'images')
     {
         $imageName = Carbon::now()->format('ymdhisu').'.'.$image->clientExtension();
         $img = Image::read($image->getPathname());
@@ -38,7 +36,7 @@ class Resource {
         $rs = $img->scale($w, $h, function ($constraint) {
             $constraint->aspectRatio();
             $constraint->upsize();
-        })->save(public_path("images/".$dirName).'/'.$imageName);
+        })->save(public_path($rootDir.'/'.$dirName).'/'.$imageName);
 
         //Move original file to somewhere
         //$destinationPath = public_path('/images');

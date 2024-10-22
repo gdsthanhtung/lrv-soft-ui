@@ -7,7 +7,7 @@
         $fiClass    = Config::get('gds.template.formInput.class');
         $statusEnum = Config::get('gds.enum.selectStatus');
         $method     = ($id) ? 'PUT' : 'POST';
-        $action     = ($id) ? route($routePrefix.'update', [$ctrl => $data['id'], 'id' => $data['id']]) : route($routePrefix.'store');
+        $action     = ($id) ? route($routePrefix.'update', [$ctrl => $data['id']]) : route($routePrefix.'store');
         $name       = ($id) ? $data['name'] : '';
         $status     = ($id) ? $data['status'] : '';
 

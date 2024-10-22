@@ -1,4 +1,4 @@
-@props(['params', 'searchSelection', 'ctrl', 'routePrefix'])
+@props(['params', 'searchSelection', 'ctrl'])
 
 @php
     $selections = '';

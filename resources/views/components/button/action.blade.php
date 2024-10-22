@@ -17,14 +17,14 @@
                 '<form action="%s" method="POST" style="display:inline;" id="delete-form-%d">
                     %s
                     %s
-                    <i class="fa %s text-secondary delete-icon" aria-hidden="true" style="cursor: pointer;" onclick="confirmDeleteItem(%d)"></i>
+                    <i class="fa %s text-secondary delete-icon" aria-hidden="true" style="cursor: pointer;" onclick="confirmDeleteItem(%s)"></i>
                 </form>',
                 $link,
-                $index,
+                $id,
                 csrf_field(),
                 method_field('DELETE'),
                 $button['icon'],
-                $index
+                $id
             );
         } else {
             $html .= sprintf(

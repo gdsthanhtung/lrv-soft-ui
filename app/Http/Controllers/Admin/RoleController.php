@@ -8,6 +8,7 @@ use App\Http\Requests\RoleRequest as MainRequest;
 use App\Helpers\Notify;
 use App\Http\Controllers\AdminBaseController;
 use App\Traits\ModuleControllerHelper;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -77,14 +78,13 @@ class RoleController extends AdminBaseController
 
     public function update(Request $request, MainModel $role)
     {
-        $data = $role;
         $request->validate([
             'name' => "required|string|max:255|unique:{$this->table},name,{$data->id}",
             'note' => 'nullable|string',
             'status' => 'required|in:active,inactive',
         ]);
 
-        $rs = $data->update([
+        $rs = $role->update([
             'name' => $request->name,
             'note' => $request->note,
             'status' => $request->status,
@@ -97,9 +97,15 @@ class RoleController extends AdminBaseController
 
     public function destroy(MainModel $role)
     {
-        $data = $role;
-        $rs = $data->delete();
-        return redirect()->route($this->routePrefix.'index')->with('notify', Notify::export($rs));
+        try {
+            $rs = $role->delete();
+            return redirect()->route($this->routePrefix.'index')->with('notify', Notify::export($rs));
+        } catch (QueryException $e) {
+            if ($e->getCode() == '23000') {
+                return redirect()->route($this->routePrefix.'index')->with('notify', Notify::export(false, ['eMsg' => 'Cannot delete role because it is associated with users.', 'sMsg' => '']));
+            }
+            return redirect()->route($this->routePrefix.'index')->with('notify', Notify::export(false, ['eMsg' => 'An error occurred while deleting the role.', 'sMsg' => '']));
+        }
     }
 
     //=====================================================

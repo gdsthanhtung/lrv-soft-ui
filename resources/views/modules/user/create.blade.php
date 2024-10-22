@@ -1,5 +1,6 @@
-<form action="{{ route('admin.'.$ctrl.'.save') }}" method="POST" accept-charset="UTF-8" enctype="multipart/form-data">
+<form action="{{ $action }}" method="POST" accept-charset="UTF-8" enctype="multipart/form-data">
 	@csrf
+    @method($method)
 
 	<div class="form-group">
 		<label for="email" class="{{ $flClass }}">Email</label>
@@ -34,9 +35,7 @@
 	</div>
 
 	<div class="d-flex justify-content-end mt-4">
-        <input type="hidden" class="form-control" id="task" name="task" value="{{ $task }}">
-        {{--  --}}
-		<a href="{{ route('admin.'.$ctrl) }}" type="button" class="btn btn-light m-0">BACK</a>
-		<button type="submit" class="btn bg-gradient-primary m-0 ms-2">SUBMIT</button>
+        <a href="{{ route($routePrefix.'index') }}" type="button" class="btn btn-light m-0">BACK</a>
+        <button type="submit" class="btn bg-gradient-primary m-0 ms-2">SUBMIT</button>
 	</div>
 </form>

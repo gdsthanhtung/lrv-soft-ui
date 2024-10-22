@@ -17,7 +17,6 @@
             </tr>
         </thead>
 
-
         @if (count($data) > 0)
             @foreach($data as $item)
                 <tr>
@@ -26,11 +25,9 @@
                         $name       = Highlight::show($ctrl, $item['name'], 'name');
                         $note       = Highlight::show($ctrl, $item['note'], 'note');
 
-                        $avatar     = Template::showItemAvatar($ctrl, $item['avatar'], $item['name']);
                         $status     = Template::showItemStatus($ctrl, $id, $item['status'], false);
                         $createdHis = Template::showItemHistory($item->createdBy->name, $item['updated_at'], 'add');
                         $updatedHis = Template::showItemHistory($item->updatedBy->name, $item['created_at'], 'edit');
-
                     @endphp
 
                     <td>{{ $loop->iteration }}</td>
