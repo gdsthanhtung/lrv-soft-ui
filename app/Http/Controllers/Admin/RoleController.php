@@ -79,7 +79,7 @@ class RoleController extends AdminBaseController
     public function update(Request $request, MainModel $role)
     {
         $request->validate([
-            'name' => "required|string|max:255|unique:{$this->table},name,{$data->id}",
+            'name' => "required|string|max:255|unique:{$this->table},name,{$role->id}",
             'note' => 'nullable|string',
             'status' => 'required|in:active,inactive',
         ]);
