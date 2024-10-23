@@ -1,10 +1,10 @@
 @props(['field', 'label'])
 
 @php
-    $sortOrder = session('room.sort_order') == 'asc' ? 'desc' : 'asc';
-    $isActive = session('room.sort_by') == $field;
+    $sortOrder = session($sessionKey.'sort_order') == 'asc' ? 'desc' : 'asc';
+    $isActive = session($sessionKey.'sort_by') == $field;
     $activeClass = $isActive ? 'active' : '';
-    $currentSortOrder = session('room.sort_order');
+    $currentSortOrder = session($sessionKey.'sort_order');
 @endphp
 
 <th class="{{ $activeClass }}">

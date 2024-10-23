@@ -33,7 +33,8 @@ trait ModuleControllerHelper
             'pathView' => $this->pathView,
             'pathViewTemplate' => $this->pathViewTemplate,
             'pageTitle' => $this->pageTitle,
-            'routePrefix' => $this->routePrefix
+            'routePrefix' => $this->routePrefix,
+            'sessionKey' => $this->sessionKey
         ]);
     }
 
