@@ -9,7 +9,7 @@
             [
                 'title' => $pageTitle. ' management',
                 'subTitle' => 'The '.$pageTitle. ' information list',
-                'button' => '<a href="'.route($routePrefix.'create').'" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; Add New</a>'
+                'button' => (Auth::user()->can("create {$ctrl}s")) ? '<a href="'.route($routePrefix.'create').'" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; Add New</a>' : ''
             ])
 
             @if ($errors->any() || session('notify'))
