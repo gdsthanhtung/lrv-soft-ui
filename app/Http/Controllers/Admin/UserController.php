@@ -19,7 +19,6 @@ class UserController extends AdminBaseController
     public function __construct()
     {
         $this->middleware('check.permissions:users');
-
         $this->initializeModuleController('user', 'User');
     }
 

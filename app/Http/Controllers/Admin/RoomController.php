@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\ModuleControllerHelper;
 
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
 class RoomController extends AdminBaseController
 {
     use ModuleControllerHelper;

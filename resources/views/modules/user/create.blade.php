@@ -37,7 +37,7 @@
         <select multiple class="form-control" id="permissions" name="permissions[]">
             @foreach($permissions as $permission)
                 <option value="{{ $permission->name }}" {{ collect(old('permissions'))->contains($permission->name) ? 'selected' : '' }}>
-                    {{ $permission->name }} ({{ $permission->note }})
+                    {{ $permission->name }} {{ ($permission->note) ? " | ".$permission->note : '' }}
                 </option>
             @endforeach
         </select>

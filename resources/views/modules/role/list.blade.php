@@ -21,14 +21,16 @@
                     @php
                         $id         = $item['id'];
                         $name       = Highlight::show($ctrl, $item['name'], 'name');
+                        $pms        = ($item['permissions']) ? $item['permissions'] : [];
                     @endphp
 
                     <td>{{ $loop->iteration }}</td>
                     <td>{!! $name !!}</td>
-                    <td width="40%">
-                        @foreach($item['permissions'] as $permission)
-                            <span class="badge bg-secondary">{{ $permission['name'] }}</span>
-                        @endforeach
+                    <td>
+                        @for ($i = 0; $i < count($pms); $i++)
+                            <span class="badge bg-secondary">{{ $pms[$i]['name'] }}</span>
+                            {!! (($i + 1) % 8 == 0) ? '<br><div class="mb-1"></div>' : '' !!}
+                        @endfor
                     </td>
                     <td class="text-sm text-center"><x-button.action :ctrl="$ctrl" :id="$id" /></td>
                 </tr>
