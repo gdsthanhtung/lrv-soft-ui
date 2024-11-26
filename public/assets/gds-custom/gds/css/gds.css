@@ -1,3 +1,27 @@
+/* font for all page */
+html {
+    font-size: 0.95rem;
+}
+
+@include media-breakpoint-up(sm) {
+    html {
+        font-size: 1.15rem;
+    }
+}
+
+@include media-breakpoint-up(md) {
+    html {
+        font-size: 1.35rem;
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    html {
+        font-size: 1.55rem;
+    }
+}
+
+/* custom css */
 .sidenav {
     z-index: 2000;
 }
@@ -9,4 +33,35 @@
 
 .clear-search > i{
     color: #8392ab;
+}
+
+mark {
+    border-radius: 3px;
+}
+
+.custom-select-padding {
+    padding-right: 2rem;
+}
+
+.showing-results {
+    line-height: 2.5;
+}
+
+
+.max-width-200 {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.max-width-300 {
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.action-button-col {
+    min-width: 100px;
 }

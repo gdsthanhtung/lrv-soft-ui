@@ -5,12 +5,18 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+
+    protected $table = 'users';
+    protected $uploadDir = 'user';
+
+    //protected $guard_name = 'web';
 
     /**
      * The attributes that are mass assignable.
@@ -21,10 +27,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'email',
         'phone',
-        'location',
-        'about_me',
-    ];
+        'avatar',
+        'status',
+        'created_by',
+        'updated_by'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -43,24 +51,17 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'password' => 'hashed',
     ];
 
-    public function hasPermission($route) {
-        $pms = $this->routes();
-        return (in_array($route, $pms)) ? true : false;
+    /* RELATIONSHIP */
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function routes() {
-        $data = [];
-        foreach ($this->getRoleList as $key => $role) {
-            $permission = json_decode($role->permission);
-            $data = array_merge($data, $permission);
-        }
-        $data = array_unique($data);
-        return $data;
-    }
-
-    public function getRoleList(){
-        return $this->belongsToMany(RoleModel::class, 'role_users', 'user_id', 'role_id');
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

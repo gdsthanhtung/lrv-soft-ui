@@ -1,134 +1,99 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use App\Http\Controllers\Controller;
 
-use App\Models\RoleModel as MainModel;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\View;
-use App\Http\Requests\RoleRequest as MainRequest;
 use App\Helpers\Notify;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminBaseController;
+use Illuminate\Http\Request;
+use App\Traits\ModuleControllerHelper;
+use Spatie\Permission\Models\Role as MainModel;
+use Spatie\Permission\Models\Permission;
 
-class RoleController extends Controller
+class RoleController extends AdminBaseController
 {
-    private $mainModel;
-    private $pathView;
-    private $pathViewTemplate;
-    private $moduleName = "role";
-    private $pageTitle = "Role";
-    private $params = [];
+    use ModuleControllerHelper;
 
-    public function __construct(){
-        $this->mainModel = new MainModel();
-        $this->pathView = "modules.$this->moduleName.";
-        $this->pathViewTemplate = "templates.";
-
-        $ctrl = Config::get("gds.route.$this->moduleName.ctrl");
-        View::share([
-            'ctrl' => $ctrl,
-            'pathView' => $this->pathView,
-            'pathViewTemplate' => $this->pathViewTemplate,
-            'pageTitle' => $this->pageTitle
-        ]);
-    }
-
-    private function getPathView(string $file = 'index'){
-        return $this->pathView.$file;
+    public function __construct()
+    {
+        $this->middleware('check.permissions:roles');
+        $this->initializeModuleController('role', 'Role');
     }
 
     //=====================================================
 
-    public function show(Request $rq)
+    public function index(Request $request)
     {
-        $searchField = $rq->input('searchField', 'all');
-        $fieldAccepted = Config::get("gds.enum.selectionInModule.".$this->moduleName);
+        list($query, $perPage, $page) = $this->handleFilters(
+            MainModel::class,
+            $request,
+            $this->sessionKey, // Session key prefix
+            $this->moduleName, // Search fields like %%
+            [], // Filter fields equals
+            'id', // Default sort by
+            'desc', // Default sort order
+        );
 
-        $ppEnum = Config::get('gds.perPage');
-        $this->params["pagination"]['perPage'] = (in_array($rq->input('perPage'), $ppEnum)) ? $rq->input('perPage') : $ppEnum[0];
-        $this->params['pagination']['page'] = $rq->input('page', 1);
+        // Apply date filters
+        $this->applyDateFilters($request, $query, $this->sessionKey, 'created_at');
 
-        $this->params['filter']['fieldAccepted'] = $fieldAccepted;
-        $this->params['filter']['searchField'] = (in_array($searchField, $fieldAccepted)) ? $searchField : 'all';
-        $this->params['filter']['searchValue'] = $rq->input('searchValue', '');
-        $this->params['filter']['status'] = $rq->input('status', 'all');
+        $data = $query->paginate($perPage, ['*'], 'page', $page);
 
-        $data = $this->mainModel->listItems($this->params, ['task' => 'admin-list-items']);
-        $countByStatus = $this->mainModel->countItems($this->params, ['task' => 'admin-count-items']);
-
-        $shareData = [
-            'data' => $data,
-            'countByStatus' => $countByStatus,
-            'params' => $this->params
-        ];
-        return view($this->getPathView('index'), $shareData);
+        return view($this->pathView.'index', compact('data'));
     }
 
-    public function form(Request $rq)
+    public function create()
     {
-        $data = [];
-        $id = $rq->id;
+        $permissions = Permission::all();
+        return view($this->pathView.'form', compact('permissions'));
+    }
 
-        if($id){
-             $params = [
-                'id'    => $id
-            ];
-            $data = $this->mainModel->getItem($params, ['task' => 'get-item']);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => "required|string|max:255|unique:{$this->table},name",
+            'permissions' => 'array',
+        ]);
+
+        $rs = MainModel::create([
+            'name' => $request->name,
+        ]);
+
+        if ($rs && $request->permissions) {
+            $rs = $rs->syncPermissions($request->permissions);
         }
 
-        if(!$data && $id)
-            return redirect()->route($this->moduleName)->with('notify', ['type' => 'danger', 'message' => $this->pageTitle.' id is invalid!']);
-
-        $routeList = $this->getRouteList();
-
-        $shareData = [
-            'data' => $data,
-            'id' => $id,
-            'routeList' => $routeList
-        ];
-        return view($this->getPathView('form'), $shareData);
-
+        return redirect()->route($this->routePrefix.'index')->with('notify', Notify::export($rs));
     }
 
-    public function delete(Request $rq)
+    public function edit($id)
     {
-        $params = [
-            'id'    => $rq->id
-        ];
-        $rs = $this->mainModel->delete($params);
-        return redirect()->route('admin.'.$this->moduleName)->with('notify', Notify::export($rs));
+        $data = MainModel::findOrFail($id);
+        $permissions = Permission::all();
+        return view($this->pathView.'form', compact('data', 'permissions'));
     }
 
-    public function change_status(Request $rq)
+    public function update(Request $request, MainModel $role)
     {
-        $params = [
-            'id'    => $rq->id,
-            'status'  => $rq->status
-        ];
+        $request->validate([
+            'name' => "required|string|max:255|unique:{$this->table},name,{$role->id}",
+            'permissions' => 'array',
+        ]);
 
-        $rs = $this->mainModel->saveItem($params, ['task' => 'change-status']);
-        return redirect()->route('admin.'.$this->moduleName)->with('notify', Notify::export($rs));
+        $data = MainModel::findOrFail($role->id);
+        $data->name = $request->name;
+        $rs = $data->save();
 
-    }
-
-    public function save(MainRequest $rq)
-    {
-        if($rq->method() == 'POST'){
-            $params = $rq->all();
-
-            $rs = $this->mainModel->saveItem($params, ['task' => $params['task']]);
+        if ($rs && $request->permissions) {
+            $rs = $data->syncPermissions($request->permissions);
         }
-        return redirect()->route('admin.'.$this->moduleName)->with('notify', Notify::export($rs));
+
+        return redirect()->route($this->routePrefix.'index')->with('notify', Notify::export($rs));
     }
 
-    public function getRouteList(){
-        $routes = [];
-        $fullRoutes = Route::getRoutes();
-        foreach ($fullRoutes as $key => $value) {
-            if(strpos($value->getName(), 'admin.') !== false)
-                $routes[$value->getName()] = $value->getName();
-        }
-        return $routes;
+    public function destroy($id)
+    {
+        $data = MainModel::findOrFail($id);
+        $rs = $data->delete();
+        return redirect()->route($this->routePrefix.'index')->with('notify', Notify::export($rs));
     }
 }

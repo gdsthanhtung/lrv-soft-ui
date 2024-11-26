@@ -6,7 +6,7 @@
     $status         = $data['status'];
     $level          = $data['level'];
     $avatar         = $data['avatar'];
-    $current_avatar = $data['current_avatar'];
+    $current_avatar = $data['avatar'];
 
     $avatarImg      = Template::showItemAvatar($ctrl, $avatar, $name, $size='l');
 @endphp
@@ -23,8 +23,10 @@
     </div>
     <hr class="horizontal dark my-3">
 
-    <form action="{{ route('admin.'.$ctrl.'.save') }}" method="POST" accept-charset="UTF-8" enctype="multipart/form-data">
+    <form action="{{ $action }}" method="POST" accept-charset="UTF-8" enctype="multipart/form-data">
         @csrf
+        @method($method)
+
         <div class="form-group">
             <label for="email" class="{{ $flClass }}">Email</label>
             <div class=""><input type="email" class="form-control" id="email" name="email" value="{{ old('email') ?? $email }}" placeholder="john.doe@icloud.com" required></div>
@@ -44,11 +46,10 @@
             <div class=""><input type="file" class="form-control" id="avatar" name="avatar"></div>
         </div>
         <div class="d-flex justify-content-end mt-4">
-            <input type="hidden" class="form-control" id="id" name="id" value="{{ $id }}">
-            <input type="hidden" class="form-control" id="task" name="task" value="{{ $task }}">
+            <input type="hidden" class="form-control" id="task" name="task" value="update-info">
             <input type="hidden" class="form-control" id="current_avatar" name="current_avatar" value="{{ $current_avatar }}">
             {{--  --}}
-            <a href="{{ route('admin.'.$ctrl) }}" type="button" class="btn btn-light m-0">BACK</a>
+            <a href="{{ route($routePrefix.'index') }}" type="button" class="btn btn-light m-0">BACK</a>
             <button type="submit" class="btn bg-gradient-primary m-0 ms-2">SUBMIT</button>
         </div>
     </form>

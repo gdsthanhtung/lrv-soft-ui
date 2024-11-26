@@ -9,43 +9,49 @@
             <tr>
                 <th>#</th>
                 <th>Avatar</th>
-                <th>Info</th>
-                <th>Role</th>
-                <th>Level</th>
-                <th class="text-center">Status</th>
-                <th>History</th>
-                <th class="text-center">Action</th>
+                <x-list.sortable-header field="name" label="Name/Email" />
+                <th>Roles</th>
+                <th>Direct Permissions</th>
+                <x-list.sortable-header field="status" label="Status" />
+                <x-list.sortable-header field="created_at" label="Create/Update His" />
+                <th class="text-center action-button-col">Action</th>
             </tr>
         </thead>
 
         @if (count($data) > 0)
-            @foreach ($data as $key => $item)
-                <tr class="odd pointer">
+            @foreach($data as $item)
+                <tr>
                     @php
-                        $no = ++$key;
-                        $id = $item['id'];
-                        $name       = Highlight::show($item['name'], $params['filter'], 'name');
-                        $email      = Highlight::show($item['email'], $params['filter'], 'email');
+                        $id         = $item['id'];
+                        $name       = Highlight::show($ctrl, $item['name'], 'name');
+                        $email      = Highlight::show($ctrl, $item['email'], 'email');
 
                         $avatar     = Template::showItemAvatar($ctrl, $item['avatar'], $item['name']);
-                        $status     = Template::showItemStatus($ctrl, $id, $item['status']);
-                        $level      = $item['level'];
-                        $roles      = Template::showListUL($item['role']);
-                        $createdHis = Template::showItemHistory($item['created_by_name'], $item['created_at'], 'add');
-                        $updatedHis = Template::showItemHistory($item['updated_by_name'], $item['updated_at'], 'edit');
+
+                        $status     = Template::showItemStatus($ctrl, $id, $item['status'], false);
+                        $createdHis = Template::showItemHistory($item->createdBy->name, $item['updated_at'], 'add');
+                        $updatedHis = Template::showItemHistory($item->updatedBy->name, $item['created_at'], 'edit');
 
                     @endphp
 
-                    <td class="text-sm">{{ $no }}</td>
-                    <td class="text-sm">{!! $avatar !!}</td>
-                    <td width="20%" class="text-sm">
-                        <span class="text-sm mb-0 text-capitalize font-weight-bold">Name: </span> {!! $name !!}<br>
-                        <span class="text-sm mb-0 text-capitalize font-weight-bold">Email: </span> {!! $email !!}
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{!! $avatar !!}</td>
+                    <td width="20%">
+                        <span class="mb-0 text-capitalize font-weight-bold">Name: </span> {!! $name !!}<br>
+                        <span class="mb-0 text-capitalize font-weight-bold">Email: </span> {!! $email !!}
                     </td>
-                    <td class="text-sm">{!! $roles !!}</td>
-                    <td class="text-sm"><x-select.dropdown :ctrl="$ctrl" :id="$id" :displayValue="$level" fieldName='level' /></td>
-                    <td class="text-sm text-center">{!! $status !!}</td>
-                    <td class="text-sm">{!! $createdHis !!} <hr class='horizontal dark m-1'> {!! $updatedHis !!}</td>
+                    <td>
+                        @foreach ($item->roles as $role)
+                            <span class="badge bg-info">{{ $role->name }}</span>
+                        @endforeach
+                    </td>
+                    <td>
+                        @foreach ($item->permissions as $permission)
+                            <span class="badge bg-secondary">{{ $permission->name }}</span>
+                        @endforeach
+                    </td>
+                    <td>{!! $status !!}</td>
+                    <td>{!! $createdHis !!} <hr class='horizontal dark m-1'> {!! $updatedHis !!}</td>
                     <td class="text-sm text-center"><x-button.action :ctrl="$ctrl" :id="$id" /></td>
                 </tr>
             @endforeach
@@ -54,3 +60,4 @@
         @endif
     </table>
 </div>
+

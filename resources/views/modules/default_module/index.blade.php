@@ -19,17 +19,19 @@
                 'button' => '<a href="'.route('admin.'.$ctrl.'.form').'" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; Add New</a>'
             ])
 
+            @if ($errors->any() || session('notify'))
             <div class="m-3 mb-0">
                 @includeWhen(session('notify'), $pathViewTemplate . 'notify')
                 @include($pathViewTemplate . 'error')
             </div>
+            @endif
 
             <div class="card-body px-0 pb-0 pt-0">
                 <div class="table-responsive">
                     <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
                         <div class="dataTable-top">
-                            <x-button.filter :ctrl="$ctrl" :countByStatus="$countByStatus" :params="$params" />
-                            <x-search.area :ctrl="$ctrl" :params="$params" />
+                            {{-- <x-button.filter :ctrl="$ctrl" :countByStatus="$countByStatus" :params="$params" />
+                            <x-search.area :ctrl="$ctrl" :params="$params" /> --}}
                         </div>
 
                         @include($pathView.'list')

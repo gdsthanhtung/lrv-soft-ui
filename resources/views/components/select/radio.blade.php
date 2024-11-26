@@ -1,3 +1,5 @@
+@props(['elName', 'listToSelect', 'valToChecked'])
+
 @php
     $html = '';
     if($listToSelect && is_array($listToSelect)) foreach ($listToSelect as $value => $title) {

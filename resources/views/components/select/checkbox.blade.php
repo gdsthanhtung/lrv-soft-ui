@@ -1,3 +1,5 @@
+@props(['listToSelect' => [], 'valToChecked' => [], 'elName' => 'checkbox', 'col' => 'col-12'])
+
 @php
     $html = '';
     if($listToSelect && is_array($listToSelect)) foreach ($listToSelect as $value => $title) {

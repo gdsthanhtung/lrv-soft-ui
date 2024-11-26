@@ -8,32 +8,30 @@
         <thead class="thead-light">
             <tr>
                 <th>#</th>
-                <th>Name</th>
-                <th class="text-center">Status</th>
-                <th>Create History</th>
-                <th>Update History</th>
-                <th class="text-center">Action</th>
+                <x-list.sortable-header field="name" label="Name" />
+                <th>Permissions</th>
+                <th class="text-center action-button-col">Action</th>
             </tr>
         </thead>
 
-        @if (count($data) > 0)
-            @foreach ($data as $key => $item)
-                <tr class="odd pointer">
-                    @php
-                        $no = ++$key;
-                        $id = $item['id'];
-                        $name       = Highlight::show($item['name'], $params['filter'], 'name');
 
-                        $status     = Template::showItemStatus($ctrl, $id, $item['status']);
-                        $createdHis = Template::showItemHistory($item['created_by_name'], $item['created_at'], 'add');
-                        $updatedHis = Template::showItemHistory($item['updated_by_name'], $item['updated_at'], 'edit');
+        @if (count($data) > 0)
+            @foreach($data as $item)
+                <tr>
+                    @php
+                        $id         = $item['id'];
+                        $name       = Highlight::show($ctrl, $item['name'], 'name');
+                        $pms        = ($item['permissions']) ? $item['permissions'] : [];
                     @endphp
 
-                    <td class="text-sm">{{ $no }}</td>
-                    <td width="20%" class="text-sm">{!! $name !!}</td>
-                    <td class="text-sm text-center">{!! $status !!}</td>
-                    <td class="text-sm">{!! $createdHis !!} </td>
-                    <td class="text-sm">{!! $updatedHis !!}</td>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{!! $name !!}</td>
+                    <td>
+                        @for ($i = 0; $i < count($pms); $i++)
+                            <span class="badge bg-secondary">{{ $pms[$i]['name'] }}</span>
+                            {!! (($i + 1) % 8 == 0) ? '<br><div class="mb-1"></div>' : '' !!}
+                        @endfor
+                    </td>
                     <td class="text-sm text-center"><x-button.action :ctrl="$ctrl" :id="$id" /></td>
                 </tr>
             @endforeach

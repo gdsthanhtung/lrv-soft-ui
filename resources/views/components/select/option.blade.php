@@ -1,3 +1,5 @@
+@props(['fieldName', 'displayValue'])
+
 @php
     $tmplDisplay = Config::get('gds.enum.select' . ucfirst($fieldName));
     $html = sprintf('<select id="%s" name="%s" class="form-select selectChangeAttr"><option>Select an item...</option>', $fieldName, $fieldName);

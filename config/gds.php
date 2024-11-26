@@ -18,31 +18,16 @@ return [
             'prefix' => 'role',
             'view' => 'role'
         ],
+        'permission' => [
+            'ctrl' => 'permission',
+            'prefix' => 'permission',
+            'view' => 'permission'
+        ],
         'room' => [
             'ctrl' => 'room',
             'prefix' => 'room',
             'view' => 'room'
-        ],
-        'congdan' => [
-            'ctrl' => 'congdan',
-            'prefix' => 'congdan',
-            'view' => 'cong_dan'
-        ],
-        'hopdong' => [
-            'ctrl' => 'hopdong',
-            'prefix' => 'hopdong',
-            'view' => 'hop_dong'
-        ],
-        'nhankhau' => [
-            'ctrl' => 'nhankhau',
-            'prefix' => 'nhankhau',
-            'view' => 'nhan_khau'
-        ],
-        'hoadon' => [
-            'ctrl' => 'hoadon',
-            'prefix' => 'hoadon',
-            'view' => 'hoa_don'
-        ],
+        ]
     ],
     'format' => [
         'longTime' => 'd.m.Y H:m:s',
@@ -66,43 +51,18 @@ return [
         5, 10, 25, 50, 100
     ],
     'enum' => [
-        'longNameId'    => array(),
         'ruleStatus'    => [
             'all'       => ['name' => 'Tất cả', 'class' => 'primary'],
             'active'    => ['name' => 'Kích hoạt', 'class' => 'success'],
             'inactive'  => ['name' => 'Chưa kích hoạt', 'class' => 'warning']
         ],
-        'ruleStatusHoaDon'    => [
-            'active'    => ['name' => 'Đã thanh toán', 'class' => 'success'],
-            'inactive'  => ['name' => 'Chưa thanh toán', 'class' => 'warning'],
-            'all'       => ['name' => 'Tất cả', 'class' => 'primary'],
-            'unknown'   => ['name' => 'Không xác định', 'class' => 'danger']
-        ],
         'selectStatus' => [
             'active' => 'Active',
             'inactive' => 'Inactive'
         ],
-        'selectStatusHoaDon' => [
-            'active' => 'Đã thanh toán',
-            'inactive' => 'Chưa thanh toán'
-        ],
-        'selectStatusDKTT' => [
-            'active' => 'Đã đăng ký',
-            'inactive' => 'Chưa đăng ký'
-        ],
         'selectYesNo' => [
             '0' => 'No',
             '1' => 'Yes'
-        ],
-        'selectLevel' => [
-            'class' => [
-                'user' => 'secondary',
-                'admin' => 'primary'
-            ],
-            'value' => [
-                'user' => 'Người dùng',
-                'admin' => 'Quản trị viên'
-            ]
         ],
         'searchSelection' => [
             'all' => ['name' => 'Tìm Tất cả'],
@@ -115,40 +75,25 @@ return [
             'cccd_number' => ['name' => 'Tìm số CCCD'],
             'address' => ['name' => 'Tìm theo Đ/C thường trú'],
             'phone' => ['name' => 'Tìm theo Số điện thoại'],
-        ],
-        'searchSelectionHopDong' => [
-            'all' => ['name' => 'Tìm Tất cả'],
-            'main.id' => ['name' => 'Tìm theo ID Hợp đồng'],
-            'main.ma_hop_dong' => ['name' => 'Tìm theo Mã hợp đồng'],
-            'cd.name' => ['name' => 'Tìm theo Tên công dân'],
-            'cd.cccd_number' => ['name' => 'Tìm theo Số CCCD'],
-            'pt.name' => ['name' => 'Tìm theo Số phòng'],
-        ],
-        'searchSelectionHoaDon' => [
-            'all' => ['name' => 'Tìm Tất cả']
+            'note' => ['name' => 'Tìm theo Ghi chú'],
         ],
         'selectionInModule' => [
             'default' => ['all'],
             'user' => ['all', 'email', 'name'],
             'role' => ['all', 'name'],
-            'room' => ['all', 'name'],
-            'congdan' => ['all', 'name', 'cccd_number', 'address', 'phone'],
-            'hopdong' => ['all', 'main.id', 'main.ma_hop_dong', 'cd.name', 'cd.cccd_number', 'pt.name'],
-            'hoadon' => ['all'],
+            'permission' => ['all', 'name'],
+            'room' => ['all', 'name', 'note'],
         ],
         'ruleBtn' => [
-            'edit'      => ['class' => 'btn-primary',               'title' => 'Edit',    'icon' => 'fa-pencil',  'route' => ".form"],
-            'delete'    => ['class' => 'btn-delete btn-danger',     'title' => 'Remove',           'icon' => 'fa-trash',   'route' => ".delete"],
-            'info'      => ['class' => 'btn-info',                  'title' => 'Info',     'icon' => 'fa-info',    'route' => ".form"],
+            'edit'      => ['class' => 'btn-primary',               'title' => 'Edit',    'icon' => 'fa-pencil',  'route' => "edit"],
+            'delete'    => ['class' => 'btn-delete btn-danger',     'title' => 'Remove',           'icon' => 'fa-trash',   'route' => "destroy"]
         ],
         'btnInArea' => [
             'default' => ['edit', 'delete'],
             'user' => ['edit', 'delete'],
             'role' => ['edit', 'delete'],
+            'permission' => ['edit', 'delete'],
             'room' => ['edit', 'delete'],
-            'congdan' => ['edit', 'delete'],
-            'hopdong' => ['edit', 'delete'],
-            'hoadon' => ['edit', 'delete'],
         ],
         'gender' => [
             'M' => 'Men',

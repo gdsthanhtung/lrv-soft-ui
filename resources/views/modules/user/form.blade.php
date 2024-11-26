@@ -6,12 +6,11 @@
 
         $flClass    = Config::get('gds.template.formLabel.class');
         $fiClass    = Config::get('gds.template.formInput.class');
-
         $statusEnum = Config::get('gds.enum.selectStatus');
-        $task       = ($id) ? 'edit' : 'add';
 
-        $role       = ($id && $data['role']) ? $data['role'] : [];
-        $uRole      = ($id) ? $roleUser['dataForSelect'] : [];
+        $id         = $data['id'] ?? null;
+        $method     = ($id) ? 'PUT' : 'POST';
+        $action     = ($id) ? route($routePrefix.'update', [$ctrl => $id]) : route($routePrefix.'store');
     @endphp
 
     <div class="row">
@@ -29,15 +28,15 @@
                     </div>
 
                         <div class="col-lg-4 col-md-6 col-md-12 mb-5">
-                            @include($pathView.'form_edit')
+                            @include($pathView.'edit')
                         </div>
 
                         <div class="col-lg-4 col-md-6 col-md-12 mb-5">
-                            @include($pathView.'form_update_role', ['tt' => 'Change Role', 'stt' => 'Update the Role for User'])
+                            @include($pathView.'assign_role', ['tt' => 'Assign Role', 'stt' => 'Assign the Role for User'])
                         </div>
 
                         <div class="col-lg-4 col-md-6 col-md-12 mb-5">
-                            @include($pathView.'form_change_password', ['tt' => 'Reset Password', 'stt' => 'Update the New Password for User'])
+                            @include($pathView.'change_password', ['tt' => 'Reset Password', 'stt' => 'Update the New Password for User'])
                         </div>
                 </div>
             </div>
@@ -51,7 +50,7 @@
                     <p class="text-sm mb-0">{{ $stt }}</p>
                     <hr class="horizontal dark my-3">
 
-                    @include($pathView.'form_add')
+                    @include($pathView.'create')
                 </div>
             </div>
         @endif
