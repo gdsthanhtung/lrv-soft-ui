@@ -3,22 +3,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Helpers\Notify;
 use App\Http\Controllers\AdminBaseController;
-use App\Models\RoomModel as MainModel;
+use App\Models\Permission as MainModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Traits\ModuleControllerHelper;
+use Illuminate\Support\Str;
 
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-
-class RoomController extends AdminBaseController
+class PermissionController extends AdminBaseController
 {
     use ModuleControllerHelper;
 
     public function __construct()
     {
-        $this->middleware('check.permissions:rooms');
-        $this->initializeModuleController('room', 'Room');
+        $this->middleware('check.permissions:permissions');
+        $this->initializeModuleController('permission', 'Permission');
     }
 
     public function index(Request $request)
@@ -28,7 +25,7 @@ class RoomController extends AdminBaseController
             $request,
             $this->sessionKey, // Session key prefix
             $this->moduleName, // Search fields like %%
-            ['status'], // Filter fields equals
+            [], // Filter fields equals
             'id', // Default sort by
             'desc', // Default sort order
         );
@@ -36,7 +33,7 @@ class RoomController extends AdminBaseController
         // Apply date filters
         $this->applyDateFilters($request, $query, $this->sessionKey, 'created_at');
 
-        $data = $query->with(['createdBy', 'updatedBy'])->paginate($perPage, ['*'], 'page', $page);
+        $data = $query->paginate($perPage, ['*'], 'page', $page);
 
         return view($this->pathView.'index', compact('data'));
     }
@@ -51,15 +48,11 @@ class RoomController extends AdminBaseController
         $request->validate([
             'name' => "required|string|max:255|unique:{$this->table},name",
             'note' => 'nullable|string',
-            'status' => 'required|in:active,inactive',
         ]);
 
         $rs = MainModel::create([
-            'name' => $request->name,
+            'name' => Str::lower($request->name),
             'note' => $request->note,
-            'status' => $request->status,
-            'created_by' => Auth::id(),
-            'updated_by' => Auth::id(),
         ]);
 
         return redirect()->route($this->routePrefix.'index')->with('notify', Notify::export($rs));
@@ -71,28 +64,25 @@ class RoomController extends AdminBaseController
         return view($this->pathView.'form', compact('data'));
     }
 
-    public function update(Request $request, MainModel $room)
+    public function update(Request $request, MainModel $permission)
     {
-        $data = $room;
+        $data = $permission;
         $request->validate([
             'name' => "required|string|max:255|unique:{$this->table},name,{$data->id}",
             'note' => 'nullable|string',
-            'status' => 'required|in:active,inactive',
         ]);
 
         $rs = $data->update([
-            'name' => $request->name,
+            'name' => Str::lower($request->name),
             'note' => $request->note,
-            'status' => $request->status,
-            'updated_by' => Auth::id(),
         ]);
 
         return redirect()->route($this->routePrefix.'index')->with('notify', Notify::export($rs));
     }
 
-    public function destroy(MainModel $room)
+    public function destroy(MainModel $permission)
     {
-        $rs = $room->delete();
+        $rs = $permission->delete();
         return redirect()->route($this->routePrefix.'index')->with('notify', Notify::export($rs));
     }
 }

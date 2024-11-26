@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 use App\Helpers\Notify;
 use App\Helpers\Resource;
 use App\Http\Controllers\AdminBaseController;
-use App\Models\RoleModel;
-use App\Models\UserModel as MainModel;
+use App\Models\User as MainModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\ModuleControllerHelper;
+
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class UserController extends AdminBaseController
 {
@@ -16,6 +18,7 @@ class UserController extends AdminBaseController
 
     public function __construct()
     {
+        $this->middleware('check.permissions:users');
         $this->initializeModuleController('user', 'User');
     }
 
@@ -34,18 +37,21 @@ class UserController extends AdminBaseController
         // Apply date filters
         $this->applyDateFilters($request, $query, $this->sessionKey, 'created_at');
 
-        $data = $query->with(['createdBy', 'updatedBy','roles'])->paginate($perPage, ['*'], 'page', $page);
+        $data = $query->with(['createdBy', 'updatedBy', 'roles', 'permissions'])->paginate($perPage, ['*'], 'page', $page);
 
         return view($this->pathView.'index', compact('data'));
     }
 
     public function create()
     {
-        return view($this->pathView.'form');
+        $roles = Role::all();
+        $permissions = Permission::all();
+        return view($this->pathView.'form', compact('roles', 'permissions'));
     }
 
     public function store(Request $request)
     {
+        //dd($request->roles, $request->permissions );
         $avatar = null;
         if ($request->hasFile('avatar')) {
             $avatar = Resource::uploadImage($this->ctrl, $request->file('avatar'), 'avatar');
@@ -63,15 +69,18 @@ class UserController extends AdminBaseController
             'updated_by' => Auth::id(),
         ]);
 
+        $rs->syncRoles($request->roles);
+        $rs->syncPermissions($request->permissions);
+
         return redirect()->route($this->routePrefix.'index')->with('notify', Notify::export($rs));
     }
 
     public function edit($id)
     {
-        $data = MainModel::with(['roles'])->findOrFail($id);
-        $uRole = $data->roles->pluck('id')->toArray();
-        $dataRole = RoleModel::all()->pluck('name','id')->toArray();
-        return view($this->pathView.'form', compact('data', 'dataRole', 'uRole'));
+        $data = MainModel::findOrFail($id);
+        $roles = Role::all();
+        $permissions = Permission::all();
+        return view($this->pathView.'form', compact('data', 'roles', 'permissions'));
     }
 
     public function update(Request $request, MainModel $user)
@@ -105,7 +114,9 @@ class UserController extends AdminBaseController
         }
 
         if($task == 'assign-role'){
-            $rs = $user->roles()->sync($request->roles);
+            $rsRoles = $user->syncRoles($request->roles);
+            $rsPermissions = $user->syncPermissions($request->permissions);
+            if($rsRoles && $rsPermissions) $rs = true;
         }
 
         return redirect()->route($this->routePrefix.'index')->with('notify', Notify::export($rs));
@@ -113,7 +124,6 @@ class UserController extends AdminBaseController
 
     public function destroy(MainModel $user)
     {
-        $user->roles()->detach();
         $rs = $user->delete();
         return redirect()->route($this->routePrefix.'index')->with('notify', Notify::export($rs));
     }

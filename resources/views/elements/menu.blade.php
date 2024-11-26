@@ -36,7 +36,7 @@
               <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                   <i style="font-size: 1rem;" class="fas fa-lg fa-list-ul ps-2 pe-2 text-center text-dark {{ (Request::is('admin/user') ? 'text-white' : 'text-dark') }} " aria-hidden="true"></i>
               </div>
-              <span class="nav-link-text ms-1">User Management</span>
+              <span class="nav-link-text ms-1">User Mgmt</span>
           </a>
         </li>
 
@@ -45,7 +45,16 @@
               <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                   <i style="font-size: 1rem;" class="fas fa-lg fa-list-ul ps-2 pe-2 text-center text-dark {{ (Request::is('admin/role') ? 'text-white' : 'text-dark') }} " aria-hidden="true"></i>
               </div>
-              <span class="nav-link-text ms-1">Role Management</span>
+              <span class="nav-link-text ms-1">Role Mgmt</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link {{ (Request::is('admin/permission') ? 'active' : '') }}" href="{{ url('admin/permission') }}">
+              <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                  <i style="font-size: 1rem;" class="fas fa-lg fa-list-ul ps-2 pe-2 text-center text-dark {{ (Request::is('admin/permission') ? 'text-white' : 'text-dark') }} " aria-hidden="true"></i>
+              </div>
+              <span class="nav-link-text ms-1">Permission Mgmt</span>
           </a>
         </li>
 
@@ -54,7 +63,7 @@
               <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                   <i style="font-size: 1rem;" class="fas fa-lg fa-list-ul ps-2 pe-2 text-center text-dark {{ (Request::is('admin/room') ? 'text-white' : 'text-dark') }} " aria-hidden="true"></i>
               </div>
-              <span class="nav-link-text ms-1">Room Management</span>
+              <span class="nav-link-text ms-1">Room Mgmt</span>
           </a>
         </li>
       </ul>
