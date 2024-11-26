@@ -9,11 +9,10 @@
             <tr>
                 <th>#</th>
                 <x-list.sortable-header field="name" label="Name" />
-                <th>Permissions</th>
+                <x-list.sortable-header field="note" label="Note" />
                 <th class="text-center action-button-col">Action</th>
             </tr>
         </thead>
-
 
         @if (count($data) > 0)
             @foreach($data as $item)
@@ -21,15 +20,12 @@
                     @php
                         $id         = $item['id'];
                         $name       = Highlight::show($ctrl, $item['name'], 'name');
+                        $note       = Highlight::show($ctrl, $item['note'], 'note');
                     @endphp
 
                     <td>{{ $loop->iteration }}</td>
                     <td>{!! $name !!}</td>
-                    <td width="40%">
-                        @foreach($item['permissions'] as $permission)
-                            <span class="badge bg-secondary">{{ $permission['name'] }}</span>
-                        @endforeach
-                    </td>
+                    <td class="max-width-300">{!! $note !!}</td>
                     <td class="text-sm text-center"><x-button.action :ctrl="$ctrl" :id="$id" /></td>
                 </tr>
             @endforeach

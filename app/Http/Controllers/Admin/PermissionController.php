@@ -1,25 +1,22 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
 
 use App\Helpers\Notify;
 use App\Http\Controllers\AdminBaseController;
+use App\Models\Permission as MainModel;
 use Illuminate\Http\Request;
 use App\Traits\ModuleControllerHelper;
-use Spatie\Permission\Models\Role as MainModel;
-use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Str;
 
-class RoleController extends AdminBaseController
+class PermissionController extends AdminBaseController
 {
     use ModuleControllerHelper;
 
     public function __construct()
     {
-        $this->middleware('check.permissions:roles');
-        $this->initializeModuleController('role', 'Role');
+        $this->middleware('check.permissions:permissions');
+        $this->initializeModuleController('permission', 'Permission');
     }
-
-    //=====================================================
 
     public function index(Request $request)
     {
@@ -43,24 +40,20 @@ class RoleController extends AdminBaseController
 
     public function create()
     {
-        $permissions = Permission::all();
-        return view($this->pathView.'form', compact('permissions'));
+        return view($this->pathView.'form');
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'name' => "required|string|max:255|unique:{$this->table},name",
-            'permissions' => 'array',
+            'note' => 'nullable|string',
         ]);
 
         $rs = MainModel::create([
-            'name' => $request->name,
+            'name' => Str::lower($request->name),
+            'note' => $request->note,
         ]);
-
-        if ($rs && $request->permissions) {
-            $rs = $rs->syncPermissions($request->permissions);
-        }
 
         return redirect()->route($this->routePrefix.'index')->with('notify', Notify::export($rs));
     }
@@ -68,32 +61,28 @@ class RoleController extends AdminBaseController
     public function edit($id)
     {
         $data = MainModel::findOrFail($id);
-        $permissions = Permission::all();
-        return view($this->pathView.'form', compact('data', 'permissions'));
+        return view($this->pathView.'form', compact('data'));
     }
 
-    public function update(Request $request, MainModel $role)
+    public function update(Request $request, MainModel $permission)
     {
+        $data = $permission;
         $request->validate([
-            'name' => "required|string|max:255|unique:{$this->table},name,{$role->id}",
-            'permissions' => 'array',
+            'name' => "required|string|max:255|unique:{$this->table},name,{$data->id}",
+            'note' => 'nullable|string',
         ]);
 
-        $data = MainModel::findOrFail($role->id);
-        $data->name = $request->name;
-        $rs = $data->save();
-
-        if ($rs && $request->permissions) {
-            $rs = $data->syncPermissions($request->permissions);
-        }
+        $rs = $data->update([
+            'name' => Str::lower($request->name),
+            'note' => $request->note,
+        ]);
 
         return redirect()->route($this->routePrefix.'index')->with('notify', Notify::export($rs));
     }
 
-    public function destroy($id)
+    public function destroy(MainModel $permission)
     {
-        $data = MainModel::findOrFail($id);
-        $rs = $data->delete();
+        $rs = $permission->delete();
         return redirect()->route($this->routePrefix.'index')->with('notify', Notify::export($rs));
     }
 }

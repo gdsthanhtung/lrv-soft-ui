@@ -1,5 +1,6 @@
-<form action="{{ route($routePrefix.'store') }}" method="POST" accept-charset="UTF-8">
-    @csrf
+<form action="{{ $action }}" method="POST" accept-charset="UTF-8">
+	@csrf
+    @method($method)
 
     <div class="form-group">
         <label for="name" class="{{ $flClass }}">Name</label>
@@ -12,13 +13,6 @@
         <label for="note" class="{{ $flClass }}">Note</label>
         <div class="">
             <input type="text" class="form-control" id="note" name="note">
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label for="status" class="{{ $flClass }}">Status</label>
-        <div class="">
-            <x-select.radio :listToSelect="$statusEnum" elName="status" :valToChecked="old('status')" required="true" />
         </div>
     </div>
 

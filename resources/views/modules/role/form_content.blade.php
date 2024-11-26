@@ -4,23 +4,23 @@
 
 	<div class="form-group">
 		<label for="name" class="{{ $flClass }}">Name</label>
-		<div class=""><input type="text" class="form-control" id="name" name="name" value="{{ old('name') ?? $name }}" placeholder="John Doe" required></div>
+		<div class=""><input type="text" class="form-control" id="name" name="name" value="{{ old('name') ?? $name }}" placeholder="Role name" required></div>
 	</div>
 
-	<div class="form-group">
-		<label for="email" class="{{ $flClass }}">Status</label>
-		<div class="">
-            <x-select.radio :listToSelect="$statusEnum" elName='status' valToChecked='{{$status}}' required='true' />
+    <div class="form-group">
+            <label for="permissions">Permissions</label>
+            <select multiple class="form-control" id="permissions" name="permissions[]">
+                @foreach($permissions as $permission)
+                    @if($id)
+                        <option value="{{ $permission->name }}" {{ $data->permissions->contains('name', $permission->name) ? 'selected' : '' }}>
+                    @else
+                        <option value="{{ $permission->name }}" {{ collect(old('permissions'))->contains($permission->name) ? 'selected' : '' }}>
+                    @endif
+                        {{ $permission->name }} {{ ($permission->note) ? "|".$permission->note : '' }}
+                    </option>
+                @endforeach
+            </select>
         </div>
-	</div>
-
-	<div class="form-group">
-		<label for="name" class="{{ $flClass }}">Permission</label>
-		<div class="">
-            <x-select.checkbox :listToSelect="$permission" elName='permission' :valToChecked="$permissionSelected" required='true' col='col-4' />
-        </div>
-        <button type="button" id="toggleCheckboxPermission" class="btn btn-sm btn-secondary">Check all</button>
-	</div>
 
 	<div class="d-flex justify-content-end mt-4">
         <a href="{{ route($routePrefix.'index') }}" type="button" class="btn btn-light m-0">BACK</a>

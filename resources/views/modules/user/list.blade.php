@@ -11,6 +11,7 @@
                 <th>Avatar</th>
                 <x-list.sortable-header field="name" label="Name/Email" />
                 <th>Roles</th>
+                <th>Direct Permissions</th>
                 <x-list.sortable-header field="status" label="Status" />
                 <x-list.sortable-header field="created_at" label="Create/Update His" />
                 <th class="text-center action-button-col">Action</th>
@@ -26,7 +27,6 @@
                         $email      = Highlight::show($ctrl, $item['email'], 'email');
 
                         $avatar     = Template::showItemAvatar($ctrl, $item['avatar'], $item['name']);
-                        $roles      = Template::showListUL($item->roles->pluck('name'));
 
                         $status     = Template::showItemStatus($ctrl, $id, $item['status'], false);
                         $createdHis = Template::showItemHistory($item->createdBy->name, $item['updated_at'], 'add');
@@ -40,7 +40,16 @@
                         <span class="mb-0 text-capitalize font-weight-bold">Name: </span> {!! $name !!}<br>
                         <span class="mb-0 text-capitalize font-weight-bold">Email: </span> {!! $email !!}
                     </td>
-                    <td>{!! $roles !!}</td>
+                    <td>
+                        @foreach ($item->roles as $role)
+                            <span class="badge bg-info">{{ $role->name }}</span>
+                        @endforeach
+                    </td>
+                    <td>
+                        @foreach ($item->permissions as $permission)
+                            <span class="badge bg-secondary">{{ $permission->name }}</span>
+                        @endforeach
+                    </td>
                     <td>{!! $status !!}</td>
                     <td>{!! $createdHis !!} <hr class='horizontal dark m-1'> {!! $updatedHis !!}</td>
                     <td class="text-sm text-center"><x-button.action :ctrl="$ctrl" :id="$id" /></td>

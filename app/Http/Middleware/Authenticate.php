@@ -1,26 +1,17 @@
 <?php
 
 namespace App\Http\Middleware;
-use Closure;
-use Auth;
+
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Illuminate\Http\Request;
 
 class Authenticate extends Middleware
 {
-    public function handle($request, Closure $next, ...$guards)
+    /**
+     * Get the path the user should be redirected to when they are not authenticated.
+     */
+    protected function redirectTo(Request $request): ?string
     {
-        //return $request->expectsJson() ? null : route('login');
-        if (!Auth::check()) { // chưa đăng nhập
-            return redirect()->route('login');
-        }else{
-            $user = Auth::user();
-            $route = $request->route()->getName();
-
-            if($user->cant($route)){
-                //return redirect()->route('error', ['code' => 403]);
-            }
-            //GDSMARKED dd($user->can($route), $request);
-            return $next($request);
-        }
+        return $request->expectsJson() ? null : route('login');
     }
 }

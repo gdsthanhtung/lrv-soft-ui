@@ -14,6 +14,7 @@ class RoomController extends AdminBaseController
 
     public function __construct()
     {
+        $this->middleware('check.permissions:rooms');
         $this->initializeModuleController('room', 'Room');
     }
 
@@ -88,8 +89,7 @@ class RoomController extends AdminBaseController
 
     public function destroy(MainModel $room)
     {
-        $data = $room;
-        $rs = $data->delete();
+        $rs = $room->delete();
         return redirect()->route($this->routePrefix.'index')->with('notify', Notify::export($rs));
     }
 }

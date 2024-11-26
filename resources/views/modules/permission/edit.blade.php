@@ -1,6 +1,7 @@
-<form method="POST" action="{{ route($routePrefix.'update', [$ctrl => $data->id, 'id' => $data->id]) }}">
-    @csrf
-    @method('PUT')
+<form action="{{ $action }}" method="POST" accept-charset="UTF-8">
+	@csrf
+    @method($method)
+
     <div class="form-group">
         <label for="name" class="{{ $flClass }}">Name</label>
         <div class="">
@@ -12,13 +13,6 @@
         <label for="note" class="{{ $flClass }}">Note</label>
         <div class="">
             <input type="text" class="form-control" id="note" name="note" value="{{ old('note', $data->note) }}">
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label for="status" class="{{ $flClass }}">Status</label>
-        <div class="">
-            <x-select.radio :listToSelect="$statusEnum" elName="status" :valToChecked="old('status', $data->status)" :required="true" />
         </div>
     </div>
 

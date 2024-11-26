@@ -22,6 +22,27 @@
 		<div class=""><input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" placeholder="John Doe" required></div>
 	</div>
 
+    <div class="form-group">
+        <label for="roles">Roles</label>
+        <select multiple class="form-control" id="roles" name="roles[]">
+            @foreach($roles as $role)
+                <option value="{{ $role->name }}" {{ collect(old('roles'))->contains($role->name) ? 'selected' : '' }}>
+                    {{ $role->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="permissions">Permissions</label>
+        <select multiple class="form-control" id="permissions" name="permissions[]">
+            @foreach($permissions as $permission)
+                <option value="{{ $permission->name }}" {{ collect(old('permissions'))->contains($permission->name) ? 'selected' : '' }}>
+                    {{ $permission->name }} ({{ $permission->note }})
+                </option>
+            @endforeach
+        </select>
+    </div>
+
 	<div class="form-group">
 		<label for="email" class="{{ $flClass }}">Status</label>
 		<div class="">
