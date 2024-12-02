@@ -23,6 +23,11 @@ return [
             'prefix' => 'permission',
             'view' => 'permission'
         ],
+        'menu' => [
+            'ctrl' => 'menu',
+            'prefix' => 'menu',
+            'view' => 'menu'
+        ],
         'room' => [
             'ctrl' => 'room',
             'prefix' => 'room',
@@ -52,9 +57,9 @@ return [
     ],
     'enum' => [
         'ruleStatus'    => [
-            'all'       => ['name' => 'Tất cả', 'class' => 'primary'],
-            'active'    => ['name' => 'Kích hoạt', 'class' => 'success'],
-            'inactive'  => ['name' => 'Chưa kích hoạt', 'class' => 'warning']
+            'all'       => ['name' => 'All', 'class' => 'primary'],
+            'active'    => ['name' => 'Active', 'class' => 'success'],
+            'inactive'  => ['name' => 'Inactive', 'class' => 'warning']
         ],
         'selectStatus' => [
             'active' => 'Active',
@@ -65,23 +70,23 @@ return [
             '1' => 'Yes'
         ],
         'searchSelection' => [
-            'all' => ['name' => 'Tìm Tất cả'],
-            'id' => ['name' => 'Tìm theo ID'],
-            'name' => ['name' => 'Tìm theo Tên'],
-            'email' => ['name' => 'Tìm theo Email'],
-            'description' => ['name' => 'Tìm theo Mô tả'],
-            'content' => ['name' => 'Tìm theo Nội dung'],
-            'link' => ['name' => 'Tìm theo Link'],
-            'cccd_number' => ['name' => 'Tìm số CCCD'],
-            'address' => ['name' => 'Tìm theo Đ/C thường trú'],
-            'phone' => ['name' => 'Tìm theo Số điện thoại'],
-            'note' => ['name' => 'Tìm theo Ghi chú'],
+            'all' => ['name' => 'Search by All'],
+            'id' => ['name' => 'Search by ID'],
+            'name' => ['name' => 'Search by Name'],
+            'email' => ['name' => 'Search by Email'],
+            'description' => ['name' => 'Search by Description'],
+            'content' => ['name' => 'Search by Content'],
+            'link' => ['name' => 'Search by Link'],
+            'address' => ['name' => 'Search by Address'],
+            'phone' => ['name' => 'Search by Phone'],
+            'note' => ['name' => 'Search by Note'],
         ],
         'selectionInModule' => [
             'default' => ['all'],
             'user' => ['all', 'email', 'name'],
             'role' => ['all', 'name'],
             'permission' => ['all', 'name'],
+            'menu' => ['all', 'name'],
             'room' => ['all', 'name', 'note'],
         ],
         'ruleBtn' => [
@@ -93,6 +98,7 @@ return [
             'user' => ['edit', 'delete'],
             'role' => ['edit', 'delete'],
             'permission' => ['edit', 'delete'],
+            'menu' => ['edit', 'delete'],
             'room' => ['edit', 'delete'],
         ],
         'gender' => [

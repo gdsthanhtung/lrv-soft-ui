@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\RoomController;
@@ -87,6 +88,14 @@ Route::prefix($prefixAdmin)->middleware('auth')->as("$prefixAdmin.")->group(func
         });
     });
 
+    $prefix = Config::get('gds.route.menu.prefix');
+    $ctrl   = Config::get('gds.route.menu.ctrl');
+    Route::prefix($prefix)->group(function () use ($ctrl) {
+        Route::controller(MenuController::class)->group(function () use ($ctrl) {
+            Route::get('/clear', 'clear')->name($ctrl.'.clear');
+        });
+    });
+
     $prefix = Config::get('gds.route.room.prefix');
     $ctrl   = Config::get('gds.route.room.ctrl');
     Route::prefix($prefix)->group(function () use ($ctrl) {
@@ -96,9 +105,10 @@ Route::prefix($prefixAdmin)->middleware('auth')->as("$prefixAdmin.")->group(func
     });
 
     Route::resource('user', UserController::class);
-    Route::resource('room', RoomController::class);
     Route::resource('role', RoleController::class);
     Route::resource('permission', PermissionController::class);
+    Route::resource('menu', MenuController::class);
+    Route::resource('room', RoomController::class);
 
     Route::get('/logout', [SessionsController::class, 'destroy'])->name('logout');
     Route::get('/login', function () {
