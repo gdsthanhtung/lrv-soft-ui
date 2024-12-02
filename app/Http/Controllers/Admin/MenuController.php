@@ -33,8 +33,8 @@ class MenuController extends AdminBaseController
             $this->sessionKey, // Session key prefix
             $this->moduleName, // Search fields like %%
             ['status'], // Filter fields equals
-            'id', // Default sort by
-            'desc', // Default sort order
+            'order', // Default sort by
+            'asc', // Default sort order
         );
 
         // Apply date filters

@@ -1,14 +1,3 @@
-@php
-    use App\Models\Menu;
-    use Illuminate\Support\Facades\Auth;
-
-    $menus = Menu::where('status', 'active')
-                ->whereNull('parent_id')
-                ->orderBy('order')
-                ->with('children') // Eager load children
-                ->get();
-@endphp
-
 <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3" id="sidenav-main">
     <div class="sidenav-header">
         <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
@@ -22,10 +11,12 @@
         <ul class="navbar-nav">
             @foreach($menus as $menu)
                 @php
+                    // Determine if the parent menu is active
                     $isActiveParent = Request::is(trim($menu->url, '/') . '*');
                     $isActiveChild = false;
                     $canAccessChild = false;
 
+                    // Iterate through children to determine active state and access
                     foreach ($menu->children as $child) {
                         if (Request::is(trim($child->url, '/') . '*')) {
                             $isActiveChild = true;
@@ -45,7 +36,9 @@
                                aria-expanded="{{ $isActiveChild ? 'true' : 'false' }}"
                            @endif>
                             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                                <i style="font-size: 1rem;" class="fas fa-lg {{ $menu->icon }} ps-2 pe-2 text-center text-dark {{ $isActiveParent || $isActiveChild ? 'text-white' : 'text-dark' }}" aria-hidden="true"></i>
+                                <i style="font-size: 1rem;"
+                                   class="fas fa-lg {{ $menu->icon }} ps-2 pe-2 text-center text-dark {{ $isActiveParent || $isActiveChild ? 'text-white' : 'text-dark' }}"
+                                   aria-hidden="true"></i>
                             </div>
                             <span class="nav-link-text ms-1">{{ $menu->name }}</span>
                         </a>
