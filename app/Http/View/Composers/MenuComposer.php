@@ -24,16 +24,28 @@ class MenuComposer
      */
     public function compose(View $view)
     {
-        $menus = Cache::remember($this->cacheKey, $this->cacheDuration, function () {
-            return Menu::where('status', 'active')
-                        ->whereNull('parent_id')
-                        ->orderBy('order')
-                        ->with(['children' => function ($query) {
-                            $query->where('status', 'active')->orderBy('order');
-                        }])
-                        ->get();
-        });
+        $useCache = true;
+
+        if ($useCache) {
+            $menus = Cache::remember($this->cacheKey, $this->cacheDuration, function () {
+                return $this->getMenuFromDB();
+            });
+        } else {
+            $menus = $this->getMenuFromDB();
+        }
+
 
         $view->with('menus', $menus);
+    }
+
+    public function getMenuFromDB()
+    {
+        return Menu::where('status', 'active')
+                    ->whereNull('parent_id')
+                    ->orderBy('order')
+                    ->with(['children' => function ($query) {
+                        $query->where('status', 'active')->orderBy('order');
+                    }])
+                    ->get();
     }
 }
